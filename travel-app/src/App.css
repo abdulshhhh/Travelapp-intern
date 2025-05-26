@@ -20,7 +20,7 @@ body, html {
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #64ffb4aa);
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
