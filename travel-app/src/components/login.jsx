@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 const slides = [
   {
-    image: 'https://images.pexels.com/photos/2659475/pexels-photo-2659475.jpeg?cs=srgb&dl=pexels-stijn-dijkstra-1306815-2659475.jpg&fm=jpg',
+    image: 'https://images.pexels.com/photos/2659475/pexels-photo-2659475.jpeg',
     title: 'Discover new places',
     subtitle: 'Explore beautiful destinations worldwide.',
   },
   {
-    image: 'https://images.pexels.com/photos/1878293/pexels-photo-1878293.jpeg?cs=srgb&dl=pexels-pixelcop-1878293.jpg&fm=jpg',
+    image: 'https://images.pexels.com/photos/1878293/pexels-photo-1878293.jpeg',
     title: 'Experience the thrill',
     subtitle: 'Adventure awaits you beyond horizons.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dG91cmlzbXxlbnwwfHwwfHx8MA%3D%3D',
+    image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24',
     title: 'Create unforgettable memories',
     subtitle: 'Travel with people who vibe with your soul.',
   },
@@ -29,14 +29,15 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-green-500 to-blue-400 overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-green-500 to-blue-400 overflow-hidden md:overflow-hidden sm:overflow-y-auto">
       {/* Left slider section */}
       <div className="w-full md:w-1/2 h-[655px] sm:h-[400px] md:h-auto relative overflow-hidden">
-
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+            }`}
           >
             <img
               src={`${slide.image}?auto=format&fit=crop&w=900&q=80`}
@@ -57,20 +58,19 @@ export default function Login() {
 
         {/* Swipe Up Indicator - Mobile Only */}
         <div className="absolute bottom-4 w-full flex justify-center sm:hidden z-20">
-            <div className="flex flex-col items-center text-white text-sm animate-bounce">
-                 <span className="mb-1">Swipe Up</span>
-                 <svg
-                 className="w-6 h-6"
-                 fill="none"
-                 stroke="currentColor"
-                 strokeWidth="2"
-                 viewBox="0 0 24 24"
-                 >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7 7 7" />
-                    </svg>
-                    </div>
-                    </div>
-
+          <div className="flex flex-col items-center text-white text-sm animate-bounce">
+            <span className="mb-1">Swipe Up</span>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7 7 7" />
+            </svg>
+          </div>
+        </div>
       </div>
 
       {/* Right login section */}
