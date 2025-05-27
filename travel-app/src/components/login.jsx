@@ -28,57 +28,15 @@ export default function Login() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    let touchStartY = 0;
-    let touchEndY = 0;
-
-    const handleTouchStart = (e) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e) => {
-      touchEndY = e.touches[0].clientY;
-    };
-
-    const handleTouchEnd = () => {
-      if (touchStartY - touchEndY > 50) {
-        // Swipe Up
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-      } else if (touchEndY - touchStartY > 50) {
-        // Swipe Down
-        setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-      }
-    };
-
-    const sliderElement = document.getElementById('slider-section');
-    if (sliderElement) {
-      sliderElement.addEventListener('touchstart', handleTouchStart);
-      sliderElement.addEventListener('touchmove', handleTouchMove);
-      sliderElement.addEventListener('touchend', handleTouchEnd);
-    }
-
-    return () => {
-      if (sliderElement) {
-        sliderElement.removeEventListener('touchstart', handleTouchStart);
-        sliderElement.removeEventListener('touchmove', handleTouchMove);
-        sliderElement.removeEventListener('touchend', handleTouchEnd);
-      }
-    };
-  }, []);
-
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-green-500 to-blue-400 overflow-hidden">
       {/* Left slider section */}
-      <div
-        id="slider-section"
-        className="w-full md:w-1/2 h-[655px] sm:h-[400px] md:h-auto relative overflow-hidden"
-      >
+      <div className="w-full md:w-1/2 h-[655px] sm:h-[400px] md:h-auto relative overflow-hidden">
+
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
           >
             <img
               src={`${slide.image}?auto=format&fit=crop&w=900&q=80`}
@@ -96,6 +54,23 @@ export default function Login() {
             </div>
           </div>
         ))}
+
+        {/* Swipe Up Indicator - Mobile Only */}
+        <div className="absolute bottom-4 w-full flex justify-center sm:hidden z-20">
+            <div className="flex flex-col items-center text-white text-sm animate-bounce">
+                 <span className="mb-1">Swipe Up</span>
+                 <svg
+                 className="w-6 h-6"
+                 fill="none"
+                 stroke="currentColor"
+                 strokeWidth="2"
+                 viewBox="0 0 24 24"
+                 >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7 7 7" />
+                    </svg>
+                    </div>
+                    </div>
+
       </div>
 
       {/* Right login section */}
