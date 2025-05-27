@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import Loading from './components/Loading';
-import Login from './components/login.jsx'; 
+import Login from './components/login.jsx';
+import SignUp from './components/SignUp.jsx';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
   const [activeLayer, setActiveLayer] = useState(true);
   const [bg1, setBg1] = useState(0); 
   const [bg2, setBg2] = useState(1); 
@@ -36,12 +38,24 @@ function App() {
     return () => clearInterval(interval);
   }, [activeLayer, backgrounds.length]);
 
+  const handleLoginClick = () => {
+    setShowSignUp(false);
+    setShowLogin(true);
+  };
+
+  const handleSignUpClick = () => {
+    setShowLogin(false);
+    setShowSignUp(true);
+  };
+
   return (
     <>
       {loading ? (
         <Loading />
       ) : showLogin ? (
-        <Login />
+        <Login onSignUpClick={handleSignUpClick} />
+      ) : showSignUp ? (
+        <SignUp onLoginClick={handleLoginClick} />
       ) : (
         <div className="relative min-h-screen text-white overflow-hidden">
           {/* Background layers */}
@@ -76,12 +90,15 @@ function App() {
             <div className="flex gap-4 mt-8">
               <button
                 className="bg-[#EC8E3D] hover:bg-[#FCCB6E] transition duration-300 px-8 py-3 rounded-full text-white font-semibold shadow-lg"
-                onClick={() => setShowLogin(true)} 
+                onClick={handleLoginClick}
               >
                 Join a Trip
               </button>
-              <button className="bg-transparent border-2 border-white hover:bg-white/10 transition duration-300 px-8 py-3 rounded-full text-white font-semibold">
-                Explore Destinations
+              <button 
+                className="bg-transparent border-2 border-white hover:bg-white/10 transition duration-300 px-8 py-3 rounded-full text-white font-semibold"
+                onClick={handleSignUpClick}
+              >
+                Sign Up
               </button>
             </div>
           </div>

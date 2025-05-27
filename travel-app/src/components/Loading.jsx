@@ -1,31 +1,25 @@
-import { useEffect, useState } from 'react';
-import NomadNovaLogo from '../images/NomadNovalogo.jpg';
+import { useState, useEffect } from 'react';
 
-
-export default function Loading() {
+function Loading() {
   const [progress, setProgress] = useState(0);
   
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
+      setProgress((prevProgress) => {
+        if (prevProgress >= 100) {
           clearInterval(interval);
           return 100;
         }
-        return prev + 5;
+        return prevProgress + 10;
       });
-    }, 100);
+    }, 200);
     
     return () => clearInterval(interval);
   }, []);
   
   return (
-    <div className="fixed inset-0 bg-black-900 flex flex-col items-center justify-center z-50">
-      <div className="w-24 h-24 mb-8">
-       <img src={NomadNovaLogo} alt="NomadNova Logo" className="w-full h-full object-contain" />
-      </div>
-      
-      <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F]">
+    <div className="fixed inset-0 bg-gray-900 flex flex-col items-center justify-center z-50">
+      <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F] mb-8">
         NomadNova
       </h2>
       
@@ -40,3 +34,5 @@ export default function Loading() {
     </div>
   );
 }
+
+export default Loading;

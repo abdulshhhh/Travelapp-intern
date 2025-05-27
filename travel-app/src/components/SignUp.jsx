@@ -2,25 +2,29 @@ import React, { useState, useEffect } from 'react';
 
 const slides = [
   {
-    image: 'https://images.pexels.com/photos/2659475/pexels-photo-2659475.jpeg',
-    title: 'Discover new places',
-    subtitle: 'Explore beautiful destinations worldwide.',
+    image: 'https://images.pexels.com/photos/3155666/pexels-photo-3155666.jpeg',
+    title: 'Join our community',
+    subtitle: 'Connect with travelers from around the world.',
   },
   {
-    image: 'https://images.pexels.com/photos/1878293/pexels-photo-1878293.jpeg',
-    title: 'Experience the thrill',
-    subtitle: 'Adventure awaits you beyond horizons.',
+    image: 'https://images.pexels.com/photos/3061217/pexels-photo-3061217.jpeg',
+    title: 'Create your profile',
+    subtitle: 'Share your travel preferences and interests.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24',
-    title: 'Create unforgettable memories',
-    subtitle: 'Travel with people who vibe with your soul.',
+    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1',
+    title: 'Start your journey',
+    subtitle: 'Find your next adventure with like-minded travelers.',
   },
 ];
 
-export default function Login({ onSignUpClick }) {
+export default function SignUp({ onLoginClick }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: ''
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,8 +33,16 @@ export default function Login({ onSignUpClick }) {
     return () => clearInterval(interval);
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] overflow-hidden md:overflow-hidden sm:overflow-y-auto">
+    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-[#6F93AD] to-[#EC8E3D] overflow-hidden md:overflow-hidden sm:overflow-y-auto">
       {/* Left slider section */}
       <div className="w-full md:w-1/2 h-[655px] sm:h-[400px] md:h-auto relative overflow-hidden">
         {slides.map((slide, index) => (
@@ -91,90 +103,102 @@ export default function Login({ onSignUpClick }) {
         </div>
       </div>
 
-      {/* Right login section */}
+      {/* Right signup section */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-10 md:p-16 relative">
         {/* Decorative elements */}
-        <div className="absolute top-10 right-10 w-20 h-20 bg-yellow-400/20 rounded-full blur-xl"></div>
-        <div className="absolute bottom-10 left-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl"></div>
+        <div className="absolute top-10 right-10 w-20 h-20 bg-blue-400/20 rounded-full blur-xl"></div>
+        <div className="absolute bottom-10 left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-xl"></div>
         
         <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-2xl border border-white/20 animate-fade-in relative overflow-hidden group">
           {/* Glass reflection effect */}
           <div className="absolute -inset-[500px] bg-gradient-to-r from-transparent via-white/10 to-transparent -rotate-45 translate-x-[1000px] group-hover:translate-x-[-1000px] transition-transform duration-1500 ease-in-out"></div>
           
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 text-center drop-shadow-lg">
-            Welcome to
+            Join
           </h2>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F]">
             NomadNova
           </h2>
 
           <p className="text-white mt-3 mb-8 text-center font-medium">
-            Login or Sign up to start your adventure
+            Create an account to start your adventure
           </p>
 
-          <button 
-            className="w-full flex items-center justify-center bg-white hover:bg-gray-100 transition-all duration-300 rounded-xl py-3 mb-5 shadow-md hover:shadow-lg transform hover:-translate-y-1"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
-              alt="Google icon"
-              className="w-6 h-6 mr-3"
-            />
-            <span className="text-gray-800 font-semibold">Continue with Google</span>
-          </button>
-
-          <button className="w-full flex items-center justify-center bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-xl py-3 mb-8 shadow-md hover:shadow-lg transform hover:-translate-y-1 text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6 mr-3"
-              fill="currentColor"
-              viewBox="0 0 24 24"
+          <form className="space-y-5">
+            <div className="relative">
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="Full Name"
+                className="w-full px-5 py-3 rounded-xl border border-transparent bg-white/90 focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:ring-opacity-80 text-gray-900 font-medium transition-all duration-300 placeholder-gray-500"
+              />
+              <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
+            </div>
+            
+            <div className="relative">
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email Address"
+                className="w-full px-5 py-3 rounded-xl border border-transparent bg-white/90 focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:ring-opacity-80 text-gray-900 font-medium transition-all duration-300 placeholder-gray-500"
+              />
+              <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
+            </div>
+            
+            <div className="relative">
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className="w-full px-5 py-3 rounded-xl border border-transparent bg-white/90 focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:ring-opacity-80 text-gray-900 font-medium transition-all duration-300 placeholder-gray-500"
+              />
+              <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
+            </div>
+            
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-[#EC8E3D] to-[#FCCB6E] hover:from-[#FCCB6E] hover:to-[#EC8E3D] transition-all duration-500 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
-              <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.125v-3.622h3.125v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.466.099 2.797.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.324-.593 1.324-1.324V1.325c0-.732-.594-1.325-1.324-1.325z" />
-            </svg>
-            <span className="font-semibold">Continue with Facebook</span>
-          </button>
+              Create Account
+            </button>
+          </form>
 
-          <div className="flex items-center mb-6">
+          <div className="flex items-center my-6">
             <hr className="flex-grow border-white/30" />
             <span className="mx-3 text-white text-sm">or</span>
             <hr className="flex-grow border-white/30" />
           </div>
 
-          <form className="space-y-6">
-            <div className="relative">
-              <input
-                type="email"
-                placeholder="Email or phone number"
-                className="w-full px-5 py-3 rounded-xl border border-transparent bg-white/90 focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:ring-opacity-80 text-gray-900 font-medium transition-all duration-300 placeholder-gray-500"
-              />
-              <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-[#EC8E3D] to-[#FCCB6E] hover:from-[#FCCB6E] hover:to-[#EC8E3D] transition-all duration-500 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              Login
-            </button>
-          </form>
+          <button className="w-full flex items-center justify-center bg-white hover:bg-gray-100 transition-all duration-300 rounded-xl py-3 mb-5 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+              alt="Google icon"
+              className="w-6 h-6 mr-3"
+            />
+            <span className="text-gray-800 font-semibold">Sign up with Google</span>
+          </button>
 
           <div className="mt-6 text-center">
             <p className="text-white text-sm">
-              New user?{' '}
+              Already have an account?{' '}
               <button 
-                onClick={() => onSignUpClick()}
+                onClick={() => onLoginClick()}
                 className="text-[#FCCB6E] hover:text-white font-bold transition-colors relative group"
               >
-                Sign up
+                Login
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FCCB6E] group-hover:w-full transition-all duration-300"></span>
               </button>
             </p>
           </div>
 
           <p className="text-white/70 text-xs mt-8 text-center select-none">
-            By continuing, you agree to our{' '}
+            By signing up, you agree to our{' '}
             <a href="#" className="underline text-yellow-400 hover:text-yellow-300 font-bold transition-colors">
               Terms of Service
             </a>{' '}and{' '}
@@ -198,3 +222,7 @@ export default function Login({ onSignUpClick }) {
     </div>
   );
 }
+
+
+
+
