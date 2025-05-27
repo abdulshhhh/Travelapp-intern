@@ -29,7 +29,7 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-green-500 to-blue-400 overflow-hidden md:overflow-hidden sm:overflow-y-auto">
+    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] overflow-hidden md:overflow-hidden sm:overflow-y-auto">
       {/* Left slider section */}
       <div className="w-full md:w-1/2 h-[655px] sm:h-[400px] md:h-auto relative overflow-hidden">
         {slides.map((slide, index) => (
@@ -75,11 +75,11 @@ export default function Login() {
 
       {/* Right login section */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-10 md:p-16">
-        <div className="w-full max-w-md bg-white bg-opacity-20 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-xl border border-white border-opacity-30 animate-fade-in">
+        <div className="w-full max-w-md bg-[#6F93AD]/30 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-xl border border-[#5E5854] animate-fade-in">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 text-center drop-shadow-lg">
             Welcome to
           </h2>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-green-700 to-blue-600">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F]">
             NomadNova
           </h2>
 
@@ -118,11 +118,11 @@ export default function Login() {
             <input
               type="email"
               placeholder="Email or phone number"
-              className="w-full px-5 py-3 rounded-xl border border-transparent focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-80 text-gray-900 font-medium"
+              className="w-full px-5 py-3 rounded-xl border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:ring-opacity-80 text-gray-900 font-medium"
             />
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-400 hover:to-blue-500 transition text-white py-3 rounded-xl font-bold shadow-lg"
+              className="w-full bg-[#EC8E3D] hover:bg-[#FCCB6E] transition text-white py-3 rounded-xl font-bold shadow-lg"
             >
               Login
             </button>
@@ -130,11 +130,10 @@ export default function Login() {
 
           <p className="text-white text-xs mt-8 text-center select-none">
             By continuing, you agree to our{' '}
-            <a href="#" className="underline text-green-200 hover:text-green-300 font-bold">
+            <a href="#" className="underline text-yellow-400 hover:text-yellow-500 font-bold">
               Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="#" className="underline text-green-200 hover:text-green-300 font-bold">
+            </a>{' '}and{' '}
+            <a href="#" className="underline text-yellow-400 hover:text-yellow-500 font-bold">
               Privacy Policy
             </a>
             .

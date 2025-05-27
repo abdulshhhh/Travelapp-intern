@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import Loading from './components/Loading';
-import Login from './components/login.jsx'; // ✅ make sure it's imported
+import Login from './components/login.jsx'; 
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -66,7 +66,7 @@ function App() {
                 Destination
               </span>
             </h1>
-            <h2 className="text-5xl mt-6 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">
+            <h2 className="text-5xl mt-6 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F]">
               NomadNova
             </h2>
             <p className="mt-4 text-xl text-gray-300 max-w-2xl">
@@ -75,8 +75,8 @@ function App() {
 
             <div className="flex gap-4 mt-8">
               <button
-                className="bg-green-600 hover:bg-green-700 transition duration-300 px-8 py-3 rounded-full text-white font-semibold shadow-lg"
-                onClick={() => setShowLogin(true)} // 👉 This shows login page
+                className="bg-[#EC8E3D] hover:bg-[#FCCB6E] transition duration-300 px-8 py-3 rounded-full text-white font-semibold shadow-lg"
+                onClick={() => setShowLogin(true)} 
               >
                 Join a Trip
               </button>
