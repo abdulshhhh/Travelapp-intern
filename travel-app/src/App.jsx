@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import './App.css';
 import Loading from './components/Loading';
-import Login from './components/login.jsx';
-import SignUp from './components/SignUp.jsx';
+
+// Lazy load components for better initial load time
+const Login = lazy(() => import('./components/login.jsx'));
+const SignUp = lazy(() => import('./components/SignUp.jsx'));
 
 function App() {
+  const hasTransitionedToLogin = useRef(false);
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [activeLayer, setActiveLayer] = useState(true);
   const [bg1, setBg1] = useState(0); 
   const [bg2, setBg2] = useState(1); 
+  const [darkMode, setDarkMode] = useState(true);
 
   const backgrounds = [
     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
@@ -19,12 +23,22 @@ function App() {
     'https://images.unsplash.com/photo-1506765515384-028b60a970df',
   ];
 
-  useEffect(() => {
-    const loadingTimer = setTimeout(() => {
+  // Add theme toggle function
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
+  // Handle loading completion with a more robust approach
+  const handleLoadingComplete = () => {
+    console.log("App: handleLoadingComplete called");
+    if (!hasTransitionedToLogin.current) {
+      hasTransitionedToLogin.current = true;
       setLoading(false);
-    }, 3000);
-    return () => clearTimeout(loadingTimer);
-  }, []);
+      setShowLogin(true);
+      console.log("App: Transitioning to login page");
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,15 +62,31 @@ function App() {
     setShowSignUp(true);
   };
 
+  // Force transition to login after a maximum time (fallback)
+  useEffect(() => {
+    if (loading) {
+      const maxLoadingTime = setTimeout(() => {
+        handleLoadingComplete();
+      }, 5500); // Reduced from 7000 to 5500 (5.5 seconds, slightly longer than Loading component's timeout)
+      return () => clearTimeout(maxLoadingTime);
+    }
+  }, [loading]);
+
+  console.log("App render state:", { loading, showLogin, showSignUp });
+
+  // Simplified conditional rendering with Suspense
+  if (loading) {
+    return <Loading onLoadingComplete={handleLoadingComplete} />;
+  }
+  
   return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : showLogin ? (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] flex items-center justify-center">Loading...</div>}>
+      {showLogin ? (
         <Login onSignUpClick={handleSignUpClick} />
       ) : showSignUp ? (
         <SignUp onLoginClick={handleLoginClick} />
       ) : (
+        // Landing page content...
         <div className="relative min-h-screen text-white overflow-hidden">
           {/* Background layers */}
           <div
@@ -102,9 +132,26 @@ function App() {
               </button>
             </div>
           </div>
+          
+          {/* Theme toggle button */}
+          <button 
+            onClick={toggleTheme}
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {darkMode ? (
+              <svg className="w-6 h-6 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+              </svg>
+            )}
+          </button>
         </div>
       )}
-    </>
+    </Suspense>
   );
 }
 

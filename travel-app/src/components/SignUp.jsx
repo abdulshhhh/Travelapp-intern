@@ -116,7 +116,7 @@ export default function SignUp({ onLoginClick }) {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 text-center drop-shadow-lg">
             Join
           </h2>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FF9D6C] via-[#FFBF69] to-[#FF6B95]">
             NomadNova
           </h2>
 
@@ -222,6 +222,8 @@ export default function SignUp({ onLoginClick }) {
     </div>
   );
 }
+
+
 
 
 

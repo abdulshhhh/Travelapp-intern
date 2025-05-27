@@ -152,6 +152,23 @@ export default function Login({ onSignUpClick }) {
               />
               <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
             </div>
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full px-5 py-3 rounded-xl border border-transparent bg-white/90 focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:ring-opacity-80 text-gray-900 font-medium transition-all duration-300 placeholder-gray-500"
+              />
+              <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center text-white">
+                <input type="checkbox" className="mr-2 rounded text-[#EC8E3D]" />
+                Remember me
+              </label>
+              <a href="#" className="text-[#FCCB6E] hover:text-white transition-colors">
+                Forgot password?
+              </a>
+            </div>
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-[#EC8E3D] to-[#FCCB6E] hover:from-[#FCCB6E] hover:to-[#EC8E3D] transition-all duration-500 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1"
