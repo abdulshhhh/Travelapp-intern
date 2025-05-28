@@ -1,7 +1,8 @@
+// src/components/landingpage.jsx
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-export default function Home() {
+export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FCCB6E] to-[#6F93AD] text-white font-poppins">
       <header className="text-center py-10">
