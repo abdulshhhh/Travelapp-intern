@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const slides = [
   {
@@ -18,9 +18,8 @@ const slides = [
   },
 ];
 
-export default function Login({ onSignUpClick }) {
+export default function Login({ onSignUpClick, onBackToLanding, onLoginSuccess }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,6 +27,15 @@ export default function Login({ onSignUpClick }) {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // In a real app, you would validate credentials here
+    // For demo purposes, we'll just call onLoginSuccess
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] overflow-hidden md:overflow-hidden sm:overflow-y-auto">
@@ -96,11 +104,24 @@ export default function Login({ onSignUpClick }) {
         {/* Decorative elements */}
         <div className="absolute top-10 right-10 w-20 h-20 bg-yellow-400/20 rounded-full blur-xl"></div>
         <div className="absolute bottom-10 left-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl"></div>
-        
+
         <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-2xl border border-white/20 animate-fade-in relative overflow-hidden group">
           {/* Glass reflection effect */}
           <div className="absolute -inset-[500px] bg-gradient-to-r from-transparent via-white/10 to-transparent -rotate-45 translate-x-[1000px] group-hover:translate-x-[-1000px] transition-transform duration-1500 ease-in-out"></div>
-          
+
+          {/* Back button */}
+          {onBackToLanding && (
+            <button
+              onClick={onBackToLanding}
+              className="absolute top-4 left-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+              aria-label="Back to landing page"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 text-center drop-shadow-lg">
             Welcome to
           </h2>
@@ -112,7 +133,7 @@ export default function Login({ onSignUpClick }) {
             Login or Sign up to start your adventure
           </p>
 
-          <button 
+          <button
             className="w-full flex items-center justify-center bg-white hover:bg-gray-100 transition-all duration-300 rounded-xl py-3 mb-5 shadow-md hover:shadow-lg transform hover:-translate-y-1"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -143,7 +164,7 @@ export default function Login({ onSignUpClick }) {
             <hr className="flex-grow border-white/30" />
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="relative">
               <input
                 type="email"
@@ -180,7 +201,7 @@ export default function Login({ onSignUpClick }) {
           <div className="mt-6 text-center">
             <p className="text-white text-sm">
               New user?{' '}
-              <button 
+              <button
                 onClick={() => onSignUpClick()}
                 className="text-[#FCCB6E] hover:text-white font-bold transition-colors relative group"
               >

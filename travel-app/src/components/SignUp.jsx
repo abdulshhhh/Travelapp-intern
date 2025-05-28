@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const slides = [
   {
@@ -18,7 +18,7 @@ const slides = [
   },
 ];
 
-export default function SignUp({ onLoginClick }) {
+export default function SignUp({ onLoginClick, onBackToLanding, onSignUpSuccess }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -39,6 +39,15 @@ export default function SignUp({ onLoginClick }) {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // In a real app, you would validate and create account here
+    // For demo purposes, we'll just call onSignUpSuccess
+    if (onSignUpSuccess) {
+      onSignUpSuccess();
+    }
   };
 
   return (
@@ -108,11 +117,24 @@ export default function SignUp({ onLoginClick }) {
         {/* Decorative elements */}
         <div className="absolute top-10 right-10 w-20 h-20 bg-blue-400/20 rounded-full blur-xl"></div>
         <div className="absolute bottom-10 left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-xl"></div>
-        
+
         <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-2xl border border-white/20 animate-fade-in relative overflow-hidden group">
           {/* Glass reflection effect */}
           <div className="absolute -inset-[500px] bg-gradient-to-r from-transparent via-white/10 to-transparent -rotate-45 translate-x-[1000px] group-hover:translate-x-[-1000px] transition-transform duration-1500 ease-in-out"></div>
-          
+
+          {/* Back button */}
+          {onBackToLanding && (
+            <button
+              onClick={onBackToLanding}
+              className="absolute top-4 left-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+              aria-label="Back to landing page"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 text-center drop-shadow-lg">
             Join
           </h2>
@@ -124,7 +146,7 @@ export default function SignUp({ onLoginClick }) {
             Create an account to start your adventure
           </p>
 
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="relative">
               <input
                 type="text"
@@ -136,7 +158,7 @@ export default function SignUp({ onLoginClick }) {
               />
               <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
             </div>
-            
+
             <div className="relative">
               <input
                 type="email"
@@ -148,7 +170,7 @@ export default function SignUp({ onLoginClick }) {
               />
               <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
             </div>
-            
+
             <div className="relative">
               <input
                 type="password"
@@ -160,7 +182,7 @@ export default function SignUp({ onLoginClick }) {
               />
               <div className="absolute inset-0 rounded-xl border border-white/30 pointer-events-none"></div>
             </div>
-            
+
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-[#EC8E3D] to-[#FCCB6E] hover:from-[#FCCB6E] hover:to-[#EC8E3D] transition-all duration-500 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1"
@@ -187,7 +209,7 @@ export default function SignUp({ onLoginClick }) {
           <div className="mt-6 text-center">
             <p className="text-white text-sm">
               Already have an account?{' '}
-              <button 
+              <button
                 onClick={() => onLoginClick()}
                 className="text-[#FCCB6E] hover:text-white font-bold transition-colors relative group"
               >

@@ -5,15 +5,17 @@ import Loading from './components/Loading';
 // Lazy load components for better initial load time
 const Login = lazy(() => import('./components/login.jsx'));
 const SignUp = lazy(() => import('./components/SignUp.jsx'));
+const Dashboard = lazy(() => import('./components/Dashboard.jsx'));
 
 function App() {
   const hasTransitionedToLogin = useRef(false);
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeLayer, setActiveLayer] = useState(true);
-  const [bg1, setBg1] = useState(0); 
-  const [bg2, setBg2] = useState(1); 
+  const [bg1, setBg1] = useState(0);
+  const [bg2, setBg2] = useState(1);
   const [darkMode, setDarkMode] = useState(true);
 
   const backgrounds = [
@@ -35,8 +37,8 @@ function App() {
     if (!hasTransitionedToLogin.current) {
       hasTransitionedToLogin.current = true;
       setLoading(false);
-      setShowLogin(true);
-      console.log("App: Transitioning to login page");
+      // Don't automatically show login - show landing page instead
+      console.log("App: Transitioning to landing page");
     }
   };
 
@@ -62,6 +64,23 @@ function App() {
     setShowSignUp(true);
   };
 
+  const handleBackToLanding = () => {
+    setShowLogin(false);
+    setShowSignUp(false);
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    setShowLogin(false);
+    setShowSignUp(false);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setShowLogin(false);
+    setShowSignUp(false);
+  };
+
   // Force transition to login after a maximum time (fallback)
   useEffect(() => {
     if (loading) {
@@ -78,13 +97,15 @@ function App() {
   if (loading) {
     return <Loading onLoadingComplete={handleLoadingComplete} />;
   }
-  
+
   return (
     <Suspense fallback={<div className="min-h-screen bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] flex items-center justify-center">Loading...</div>}>
-      {showLogin ? (
-        <Login onSignUpClick={handleSignUpClick} />
+      {isLoggedIn ? (
+        <Dashboard onLogout={handleLogout} />
+      ) : showLogin ? (
+        <Login onSignUpClick={handleSignUpClick} onBackToLanding={handleBackToLanding} onLoginSuccess={handleLoginSuccess} />
       ) : showSignUp ? (
-        <SignUp onLoginClick={handleLoginClick} />
+        <SignUp onLoginClick={handleLoginClick} onBackToLanding={handleBackToLanding} onSignUpSuccess={handleLoginSuccess} />
       ) : (
         // Landing page content...
         <div className="relative min-h-screen text-white overflow-hidden">
@@ -122,9 +143,9 @@ function App() {
                 className="bg-[#EC8E3D] hover:bg-[#FCCB6E] transition duration-300 px-8 py-3 rounded-full text-white font-semibold shadow-lg"
                 onClick={handleLoginClick}
               >
-                Join a Trip
+                Begin your Journey
               </button>
-              <button 
+              <button
                 className="bg-transparent border-2 border-white hover:bg-white/10 transition duration-300 px-8 py-3 rounded-full text-white font-semibold"
                 onClick={handleSignUpClick}
               >
@@ -132,9 +153,9 @@ function App() {
               </button>
             </div>
           </div>
-          
+
           {/* Theme toggle button */}
-          <button 
+          <button
             onClick={toggleTheme}
             className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
