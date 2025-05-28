@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import logoImage from '../images/NomadNovalogo.jpg';
 
 function Loading({ onLoadingComplete }) {
   const [progress, setProgress] = useState(0);
@@ -133,17 +132,13 @@ function Loading({ onLoadingComplete }) {
     // Set favicon dynamically
     const link = document.querySelector("link[rel~='icon']") || document.createElement('link');
     link.rel = 'icon';
-    link.href = logoImage;
+    link.href = '/assets/images/NomadNovalogo.jpg';
     document.head.appendChild(link);
     
-    // Calculate how much to increment per interval to reach ~100% in 4.5 seconds
-    // 4500ms / 150ms = 30 intervals, so we need ~3.33% per interval
-    const progressIncrement = 3.5; // Slightly higher to ensure we reach 100%
+    const progressIncrement = 3.5; 
     
-    // Progress animation - adjusted to reach 100% within 4.5 seconds
     const interval = setInterval(() => {
       setProgress(prev => {
-        // Use a more consistent increment with small randomness
         const newProgress = prev + (progressIncrement + (Math.random() * 0.5));
         if (newProgress >= 100) {
           clearInterval(interval);
@@ -153,20 +148,16 @@ function Loading({ onLoadingComplete }) {
       });
     }, 150);
     
-    // Loading phase animation
     const phaseInterval = setInterval(() => {
       setLoadingPhase(prev => (prev + 1) % loadingPhrases.length);
     }, 2500);
     
-    // Ensure we reach 100% and call the completion callback
     const completeTimeout = setTimeout(() => {
       setProgress(100);
-      // Make sure we call the callback
-      console.log("Loading timeout reached, calling onLoadingComplete");
       if (onLoadingComplete) {
         onLoadingComplete();
       }
-    }, 4500); // 4.5 seconds
+    }, 4500);
     
     return () => {
       clearInterval(interval);
@@ -175,11 +166,8 @@ function Loading({ onLoadingComplete }) {
     };
   }, [onLoadingComplete]);
 
-  // Also add this effect to ensure we call onLoadingComplete when progress reaches 100
   useEffect(() => {
     if (progress >= 100 && onLoadingComplete) {
-      console.log("Progress reached 100%, calling onLoadingComplete");
-      // Small delay to ensure animations complete
       const timer = setTimeout(() => {
         onLoadingComplete();
       }, 500);
@@ -187,33 +175,27 @@ function Loading({ onLoadingComplete }) {
     }
   }, [progress, onLoadingComplete]);
   
-  // Calculate progress bar segments
   const segments = 20;
   const segmentWidth = 100 / segments;
   const filledSegments = Math.floor(progress / segmentWidth);
   
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-gray-900 via-[#0f172a] to-black flex flex-col items-center justify-center z-50 overflow-hidden">
-      {/* Interactive canvas background */}
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 z-0"
       />
       
-      {/* Animated gradient overlay */}
       <div className="absolute inset-0 bg-gradient-radial from-transparent to-black opacity-70 z-10" />
       
-      {/* Main content container */}
       <div className="relative z-20 flex flex-col items-center justify-center px-6">
-        {/* Glowing orb effect */}
         <div className="absolute w-40 h-40 rounded-full bg-gradient-to-r from-[#FF9D6C]/20 via-[#FFBF69]/20 to-[#FF6B95]/20 blur-2xl animate-pulse-slow" />
         
-        {/* Logo with 3D effect */}
         <div className="mb-12 relative group perspective">
           <div className="absolute -inset-6 bg-gradient-to-r from-[#FF9D6C]/10 to-[#FF6B95]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           <div className="relative transform transition-transform duration-1000 hover:rotate-y-12 animate-float">
             <img 
-              src={logoImage} 
+              src="/assets/images/NomadNovalogo.jpg" 
               alt="NomadNova Logo" 
               className="h-32 w-auto rounded-full shadow-xl shadow-[#FCCB6E]/20 ring-2 ring-white/10"
             />
@@ -222,12 +204,10 @@ function Loading({ onLoadingComplete }) {
           </div>
         </div>
         
-        {/* Title with animated gradient */}
         <h2 className="text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#FF9D6C] via-[#FFBF69] to-[#FF6B95] mb-12 animate-gradient-x">
           NomadNova
         </h2>
         
-        {/* Segmented progress bar */}
         <div className="w-80 flex space-x-1 mb-3">
           {[...Array(segments)].map((_, i) => (
             <div 
@@ -240,93 +220,50 @@ function Loading({ onLoadingComplete }) {
               style={{
                 transform: i < filledSegments ? 'scaleY(1.2)' : 'scaleY(1)',
                 opacity: i < filledSegments ? 1 : 0.5,
-                boxShadow: i < filledSegments ? '0 0 8px rgba(255, 157, 108, 0.5)' : 'none'
+                boxShadow: i < filledSegments ? '0 0 8px rgba(255, 157, 108, 0.5)' : 'none',
               }}
             />
           ))}
         </div>
         
-        {/* Progress percentage with animated counting */}
-        <p className="text-gray-300 text-sm font-medium tracking-widest mb-8">
-          {Math.floor(progress)}%
+        <p
+          className="text-2xl font-semibold text-white text-center tracking-wide max-w-lg h-12"
+          aria-live="polite"
+        >
+          {loadingPhrases[loadingPhase].text}
         </p>
-        
-        {/* Animated loading text with typewriter effect */}
-        <div className="h-8 mb-12 overflow-hidden">
-          <p 
-            className="text-lg font-medium tracking-wider typewriter"
-            style={{ color: loadingPhrases[loadingPhase].color }}
-          >
-            {loadingPhrases[loadingPhase].text}
-          </p>
-        </div>
-        
-        {/* Decorative elements */}
-        <div className="flex items-center justify-center space-x-3 mb-10">
-          <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-gray-600" />
-          <div className="w-2 h-2 rounded-full bg-[#FF9D6C]" />
-          <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-gray-600" />
-        </div>
-        
-        {/* Footer with hover effects */}
-        <div className="text-center">
-          <p className="text-gray-500 text-xs font-light tracking-wider">
-            © 2025 <span className="text-[#FCCB6E]/80 hover:text-[#FCCB6E] transition-colors duration-300">NomadNova</span>
-          </p>
-          <p className="text-gray-600 text-xs mt-1">
-            <span className="hover:text-gray-400 transition-colors duration-300 cursor-pointer">Terms</span> • 
-            <span className="hover:text-gray-400 transition-colors duration-300 cursor-pointer mx-2">Privacy</span> • 
-            <span className="hover:text-gray-400 transition-colors duration-300 cursor-pointer">Support</span>
-          </p>
-        </div>
       </div>
       
-      {/* Custom animations */}
       <style jsx>{`
-        @keyframes rotate-y {
-          0% { transform: rotateY(0deg); }
-          100% { transform: rotateY(360deg); }
+        .animate-pulse-slow {
+          animation: pulse 5s ease-in-out infinite;
         }
-        
-        .rotate-y-12 {
-          transform: rotateY(12deg);
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
         }
-        
-        .perspective {
-          perspective: 1000px;
+        @keyframes pulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
         }
-        
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        .animate-gradient-x {
+          background-size: 200% 100%;
+          animation: gradient-x 4s ease infinite;
+        }
         @keyframes gradient-x {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
-        
-        .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 8s ease infinite;
+        .perspective {
+          perspective: 600px;
         }
-        
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.3; transform: scale(1); }
-          50% { opacity: 0.6; transform: scale(1.1); }
-        }
-        
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
-        }
-        
-        @keyframes typewriter {
-          from { width: 0; }
-          to { width: 100%; }
-        }
-        
-        .typewriter {
-          overflow: hidden;
-          white-space: nowrap;
-          border-right: 2px solid;
-          width: 0;
-          animation: typewriter 2s steps(40) forwards;
+        .rotate-y-12 {
+          transform-style: preserve-3d;
+          transform: rotateY(12deg);
         }
       `}</style>
     </div>

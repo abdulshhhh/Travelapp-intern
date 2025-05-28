@@ -1,66 +1,69 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import './App.css';
 import Loading from './components/Loading';
-const Login = lazy(() => import('./components/login.jsx'));
+
+const Login = lazy(() => import('./components/Login.jsx'));
 const SignUp = lazy(() => import('./components/SignUp.jsx'));
-<<<<<<< HEAD
-const Landing = lazy(() => import('./components/landingpage.jsx'));
-=======
 const Dashboard = lazy(() => import('./components/Dashboard.jsx'));
->>>>>>> c5080df2054bd6bbccf5ed7f23d3952f7012358b
 
 function App() {
   const hasTransitioned = useRef(false);
   const [loading, setLoading] = useState(true);
-  const [showWelcomeScreen, setShowWelcomeScreen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
-<<<<<<< HEAD
-  const [showLandingPage, setShowLandingPage] = useState(false);
-=======
   const [isLoggedIn, setIsLoggedIn] = useState(false);
->>>>>>> c5080df2054bd6bbccf5ed7f23d3952f7012358b
   const [activeLayer, setActiveLayer] = useState(true);
   const [bg1, setBg1] = useState(0);
   const [bg2, setBg2] = useState(1);
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(() => {
+    // initialize from localStorage or default to true
+    const saved = localStorage.getItem('darkMode');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
 
   const backgrounds = [
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-    'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
-    'https://images.unsplash.com/photo-1501785888041-af3ef285b470',
-    'https://images.unsplash.com/photo-1506765515384-028b60a970df',
+    "/assets/images/Welcomeslider1.jpeg",
+    "/assets/images/Welcomeslider2.jpeg",
+    "/assets/images/Welcomeslider3.jpeg",
+    "/assets/images/Welcomeslider4.jpeg",
   ];
+
+  // Sync dark mode class on mount and when darkMode changes
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+  }, [darkMode]);
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
-    document.documentElement.classList.toggle('dark');
   };
 
   const handleLoadingComplete = () => {
     if (!hasTransitioned.current) {
       hasTransitioned.current = true;
       setLoading(false);
-<<<<<<< HEAD
-      setShowWelcomeScreen(true); // 👈 Show the welcome screen after loading
-=======
-      // Don't automatically show login - show landing page instead
       console.log("App: Transitioning to landing page");
->>>>>>> c5080df2054bd6bbccf5ed7f23d3952f7012358b
     }
   };
 
+  // Background image transition effect — interval only runs once on mount
   useEffect(() => {
     const interval = setInterval(() => {
-      if (activeLayer) {
-        setBg2((prev) => (prev + 1) % backgrounds.length);
-      } else {
-        setBg1((prev) => (prev + 1) % backgrounds.length);
-      }
-      setActiveLayer((prev) => !prev);
+      setActiveLayer((prevActive) => {
+        if (prevActive) {
+          setBg2((prev) => (prev + 1) % backgrounds.length);
+        } else {
+          setBg1((prev) => (prev + 1) % backgrounds.length);
+        }
+        return !prevActive;
+      });
     }, 5000);
     return () => clearInterval(interval);
-  }, [activeLayer]);
+  }, []);
 
   useEffect(() => {
     if (loading) {
@@ -72,24 +75,15 @@ function App() {
   }, [loading]);
 
   const handleLoginClick = () => {
-    setShowWelcomeScreen(false);
     setShowSignUp(false);
     setShowLogin(true);
   };
 
   const handleSignUpClick = () => {
-    setShowWelcomeScreen(false);
     setShowLogin(false);
     setShowSignUp(true);
   };
 
-<<<<<<< HEAD
-  const handleAuthSuccess = () => {
-    setShowLogin(false);
-    setShowSignUp(false);
-    setShowLandingPage(true);
-  };
-=======
   const handleBackToLanding = () => {
     setShowLogin(false);
     setShowSignUp(false);
@@ -107,41 +101,33 @@ function App() {
     setShowSignUp(false);
   };
 
-  // Force transition to login after a maximum time (fallback)
-  useEffect(() => {
-    if (loading) {
-      const maxLoadingTime = setTimeout(() => {
-        handleLoadingComplete();
-      }, 5500); // Reduced from 7000 to 5500 (5.5 seconds, slightly longer than Loading component's timeout)
-      return () => clearTimeout(maxLoadingTime);
-    }
-  }, [loading]);
->>>>>>> c5080df2054bd6bbccf5ed7f23d3952f7012358b
-
   if (loading) {
     return <Loading onLoadingComplete={handleLoadingComplete} />;
   }
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] flex items-center justify-center">Loading...</div>}>
-<<<<<<< HEAD
-      {showLandingPage ? (
-        <Landing />
-      ) : showLogin ? (
-        <Login onSignUpClick={handleSignUpClick} onBackToHome={handleAuthSuccess} />
-      ) : showSignUp ? (
-        <SignUp onLoginClick={handleLoginClick} onBackToHome={handleAuthSuccess} />
-      ) : showWelcomeScreen ? (
-=======
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] flex items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
       {isLoggedIn ? (
         <Dashboard onLogout={handleLogout} />
       ) : showLogin ? (
-        <Login onSignUpClick={handleSignUpClick} onBackToLanding={handleBackToLanding} onLoginSuccess={handleLoginSuccess} />
+        <Login
+          onSignUpClick={handleSignUpClick}
+          onBackToLanding={handleBackToLanding}
+          onLoginSuccess={handleLoginSuccess}
+        />
       ) : showSignUp ? (
-        <SignUp onLoginClick={handleLoginClick} onBackToLanding={handleBackToLanding} onSignUpSuccess={handleLoginSuccess} />
+        <SignUp
+          onLoginClick={handleLoginClick}
+          onBackToLanding={handleBackToLanding}
+          onSignUpSuccess={handleLoginSuccess}
+        />
       ) : (
-        // Landing page content...
->>>>>>> c5080df2054bd6bbccf5ed7f23d3952f7012358b
         <div className="relative min-h-screen text-white overflow-hidden">
           <div
             className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
@@ -167,7 +153,7 @@ function App() {
               NomadNova
             </h2>
             <p className="mt-4 text-xl text-gray-300 max-w-2xl">
-              Explore the world with people who vibe with your soul.
+              "Unleash the Nomad in You"
             </p>
 
             <div className="flex gap-4 mt-8">
@@ -186,28 +172,32 @@ function App() {
             </div>
           </div>
 
-<<<<<<< HEAD
-          <button 
-=======
           {/* Theme toggle button */}
           <button
->>>>>>> c5080df2054bd6bbccf5ed7f23d3952f7012358b
             onClick={toggleTheme}
             className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
             {darkMode ? (
-              <svg className="w-6 h-6 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                className="w-6 h-6 text-yellow-300"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zM14 10a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
             ) : (
-              <svg className="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                className="w-6 h-6 text-gray-800"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
               </svg>
             )}
           </button>
         </div>
-      ) : null}
+      )}
     </Suspense>
   );
 }

@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react';
 
 const slides = [
   {
-    image: 'https://images.pexels.com/photos/3155666/pexels-photo-3155666.jpeg',
+    image: '/assets/images/Signupslider1.jpeg',
     title: 'Join our community',
     subtitle: 'Connect with travelers from around the world.',
   },
   {
-    image: 'https://images.pexels.com/photos/3061217/pexels-photo-3061217.jpeg',
+    image: '/assets/images/Signupslider2.jpeg',
     title: 'Create your profile',
     subtitle: 'Share your travel preferences and interests.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1',
+    image: '/assets/images/Signupslider3.jpeg',
     title: 'Start your journey',
     subtitle: 'Find your next adventure with like-minded travelers.',
   },
@@ -51,7 +51,7 @@ export default function SignUp({ onLoginClick, onBackToLanding, onSignUpSuccess 
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-[#6F93AD] to-[#EC8E3D] overflow-hidden md:overflow-hidden sm:overflow-y-auto">
+    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-r from-[#f6c28b] via-[#e1a87e] to-[#c47d5e] overflow-hidden md:overflow-hidden sm:overflow-y-auto">
       {/* Left slider section */}
       <div className="w-full md:w-1/2 h-[655px] sm:h-[400px] md:h-auto relative overflow-hidden">
         {slides.map((slide, index) => (
@@ -138,7 +138,7 @@ export default function SignUp({ onLoginClick, onBackToLanding, onSignUpSuccess 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 text-center drop-shadow-lg">
             Join
           </h2>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FF9D6C] via-[#FFBF69] to-[#FF6B95]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#204231] via-[#5E5854] to-[#204231]">
             NomadNova
           </h2>
 
@@ -199,7 +199,7 @@ export default function SignUp({ onLoginClick, onBackToLanding, onSignUpSuccess 
 
           <button className="w-full flex items-center justify-center bg-white hover:bg-gray-100 transition-all duration-300 rounded-xl py-3 mb-5 shadow-md hover:shadow-lg transform hover:-translate-y-1">
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+              src="\assets\images\Google__G__logo.svg.webp"
               alt="Google icon"
               className="w-6 h-6 mr-3"
             />

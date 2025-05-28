@@ -12,31 +12,31 @@ const mockTrips = [
     destination: "Bali, Indonesia",
     duration: "7 days",
     price: "$1,200",
-    image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1",
+    image: "/assets/images/baliadventure.jpeg",
     spots: 3,
     maxSpots: 6,
     date: "March 15-22, 2025",
     organizer: "Sarah Chen",
     organizerId: "org_1",
-    organizerAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786",
+    organizerAvatar: "/assets/images/sarachen.jpeg",
     tags: ["Beach", "Culture", "Adventure"],
     joinedMembers: [
       {
         id: "user_1",
         name: "Alex Rivera",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+        avatar: "/assets/images/Alexrivera.jpeg",
         joinedDate: "2024-12-01"
       },
       {
         id: "user_2",
         name: "Maya Patel",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
+        avatar: "/assets/images/mayapatel.jpeg",
         joinedDate: "2024-12-03"
       },
       {
         id: "user_3",
         name: "Jordan Kim",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+        avatar: "/assets/images/jordankim.jpeg",
         joinedDate: "2024-12-05"
       }
     ],
@@ -48,25 +48,25 @@ const mockTrips = [
     destination: "Tokyo, Japan",
     duration: "5 days",
     price: "$1,800",
-    image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf",
+    image: "/assets/images/Tokyo.jpeg",
     spots: 2,
     maxSpots: 4,
     date: "April 10-15, 2025",
     organizer: "Mike Johnson",
     organizerId: "org_2",
-    organizerAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+    organizerAvatar: "/assets/images/mikejohnson.jpeg",
     tags: ["City", "Food", "Culture"],
     joinedMembers: [
       {
         id: "user_4",
         name: "Sophie Chen",
-        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
+        avatar: "/assets/images/sophiachen.jpeg",
         joinedDate: "2024-11-28"
       },
       {
         id: "user_5",
         name: "David Park",
-        avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
+        avatar: "/assets/images/davidpark.jpeg",
         joinedDate: "2024-12-02"
       }
     ],
@@ -78,37 +78,37 @@ const mockTrips = [
     destination: "Switzerland",
     duration: "10 days",
     price: "$2,500",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+    image: "/assets/images/swissmount.jpeg",
     spots: 4,
     maxSpots: 8,
     date: "May 20-30, 2025",
     organizer: "Emma Wilson",
     organizerId: "org_3",
-    organizerAvatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f",
+    organizerAvatar: "/assets/images/emmawilson.jpeg",
     tags: ["Mountains", "Hiking", "Nature"],
     joinedMembers: [
       {
         id: "user_6",
         name: "Carlos Rodriguez",
-        avatar: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128",
+        avatar: "/assets/images/carlosrodriguez.jpeg",
         joinedDate: "2024-11-25"
       },
       {
         id: "user_7",
         name: "Lisa Zhang",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        avatar: "/assets/images/lisazhang.jpeg",
         joinedDate: "2024-11-30"
       },
       {
         id: "user_8",
         name: "Ahmed Hassan",
-        avatar: "https://images.unsplash.com/photo-1463453091185-61582044d556",
+        avatar: "/assets/images/ahmedhassen.jpeg",
         joinedDate: "2024-12-01"
       },
       {
         id: "user_9",
         name: "Nina Kowalski",
-        avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb",
+        avatar: "/assets/images/ninakowalski.jpeg",
         joinedDate: "2024-12-04"
       }
     ],
@@ -121,7 +121,7 @@ const completedTrips = [
     id: 1,
     title: "Iceland Northern Lights",
     destination: "Reykjavik, Iceland",
-    image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7",
+    image: "/assets/images/icelandnorthernlights.jpeg",
     rating: 4.9,
     participants: 8,
     date: "December 2024"
@@ -130,7 +130,7 @@ const completedTrips = [
     id: 2,
     title: "Santorini Sunset",
     destination: "Santorini, Greece",
-    image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff",
+    image: "/assets/images/santorinisunset.jpeg",
     rating: 4.8,
     participants: 6,
     date: "October 2024"
@@ -144,7 +144,7 @@ const testimonials = [
     trip: "Bali Adventure",
     rating: 5,
     comment: "Amazing experience! Met incredible people and saw breathtaking places.",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
+    avatar: "/assets/images/Alexrivera.jpeg"
   },
   {
     id: 2,
@@ -152,15 +152,15 @@ const testimonials = [
     trip: "Tokyo Explorer",
     rating: 5,
     comment: "Perfect organization and wonderful travel companions. Highly recommend!",
-    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786"
+    avatar: "/assets/images/lisazhang.jpeg"
   }
 ];
 
 const popularDestinations = [
-  { name: "Paris, France", visits: "2.3k", image: "https://images.unsplash.com/photo-1502602898536-47ad22581b52" },
-  { name: "New York, USA", visits: "1.8k", image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9" },
-  { name: "Dubai, UAE", visits: "1.5k", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c" },
-  { name: "London, UK", visits: "1.2k", image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad" }
+  { name: "Paris, France", visits: "2.3k", image: "/assets/images/paris.webp" },
+  { name: "New York, USA", visits: "1.8k", image: "/assets/images/newyork.jpeg" },
+  { name: "Dubai, UAE", visits: "1.5k", image: "/assets/images/dubai.jpeg" },
+  { name: "London, UK", visits: "1.2k", image: "/assets/images/london.jpeg" }
 ];
 
 export default function Dashboard({ onLogout }) {
@@ -190,7 +190,7 @@ export default function Dashboard({ onLogout }) {
   const currentUser = {
     id: "current_user",
     name: "Alex Rivera",
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
+    avatar: "/assets/images/Alexrivera.jpeg",
     email: "alex.rivera@nomadnova.com",
     fullName: "Alex Rivera",
     bio: "Passionate traveler and adventure seeker. Love exploring new cultures, meeting amazing people, and creating unforgettable memories around the world! 🌍✈️",
@@ -314,7 +314,7 @@ export default function Dashboard({ onLogout }) {
       departure: newTrip.departure,
       duration: `${durationDays} days`,
       price: newTrip.budget,
-      image: "https://images.unsplash.com/photo-1500835556837-99ac94a94552", // Default image
+      image: "/assets/images/default.jpeg", // Default image
       spots: newTrip.maxPeople - newTrip.numberOfPeople,
       date: `${formatDate(fromDate)} - ${formatDate(toDate)}`,
       organizer: "You", // In a real app, this would be the current user
@@ -494,7 +494,7 @@ export default function Dashboard({ onLogout }) {
                       <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span className="text-sm">Verified</span>
+                      <span className="text-sm"></span>
                     </div>
                   </div>
                   <div className="flex space-x-2">
@@ -885,14 +885,14 @@ export default function Dashboard({ onLogout }) {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e", title: "Mountain Adventure", location: "Swiss Alps" },
-              { url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4", title: "Alpine Views", location: "Switzerland" },
-              { url: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf", title: "Tokyo Nights", location: "Japan" },
-              { url: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1", title: "Bali Beach", location: "Indonesia" },
-              { url: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7", title: "Northern Lights", location: "Iceland" },
-              { url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff", title: "Santorini Sunset", location: "Greece" },
-              { url: "https://images.unsplash.com/photo-1502602898536-47ad22581b52", title: "Paris Romance", location: "France" },
-              { url: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9", title: "NYC Skyline", location: "USA" }
+              { url: "/assets/images/MountainAdventure.jpeg", title: "Mountain Adventure", location: "Swiss Alps" },
+              { url: "/assets/images/AlpineViews.jpeg", title: "Alpine Views", location: "Switzerland" },
+              { url: "/assets/images/Tokyo.jpeg", title: "Tokyo Nights", location: "Japan" },
+              { url: "/assets/images/BaliBeach.jpeg", title: "Bali Beach", location: "Indonesia" },
+              { url: "/assets/images/icelandnorthernlights.jpeg", title: "Northern Lights", location: "Iceland" },
+              { url: "/assets/images/santorinisunset.jpeg", title: "Santorini Sunset", location: "Greece" },
+              { url: "/assets/images/parisromance.jpg", title: "Paris Romance", location: "France" },
+              { url: "/assets/images/NYCSkyline.jpeg", title: "NYC Skyline", location: "USA" }
             ].map((photo, index) => (
               <div
                 key={index}

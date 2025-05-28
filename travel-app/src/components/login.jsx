@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react';
 
 const slides = [
   {
-    image: 'https://images.pexels.com/photos/2659475/pexels-photo-2659475.jpeg',
+    image: '/assets/images/Loginslider1.jpeg',
     title: 'Discover new places',
     subtitle: 'Explore beautiful destinations worldwide.',
   },
   {
-    image: 'https://images.pexels.com/photos/1878293/pexels-photo-1878293.jpeg',
+    image: '/assets/images/Loginslider2.jpeg',
     title: 'Experience the thrill',
     subtitle: 'Adventure awaits you beyond horizons.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24',
+    image: '/assets/images/Loginslider3.jpeg',
     title: 'Create unforgettable memories',
     subtitle: 'Travel with people who vibe with your soul.',
   },
@@ -139,7 +139,7 @@ export default function Login({ onSignUpClick, onBackToLanding, onLoginSuccess }
             onMouseLeave={() => setIsHovered(false)}
           >
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+              src="\assets\images\Google__G__logo.svg.webp"
               alt="Google icon"
               className="w-6 h-6 mr-3"
             />
@@ -148,7 +148,7 @@ export default function Login({ onSignUpClick, onBackToLanding, onLoginSuccess }
 
           <button className="w-full flex items-center justify-center bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-xl py-3 mb-8 shadow-md hover:shadow-lg transform hover:-translate-y-1 text-white">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="\assets\images\Facebook-Free-PNG.png"
               className="w-6 h-6 mr-3"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -186,7 +186,7 @@ export default function Login({ onSignUpClick, onBackToLanding, onLoginSuccess }
                 <input type="checkbox" className="mr-2 rounded text-[#EC8E3D]" />
                 Remember me
               </label>
-              <a href="#" className="text-[#FCCB6E] hover:text-white transition-colors">
+              <a href="#" className="underline text-[#FCCB6E] hover:text-white transition-colors">
                 Forgot password?
               </a>
             </div>

@@ -42,7 +42,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
       title: "Bali Adventure",
       destination: "Bali, Indonesia",
       date: "March 15-22, 2025",
-      image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1",
+      image: "/assets/images/baliadventure.jpeg",
       role: "member",
       status: "confirmed"
     },
@@ -51,7 +51,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
       title: "European Backpacking",
       destination: "Multiple Cities",
       date: "June 1-30, 2025",
-      image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b",
+      image: "/assets/images/EuropeanBackpacking.jpeg",
       role: "organizer",
       status: "planning"
     },
@@ -60,7 +60,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
       title: "Safari Experience",
       destination: "Kenya",
       date: "August 10-20, 2025",
-      image: "https://images.unsplash.com/photo-1516426122078-c23e76319801",
+      image: "/assets/images/SafariExperience.jpeg",
       role: "member",
       status: "pending"
     }
@@ -339,14 +339,14 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 <h3 className="text-xl font-bold text-[#204231] mb-4">Recent Travel Memories</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {[
-                    { url: "https://images.unsplash.com/photo-1502602898536-47ad22581b52", location: "Paris, France", date: "Dec 2024" },
-                    { url: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad", location: "London, UK", date: "Nov 2024" },
-                    { url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4", location: "Swiss Alps", date: "Oct 2024" },
-                    { url: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1", location: "Bali, Indonesia", date: "Sep 2024" },
-                    { url: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf", location: "Tokyo, Japan", date: "Aug 2024" },
-                    { url: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7", location: "Iceland", date: "Jul 2024" },
-                    { url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff", location: "Santorini, Greece", date: "Jun 2024" },
-                    { url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e", location: "Swiss Alps", date: "May 2024" }
+                    { url: "/assets/images/paris.webp", location: "Paris, France", date: "Dec 2024" },
+                    { url: "/assets/images/london.jpeg", location: "London, UK", date: "Nov 2024" },
+                    { url: "/assets/images/swissalps.jpeg", location: "Swiss Alps", date: "Oct 2024" },
+                    { url: "/assets/images/baliadventure.jpeg", location: "Bali, Indonesia", date: "Sep 2024" },
+                    { url: "/assets/images/Tokyo.jpeg", location: "Tokyo, Japan", date: "Aug 2024" },
+                    { url: "/assets/images/icelandnorthernlights.jpeg", location: "Iceland", date: "Jul 2024" },
+                    { url: "/assets/images/santorinisunset.jpeg", location: "Santorini, Greece", date: "Jun 2024" },
+                    { url: "/assets/images/swissmount.jpeg", location: "Swiss Alps", date: "May 2024" }
                   ].map((memory, index) => (
                     <div key={index} className="relative group cursor-pointer">
                       <img
@@ -397,7 +397,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                     {
                       id: 1,
                       reviewer: "Sarah Chen",
-                      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786",
+                      avatar: "/assets/images/sarachen.jpeg",
                       rating: 5,
                       comment: "Alex was an amazing travel companion! Very organized and always positive. Would definitely travel with again!",
                       trip: "European Backpacking",
@@ -406,7 +406,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                     {
                       id: 2,
                       reviewer: "Mike Johnson",
-                      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+                      avatar: "/assets/images/mikejohnson.jpeg",
                       rating: 5,
                       comment: "Great organizer and very knowledgeable about local cultures. Made our trip unforgettable!",
                       trip: "Southeast Asia Food Tour",
@@ -415,7 +415,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                     {
                       id: 3,
                       reviewer: "Emma Wilson",
-                      avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f",
+                      avatar: "/assets/images/emmawilson.jpeg",
                       rating: 4,
                       comment: "Friendly and reliable. Good communication throughout the trip planning process.",
                       trip: "Swiss Alps Trek",
@@ -457,7 +457,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                     {
                       id: 1,
                       reviewee: "David Park",
-                      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
+                      avatar: "/assets/images/davidpark.jpeg",
                       rating: 5,
                       comment: "Excellent trip organizer! Everything was perfectly planned and executed.",
                       trip: "Tokyo Explorer",
@@ -466,7 +466,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                     {
                       id: 2,
                       reviewee: "Lisa Zhang",
-                      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+                      avatar: "/assets/images/lisazhang.jpeg",
                       rating: 4,
                       comment: "Great travel companion, very adventurous and fun to be around!",
                       trip: "Bali Adventure",
