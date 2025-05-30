@@ -302,6 +302,17 @@ export default function Dashboard({ onLogout }) {
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [availableTrips, setAvailableTrips] = useState(mockTrips);
+  const [newTrip, setNewTrip] = useState({
+    destination: '',
+    departure: '',
+    numberOfPeople: 0,
+    maxPeople: 0,
+    fromDate: '',
+    toDate: '',
+    transport: '',
+    budget: '',
+    description: ''
+  });
 
   // Current user data
   const currentUser = {
@@ -345,6 +356,69 @@ export default function Dashboard({ onLogout }) {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const formatDate = (date) => {
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTrip(prev => ({ 
+      ...prev, 
+      [name]: name === 'numberOfPeople' || name === 'maxPeople' 
+        ? parseInt(value) || 0 
+        : value 
+    }));
+  };
+
+  const handlePostTrip = () => {
+    if (!newTrip.destination || !newTrip.departure || !newTrip.fromDate ||
+        !newTrip.toDate || !newTrip.budget || !newTrip.maxPeople) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    const fromDate = new Date(newTrip.fromDate);
+    const toDate = new Date(newTrip.toDate);
+    const durationDays = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+
+    const tripToAdd = {
+      id: availableTrips.length + 1,
+      title: `${newTrip.destination} Adventure`,
+      destination: newTrip.destination,
+      departure: newTrip.departure,
+      duration: `${durationDays} days`,
+      price: newTrip.budget,
+      image: "/assets/images/default.jpeg",
+      spots: newTrip.maxPeople - newTrip.numberOfPeople,
+      maxSpots: newTrip.maxPeople,
+      date: `${formatDate(fromDate)} - ${formatDate(toDate)}`,
+      organizer: currentUser.name,
+      organizerId: currentUser.id,
+      organizerAvatar: currentUser.avatar,
+      tags: ["Adventure", "Travel"],
+      transport: newTrip.transport,
+      description: newTrip.description,
+      joinedMembers: []
+    };
+
+    setAvailableTrips([tripToAdd, ...availableTrips]);
+    setShowPostTrip(false);
+    setNewTrip({
+      destination: '',
+      departure: '',
+      numberOfPeople: 0,
+      maxPeople: 0,
+      fromDate: '',
+      toDate: '',
+      transport: '',
+      budget: '',
+      description: ''
+    });
+
+    alert('Trip posted successfully!');
+  };
 
   // Handle functions
   const handleJoinTrip = (tripId) => {
@@ -422,67 +496,9 @@ export default function Dashboard({ onLogout }) {
     alert('Opening message interface...');
   };
 
-  const handlePostTrip = () => {
-    if (!newTrip.destination || !newTrip.departure || !newTrip.fromDate ||
-        !newTrip.toDate || !newTrip.budget || !newTrip.maxPeople) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    const fromDate = new Date(newTrip.fromDate);
-    const toDate = new Date(newTrip.toDate);
-    const durationDays = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
-
-    const tripToAdd = {
-      id: availableTrips.length + 1,
-      title: `${newTrip.destination} Adventure`,
-      destination: newTrip.destination,
-      departure: newTrip.departure,
-      duration: `${durationDays} days`,
-      price: newTrip.budget,
-      image: "/assets/images/default.jpeg",
-      spots: newTrip.maxPeople - newTrip.numberOfPeople,
-      maxSpots: newTrip.maxPeople,
-      date: `${formatDate(fromDate)} - ${formatDate(toDate)}`,
-      organizer: currentUser.name,
-      organizerId: currentUser.id,
-      organizerAvatar: currentUser.avatar,
-      tags: ["Adventure", "Travel"],
-      transport: newTrip.transport,
-      description: newTrip.description,
-      joinedMembers: []
-    };
-
-    setAvailableTrips([tripToAdd, ...availableTrips]);
-    setShowPostTrip(false);
-    setNewTrip({
-      destination: '',
-      departure: '',
-      numberOfPeople: 0,
-      maxPeople: 0,
-      fromDate: '',
-      toDate: '',
-      transport: '',
-      budget: '',
-      description: ''
-    });
-
-    alert('Trip posted successfully!');
-  };
-
   const handlePhotoClick = (photo) => {
     setSelectedPhoto(photo);
     setShowPhotoModal(true);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewTrip(prev => ({ ...prev, [name]: value }));
-  };
-
-  const formatDate = (date) => {
-    const options = { month: 'long', day: 'numeric', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
   };
 
   return (
@@ -777,7 +793,6 @@ export default function Dashboard({ onLogout }) {
                 >
                   Close
                 </button>
-                {/* Action Buttons (continued) */}
                 <button
                   onClick={() => handleJoinTrip(selectedTrip.id)}
                   disabled={joinedTrips.includes(selectedTrip.id)}
@@ -924,152 +939,151 @@ export default function Dashboard({ onLogout }) {
 
         {/* Post Trip Modal */}
         {showPostTrip && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl p-8 max-w-2xl w-full border border-[#d1c7b7] shadow-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-3xl font-bold text-[#2c5e4a]">Post a New Trip</h3>
-                <button
-                  onClick={() => setShowPostTrip(false)}
-                  className="text-[#5E5854] hover:text-[#f87c6d] text-3xl font-bold"
-                >
-                  <FiX />
-                </button>
-              </div>
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="bg-white rounded-2xl p-8 max-w-2xl w-full border border-[#d1c7b7] shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-3xl font-bold text-[#2c5e4a]">Post a New Trip</h3>
+        <button
+          onClick={() => setShowPostTrip(false)}
+          className="text-[#5E5854] hover:text-[#f87c6d] text-3xl font-bold"
+        >
+          <FiX />
+        </button>
+      </div>
 
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">Destination*</label>
-                    <input
-                      type="text"
-                      name="destination"
-                      value={newTrip.destination}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                      placeholder="Where are you going?"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">Departure From*</label>
-                    <input
-                      type="text"
-                      name="departure"
-                      value={newTrip.departure}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                      placeholder="Starting point"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">From Date*</label>
-                    <input
-                      type="date"
-                      name="fromDate"
-                      value={newTrip.fromDate}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">To Date*</label>
-                    <input
-                      type="date"
-                      name="toDate"
-                      value={newTrip.toDate}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">Number of People Going*</label>
-                    <input
-                      type="number"
-                      name="numberOfPeople"
-                      value={newTrip.numberOfPeople}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                      min="1"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">Maximum People*</label>
-                    <input
-                      type="number"
-                      name="maxPeople"
-                      value={newTrip.maxPeople}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                      min="1"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">Transportation</label>
-                    <select
-                      name="transport"
-                      value={newTrip.transport}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                    >
-                      <option value="">Select option</option>
-                      <option value="Flight">Flight</option>
-                      <option value="Train">Train</option>
-                      <option value="Bus">Bus</option>
-                      <option value="Car">Car</option>
-                      <option value="Mixed">Mixed</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[#5E5854] font-medium mb-2">Estimated Budget*</label>
-                    <input
-                      type="text"
-                      name="budget"
-                      value={newTrip.budget}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent"
-                      placeholder="e.g. $1,200"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[#5E5854] font-medium mb-2">Trip Description</label>
-                  <textarea
-                    name="description"
-                    value={newTrip.description}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent h-32"
-                    placeholder="Tell potential travel buddies about your trip..."
-                  ></textarea>
-                </div>
-
-                <div className="flex justify-end space-x-4 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowPostTrip(false)}
-                    className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-semibold"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handlePostTrip}
-                    className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold"
-                  >
-                    Post Trip
-                  </button>
-                </div>
-              </form>
-            </div>
+      <form className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Destination*</label>
+            <input
+              type="text"
+              name="destination"
+              value={newTrip.destination}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              placeholder="Where are you going?"
+              required
+            />
           </div>
-        )}
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Departure From*</label>
+            <input
+              type="text"
+              name="departure"
+              value={newTrip.departure}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              placeholder="Starting point"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">From Date*</label>
+            <input
+              type="date"
+              name="fromDate"
+              value={newTrip.fromDate}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">To Date*</label>
+            <input
+              type="date"
+              name="toDate"
+              value={newTrip.toDate}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Number of People Going*</label>
+            <input
+              type="number"
+              name="numberOfPeople"
+              value={newTrip.numberOfPeople}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              min="1"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Maximum People*</label>
+            <input
+              type="number"
+              name="maxPeople"
+              value={newTrip.maxPeople}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              min="1"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Transportation</label>
+            <select
+              name="transport"
+              value={newTrip.transport}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+            >
+              <option value="">Select option</option>
+              <option value="Flight">Flight</option>
+              <option value="Train">Train</option>
+              <option value="Bus">Bus</option>
+              <option value="Car">Car</option>
+              <option value="Mixed">Mixed</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Estimated Budget*</label>
+            <input
+              type="text"
+              name="budget"
+              value={newTrip.budget}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              placeholder="e.g. $1,200"
+              required
+            />
+          </div>
+        </div>
 
+        <div>
+          <label className="block text-[#5E5854] font-medium mb-2">Trip Description</label>
+          <textarea
+            name="description"
+            value={newTrip.description}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854] h-32"
+            placeholder="Tell potential travel buddies about your trip..."
+          ></textarea>
+        </div>
+
+        <div className="flex justify-end space-x-4 pt-4">
+          <button
+            type="button"
+            onClick={() => setShowPostTrip(false)}
+            className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handlePostTrip}
+            className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+          >
+            Post Trip
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
         {/* Group Chat Modal */}
         {showGroupChat && selectedTrip && (
           <GroupChat

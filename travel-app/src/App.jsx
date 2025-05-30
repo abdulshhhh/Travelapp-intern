@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import './App.css';
 
 // Lazy loaded components
-const Login = lazy(() => import('./components/Login'));
+const Login = lazy(() => import('./components/login')); // Fixed typo here
 const SignUp = lazy(() => import('./components/SignUp'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Profile = lazy(() => import('./components/Profile'));
@@ -182,12 +182,10 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useLocalStorage(STORAGE_KEYS.DARK_MODE, true);
 
-  // Handle dark mode
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  // Handle loading completion
   const handleLoadingComplete = useCallback(() => {
     if (!hasTransitioned.current) {
       hasTransitioned.current = true;
@@ -195,15 +193,12 @@ const App = () => {
     }
   }, []);
 
-  // Auto-complete loading after timeout
   useEffect(() => {
     if (!loading) return;
-    
     const timer = setTimeout(handleLoadingComplete, LOADING_DURATION);
     return () => clearTimeout(timer);
   }, [loading, handleLoadingComplete]);
 
-  // Auth handlers
   const handleAuthSuccess = useCallback(() => setIsLoggedIn(true), []);
   const handleLogout = useCallback(() => setIsLoggedIn(false), []);
 
@@ -220,7 +215,6 @@ const App = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          
           <Route
             path="/login"
             element={
@@ -229,7 +223,6 @@ const App = () => {
               </PublicRoute>
             }
           />
-          
           <Route
             path="/signup"
             element={
@@ -238,7 +231,6 @@ const App = () => {
               </PublicRoute>
             }
           />
-          
           <Route
             path="/dashboard"
             element={
@@ -252,7 +244,6 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          
           <Route
             path="/profile"
             element={
