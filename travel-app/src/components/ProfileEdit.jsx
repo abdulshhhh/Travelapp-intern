@@ -20,6 +20,7 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(profileData.avatar);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -78,10 +79,32 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
     onOTPVerification('phone');
   };
 
-  const handleSave = () => {
-    // In a real app, this would save to backend
-    alert('Profile updated successfully!');
-    onClose();
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      // Basic validation
+      if (!formData.fullName.trim()) {
+        alert('Please enter your full name');
+        return;
+      }
+
+      // In a real app, you would call your API here
+      // const response = await api.updateProfile({ 
+      //   ...formData, 
+      //   avatar: selectedImage 
+      // });
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      alert('Profile updated successfully!');
+      onClose();
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      alert('Failed to save profile. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const availableCategories = [
@@ -132,12 +155,28 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
               <h2 className="text-2xl font-bold text-gray-800">
                 {sections.find(s => s.id === activeSection)?.label}
               </h2>
-              <button
-                onClick={onClose}
-                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
-              >
-                <FiX className="w-6 h-6" />
-              </button>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors text-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSaving ? (
+                    'Saving...'
+                  ) : (
+                    <>
+                      <FiSave className="mr-2 w-4 h-4" />
+                      Save
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={onClose}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                >
+                  <FiX className="w-6 h-6" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -188,6 +227,7 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
                         value={formData.fullName}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent font-medium"
+                        required
                       />
                     </div>
 
@@ -400,10 +440,17 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
               </button>
               <button
                 onClick={handleSave}
-                className="inline-flex items-center bg-#FCCB6E hover:bg-yellow-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+                disabled={isSaving}
+                className="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <FiSave className="mr-2 w-5 h-5" />
-                Save Changes
+                {isSaving ? (
+                  'Saving...'
+                ) : (
+                  <>
+                    <FiSave className="mr-2 w-5 h-5" />
+                    Save Changes
+                  </>
+                )}
               </button>
             </div>
           </div>
