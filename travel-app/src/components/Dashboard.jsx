@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NotificationSystem from './NotificationSystem';
 import GroupChat from './GroupChat';
 import MemberProfiles from './MemberProfiles';
@@ -288,6 +289,7 @@ function Profile({ user, onClose, onMessage, onPhotoClick }) {
 }
 
 export default function Dashboard({ onLogout }) {
+  const navigate = useNavigate();
   const [currentTripIndex, setCurrentTripIndex] = useState(0);
   const [currentCompletedIndex, setCurrentCompletedIndex] = useState(0);
   const [showPostTrip, setShowPostTrip] = useState(false);
@@ -297,18 +299,9 @@ export default function Dashboard({ onLogout }) {
   const [showGroupChat, setShowGroupChat] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-  const [newTrip, setNewTrip] = useState({
-    destination: '',
-    departure: '',
-    numberOfPeople: 0,
-    maxPeople: 0,
-    fromDate: '',
-    toDate: '',
-    transport: '',
-    budget: '',
-    description: ''
-  });
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [availableTrips, setAvailableTrips] = useState(mockTrips);
 
   // Current user data
   const currentUser = {
@@ -329,10 +322,6 @@ export default function Dashboard({ onLogout }) {
       "/assets/images/santorinisunset.jpeg"
     ]
   };
-
-  const [showPhotoModal, setShowPhotoModal] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [availableTrips, setAvailableTrips] = useState(mockTrips);
 
   // Fix scrolling issues by removing auto-rotate on scroll
   useEffect(() => {
@@ -426,7 +415,7 @@ export default function Dashboard({ onLogout }) {
   };
 
   const handleShowProfile = () => {
-    setShowProfile(true);
+    navigate('/profile');
   };
 
   const handleProfileMessage = () => {
@@ -1087,16 +1076,6 @@ export default function Dashboard({ onLogout }) {
             trip={selectedTrip}
             currentUser={currentUser}
             onClose={() => setShowGroupChat(false)}
-          />
-        )}
-
-        {/* Profile Modal */}
-        {showProfile && (
-          <Profile
-            user={currentUser}
-            onClose={() => setShowProfile(false)}
-            onMessage={handleProfileMessage}
-            onPhotoClick={handlePhotoClick}
           />
         )}
 
