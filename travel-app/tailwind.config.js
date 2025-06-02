@@ -8,6 +8,8 @@ export default {
     extend: {
       fontFamily: {
         headline: ['Poppins', 'sans-serif'],
+        cinzel: ['Cinzel', 'serif'],
+        greatvibes: ['Great Vibes', 'cursive'],
       },
       animation: {
         wiggle: 'wiggle 2s ease-in-out infinite',
