@@ -122,7 +122,7 @@ const LandingPage = () => {
       />
       
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen text-center px-4 bg-black/45 backdrop-blur-[1px]">
-        <h1 className="text-4xl md:text-4xl font-bold leading-tight">
+        <h1 className="text-4xl font-greatvibes text-teal-400 mb-2 mt-6">
           Your Journey should be as exciting as your <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-green-500">
             Destination
@@ -133,13 +133,13 @@ const LandingPage = () => {
           NomadNova
         </h2>
         
-        <p className="mt-4 text-xl text-gray-300 max-w-2xl">
+        <p className="text-xl font-cinzel text-gray-300 mt-2 max-w-xl">
           "Unleash the Nomad in You"
         </p>
 
         <div className="flex gap-4 mt-8">
           <button
-            className="bg-[#EC8E3D] hover:bg-[#FCCB6E] transition duration-300 px-8 py-3 rounded-full text-white font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-[#FCCB6E] focus:ring-offset-2"
+            className="font-cinzel bg-teal-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-teal-600 transition duration-300"
             onClick={handleLogin}
             type="button"
           >
