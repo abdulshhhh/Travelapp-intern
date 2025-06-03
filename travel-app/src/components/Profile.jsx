@@ -36,7 +36,6 @@ export default function Profile({ currentUser, onClose, onMessage }) {
     travelCategories: ["Adventure", "Culture", "Food", "Photography", "Nature"],
     languages: ["English", "Spanish", "French"],
     verified: true,
-    rating: 4.8,
     responseRate: "95%",
     responseTime: "Within 2 hours"
   };

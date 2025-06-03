@@ -122,31 +122,32 @@ const LandingPage = () => {
       />
       
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen text-center px-4 bg-black/45 backdrop-blur-[1px]">
-        <h1 className="text-4xl font-greatvibes text-teal-400 mb-2 mt-6">
+        <h1 className="text-4xl font-extrabold text-white-400 mb-2 mt-6">
           Your Journey should be as exciting as your <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-green-500">
             Destination
           </span>
         </h1>
         
-        <h2 className="text-5xl mt-6 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F]">
+        <h2 className="text-5xl mt-1 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#FCCB6E] to-[#EE9C8F]">
           NomadNova
         </h2>
         
-        <p className="text-xl font-cinzel text-gray-300 mt-2 max-w-xl">
+        <p className="text-2xl font-greatvibes text-gray-300 mt-2 max-w-xl">
           "Unleash the Nomad in You"
         </p>
 
         <div className="flex gap-4 mt-8">
           <button
-            className="font-cinzel bg-teal-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-teal-600 transition duration-300"
+            className="font-cinzel bg-[#EC8E3D] text-white px-6 py-3 rounded-full shadow-lg hover:bg-yellow-600 transition duration-300"
+
             onClick={handleLogin}
             type="button"
           >
             Forge your Journey
           </button>
           <button
-            className="bg-transparent border-2 border-white hover:bg-white/10 transition duration-300 px-8 py-3 rounded-full text-white font-semibold focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+            className="font-cinzel bg-transparent border-2 border-white hover:bg-white/10 transition duration-300 px-8 py-3 rounded-full text-white font-semibold focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
             onClick={handleSignUp}
             type="button"
           >
