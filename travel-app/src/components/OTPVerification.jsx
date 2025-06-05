@@ -206,7 +206,7 @@ export default function OTPVerification({ type, onClose, onVerified }) {
             <button
               onClick={handleVerify}
               disabled={otp.join('').length !== 6 || timeLeft === 0}
-              className="w-full bg-[#EC8E3D] hover:bg-[#EE9C8F] disabled:bg-[#5E5854] disabled:cursor-not-allowed text-white py-3 rounded-xl font-semibold transition-colors"
+              className="w-full bg-[#EC8E3D] hover:bg-[#EE9C8F] disabled:bg-[#5E5854] disabled:cursor-not-allowed text-white py-3 rounded-xl font-cinzel transition-colors"
             >
               🔐 Verify Code
             </button>
@@ -216,7 +216,7 @@ export default function OTPVerification({ type, onClose, onVerified }) {
               <button
                 onClick={handleResendOTP}
                 disabled={isResending || timeLeft > 240} // Can resend after 1 minute
-                className="text-[#EC8E3D] hover:text-[#EE9C8F] font-semibold disabled:text-[#5E5854] disabled:cursor-not-allowed transition-colors"
+                className="text-[#EC8E3D] hover:text-[#EE9C8F] font-cinzel disabled:text-[#5E5854] disabled:cursor-not-allowed transition-colors"
               >
                 {isResending ? '📤 Sending...' : '🔄 Resend OTP'}
               </button>

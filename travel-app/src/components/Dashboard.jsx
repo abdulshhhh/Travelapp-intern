@@ -192,7 +192,7 @@ function Profile({ user, onClose, onMessage, onPhotoClick }) {
               <p className="text-[#5E5854]">{user.location}</p>
               <button
                 onClick={onMessage}
-                className="mt-4 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold flex items-center"
+                className="mt-4 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-cinzel flex items-center"
               >
                 <FiMail className="mr-2" /> Message
               </button>
@@ -510,9 +510,9 @@ export default function Dashboard({ onLogout }) {
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold text-[#f8d56b]">NomadNova</h1>
               <nav className="hidden md:flex space-x-6">
-                <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-medium">Trips</a>
-                <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-medium">Completed</a>
-                <a href="#destinations" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-medium">Destinations</a>
+                <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Trips</a>
+                <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Completed</a>
+                <a href="#destinations" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Destinations</a>
               </nav>
             </div>
             <div className="flex items-center space-x-4">
@@ -525,7 +525,7 @@ export default function Dashboard({ onLogout }) {
               />
               <button
                 onClick={handleShowProfile}
-                className="flex items-center space-x-2 bg-[#6F93AD] hover:bg-[#5E5854] text-white px-4 py-2 rounded-full transition-colors font-semibold shadow-lg"
+                className="flex items-center space-x-2 bg-[#6F93AD] hover:bg-[#5E5854] text-white px-4 py-2 rounded-full transition-colors font-cinzel shadow-lg"
               >
                 <img
                   src={currentUser.avatar}
@@ -536,14 +536,14 @@ export default function Dashboard({ onLogout }) {
               </button>
               <button
                 onClick={() => setShowPostTrip(true)}
-                className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold shadow-lg flex items-center"
+                className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-cinzel shadow-lg flex items-center"
               >
                 <FiPlus className="mr-1" />
                 Post Trip
               </button>
               <button
                 onClick={onLogout}
-                className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+                className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-cinzel"
               >
                 Logout
               </button>
@@ -556,7 +556,7 @@ export default function Dashboard({ onLogout }) {
         {/* Welcome Section */}
         <section className="text-center bg-gradient-to-r from-[#6F93AD] to-[#4a708a] rounded-2xl p-8 border border-[#5E5854] shadow-xl">
           <h2 className="text-4xl font-bold mb-4 text-white">Welcome back, Traveler!</h2>
-          <p className="text-xl text-white/90 font-medium">Discover your next adventure with like-minded explorers</p>
+          <p className="text-xl text-white/90 font-greatvibes">Discover your next adventure with like-minded explorers</p>
         </section>
 
         {/* Available Trips Carousel */}
@@ -566,13 +566,13 @@ export default function Dashboard({ onLogout }) {
             <div className="flex space-x-2">
               <button
                 onClick={() => setCurrentTripIndex((prev) => (prev - 1 + mockTrips.length) % mockTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
+                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg font-cinzel"
               >
                 <FiChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setCurrentTripIndex((prev) => (prev + 1) % mockTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
+                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg font-cinzel"
               >
                 <FiChevronRight className="w-5 h-5" />
               </button>
@@ -636,14 +636,14 @@ export default function Dashboard({ onLogout }) {
                   <div className="flex space-x-2">
                     <button
                       onClick={() => handleViewTrip(trip)}
-                      className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-4 py-2 rounded-full transition-colors font-semibold flex items-center justify-center"
+                      className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-4 py-2 rounded-full transition-colors font-cinzel flex items-center justify-center"
                     >
                       <FiEye className="mr-1" /> View Details
                     </button>
                     <button
                       onClick={() => handleJoinTrip(trip.id)}
                       disabled={joinedTrips.includes(trip.id)}
-                      className={`flex-1 px-4 py-2 rounded-full transition-colors font-semibold flex items-center justify-center ${
+                      className={`flex-1 px-4 py-2 rounded-full transition-colors font-cinzel flex items-center justify-center ${
                         joinedTrips.includes(trip.id)
                           ? 'bg-[#a8c4b8] text-[#2c5e4a] cursor-not-allowed'
                           : 'bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white'
@@ -789,14 +789,14 @@ export default function Dashboard({ onLogout }) {
               <div className="mt-8 flex space-x-4">
                 <button
                   onClick={() => setShowTripDetails(false)}
-                  className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white py-3 rounded-xl transition-colors font-semibold"
+                  className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white py-3 rounded-xl transition-colors font-cinzel"
                 >
                   Close
                 </button>
                 <button
                   onClick={() => handleJoinTrip(selectedTrip.id)}
                   disabled={joinedTrips.includes(selectedTrip.id)}
-                  className={`flex-1 py-3 rounded-xl transition-colors font-semibold ${
+                  className={`flex-1 py-3 rounded-xl transition-colors font-cinzel ${
                     joinedTrips.includes(selectedTrip.id)
                       ? 'bg-[#a8c4b8] text-[#2c5e4a] cursor-not-allowed'
                       : 'bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white'
@@ -1068,14 +1068,14 @@ export default function Dashboard({ onLogout }) {
           <button
             type="button"
             onClick={() => setShowPostTrip(false)}
-            className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+            className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-cinzel"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handlePostTrip}
-            className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+            className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-cinzel"
           >
             Post Trip
           </button>

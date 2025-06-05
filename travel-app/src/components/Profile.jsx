@@ -128,7 +128,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               {/* Profile Info */}
               <div>
                 <div className="flex items-center">
-                  <h2 className="text-2xl font-bold text-gray-800">{profileData.fullName}</h2>
+                  <h2 className="text-2xl font-cinzel font-bold text-gray-800">{profileData.fullName}</h2>
                   {profileData.verified && (
                     <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-600 text-xs font-medium rounded-full flex items-center">
                       Verified
@@ -166,19 +166,19 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           {/* Stats Row */}
           <div className="flex justify-between mt-6 pt-4 border-t border-gray-200">
             <div className="text-center">
-              <p className="text-xl font-bold text-gray-800">{profileData.connections}</p>
+              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.connections}</p>
               <p className="text-gray-500 text-xs">Connections</p>
             </div>
             <div className="text-center">
-              <p className="text-xl font-bold text-gray-800">{profileData.tripsPosted}</p>
+              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.tripsPosted}</p>
               <p className="text-gray-500 text-xs">Trips Posted</p>
             </div>
             <div className="text-center">
-              <p className="text-xl font-bold text-gray-800">{profileData.tripsJoined}</p>
+              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.tripsJoined}</p>
               <p className="text-gray-500 text-xs">Trips Joined</p>
             </div>
             <div className="text-center">
-              <p className="text-xl font-bold text-gray-800">{profileData.upcomingTrips}</p>
+              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.upcomingTrips}</p>
               <p className="text-gray-500 text-xs">Upcoming</p>
             </div>
           </div>
@@ -267,13 +267,13 @@ export default function Profile({ currentUser, onClose, onMessage }) {
             <div className="space-y-6">
               {/* About Section */}
               <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">About</h3>
+                <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">About</h3>
                 <p className="text-gray-600 leading-relaxed">{profileData.bio}</p>
               </div>
 
               {/* Travel Categories */}
               <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Travel Interests</h3>
+                <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">Travel Interests</h3>
                 <div className="flex flex-wrap gap-2">
                   {profileData.travelCategories.map((category, index) => (
                     <span
@@ -289,7 +289,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               {/* Languages & Response Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Languages</h3>
+                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">Languages</h3>
                   <div className="space-y-2">
                     {profileData.languages.map((language, index) => (
                       <div key={index} className="flex items-center space-x-2">
@@ -301,15 +301,15 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 </div>
 
                 <div className="bg-white p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Response Info</h3>
+                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">Response Info</h3>
                   <div className="space-y-2 text-gray-600">
                     <div className="flex items-center">
                       <FiMail className="mr-2 text-yellow-500" />
-                      <span><strong>Response Rate:</strong> {profileData.responseRate}</span>
+                      <span><strong className="font-cinzel">Response Rate:</strong> {profileData.responseRate}</span>
                     </div>
                     <div className="flex items-center">
                       <FiClock className="mr-2 text-yellow-500" />
-                      <span><strong>Response Time:</strong> {profileData.responseTime}</span>
+                      <span><strong className="font-cinzel">Response Time:</strong> {profileData.responseTime}</span>
                     </div>
                   </div>
                 </div>
@@ -325,8 +325,8 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                   onClick={() => handleViewTripMemories('posted')}
                   className="bg-white p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
                 >
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Trips Posted</h3>
-                  <p className="text-2xl font-bold text-yellow-500 mb-2">{profileData.tripsPosted}</p>
+                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Posted</h3>
+                  <p className="text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsPosted}</p>
                   <p className="text-gray-500 text-sm">Click to view details and memories</p>
                 </div>
 
@@ -334,8 +334,8 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                   onClick={() => handleViewTripMemories('joined')}
                   className="bg-white p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
                 >
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Trips Joined</h3>
-                  <p className="text-2xl font-bold text-yellow-500 mb-2">{profileData.tripsJoined}</p>
+                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Joined</h3>
+                  <p className="text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsJoined}</p>
                   <p className="text-gray-500 text-sm">Click to view details and memories</p>
                 </div>
               </div>
@@ -343,7 +343,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               {/* Upcoming Trips */}
               <div className="bg-white p-6 rounded-lg border border-gray-200">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold text-gray-800">Upcoming Trips</h3>
+                  <h3 className="text-lg font-cinzel font-semibold text-gray-800">Upcoming Trips</h3>
                   <button className="text-yellow-500 text-sm font-medium">View All</button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -354,7 +354,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                         alt={trip.title}
                         className="w-full h-32 object-cover rounded-lg mb-3"
                       />
-                      <h4 className="font-semibold text-gray-800 mb-1">{trip.title}</h4>
+                      <h4 className="font-cinzel font-semibold text-gray-800 mb-1">{trip.title}</h4>
                       <p className="text-gray-500 text-sm mb-2">{trip.destination}</p>
                       <p className="text-gray-500 text-sm mb-2">{trip.date}</p>
                       <div className="flex justify-between items-center">
