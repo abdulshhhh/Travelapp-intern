@@ -43,7 +43,7 @@ export default function MemberProfiles({ trip, onStartChat }) {
   return (
     <div className="space-y-4">
       {/* Members Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {allMembers.map((member) => (
           <div
             key={member.id}
@@ -60,22 +60,15 @@ export default function MemberProfiles({ trip, onStartChat }) {
                 {member.role === 'organizer' && (
                   <div className="absolute -top-1 -right-1 bg-[#EC8E3D] rounded-full p-1">
                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
                 )}
               </div>
-              
-              <h4 className="text-[#204231] font-bold mt-2 text-sm">{member.name}</h4>
-              <p className="text-[#204231]/70 text-xs capitalize">
-                {member.role === 'organizer' ? '👑 Organizer' : '🎒 Traveler'}
+              <h3 className="mt-2 font-bold text-white text-sm sm:text-base truncate">{member.name}</h3>
+              <p className="text-[#FCCB6E] text-xs sm:text-sm capitalize">
+                {member.role === 'organizer' ? 'Trip Organizer' : 'Fellow Traveler'}
               </p>
-              
-              {/* Rating */}
-              <div className="flex items-center justify-center mt-2">
-                <span className="text-[#EC8E3D] text-sm">★</span>
-                <span className="text-[#204231] text-xs font-medium ml-1">{member.rating}</span>
-              </div>
             </div>
           </div>
         ))}
@@ -83,34 +76,34 @@ export default function MemberProfiles({ trip, onStartChat }) {
 
       {/* Member Details Modal */}
       {showMemberModal && selectedMember && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#FCCB6E] rounded-2xl p-6 max-w-md w-full border-2 border-[#5E5854] shadow-2xl">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-r from-yellow-50 to-purple-50 rounded-2xl p-4 sm:p-6 max-w-md w-full border-2 border-[#5E5854] shadow-2xl">
             {/* Header */}
-            <div className="flex justify-between items-start mb-6">
-              <div className="flex items-center space-x-4">
+            <div className="flex justify-between items-start mb-4 sm:mb-6">
+              <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="relative">
                   <img
                     src={selectedMember.avatar}
                     alt={selectedMember.name}
-                    className="w-20 h-20 rounded-full object-cover border-3 border-[#EE9C8F]"
+                    className="w-16 sm:w-20 h-16 sm:h-20 rounded-full object-cover border-3 border-[#EE9C8F]"
                   />
                   {selectedMember.role === 'organizer' && (
-                    <div className="absolute -top-2 -right-2 bg-[#EC8E3D] rounded-full p-2">
-                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    <div className="absolute -top-2 -right-2 bg-[#EC8E3D] rounded-full p-1 sm:p-2">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     </div>
                   )}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[#204231]">{selectedMember.name}</h3>
-                  <p className="text-[#204231]/70 capitalize">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#204231]">{selectedMember.name}</h3>
+                  <p className="text-[#204231]/70 text-sm capitalize">
                     {selectedMember.role === 'organizer' ? '👑 Trip Organizer' : '🎒 Fellow Traveler'}
                   </p>
                   <div className="flex items-center mt-1">
                     <span className="text-[#EC8E3D]">★</span>
                     <span className="text-[#204231] font-medium ml-1">{selectedMember.rating}</span>
-                    <span className="text-[#204231]/60 text-sm ml-1">({selectedMember.previousTrips} trips)</span>
+                    <span className="text-[#204231]/60 text-xs sm:text-sm ml-1">({selectedMember.previousTrips} trips)</span>
                   </div>
                 </div>
               </div>
@@ -124,21 +117,21 @@ export default function MemberProfiles({ trip, onStartChat }) {
             </div>
 
             {/* Member Info */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Bio */}
-              <div className="bg-[#6F93AD] p-4 rounded-xl border border-[#5E5854]">
-                <h4 className="font-bold text-[#204231] mb-2">About</h4>
-                <p className="text-[#204231] text-sm">{selectedMember.bio}</p>
+              <div className="bg-[#6F93AD] p-3 sm:p-4 rounded-xl border border-[#5E5854]">
+                <h4 className="font-bold text-[#204231] mb-1 sm:mb-2">About</h4>
+                <p className="text-[#204231] text-xs sm:text-sm">{selectedMember.bio}</p>
               </div>
 
               {/* Interests */}
-              <div className="bg-[#EE9C8F] p-4 rounded-xl border border-[#5E5854]">
-                <h4 className="font-bold text-[#204231] mb-2">Interests</h4>
-                <div className="flex flex-wrap gap-2">
+              <div className="bg-[#EE9C8F] p-3 sm:p-4 rounded-xl border border-[#5E5854]">
+                <h4 className="font-bold text-[#204231] mb-1 sm:mb-2">Interests</h4>
+                <div className="flex flex-wrap gap-1 sm:gap-2">
                   {selectedMember.interests.map((interest, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-[#204231] text-[#FCCB6E] rounded-full text-sm font-medium"
+                      className="px-2 sm:px-3 py-1 bg-[#204231] text-[#FCCB6E] rounded-full text-xs sm:text-sm font-medium"
                     >
                       {interest}
                     </span>
@@ -173,10 +166,10 @@ export default function MemberProfiles({ trip, onStartChat }) {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex space-x-3 mt-6">
+            <div className="flex space-x-2 sm:space-x-3 mt-4 sm:mt-6">
               <button
                 onClick={() => setShowMemberModal(false)}
-                className="flex-1 bg-[#5E5854] hover:bg-[#204231] text-white py-2 rounded-xl transition-colors font-semibold"
+                className="flex-1 bg-[#5E5854] hover:bg-[#204231] text-white py-2 rounded-xl transition-colors font-semibold text-sm sm:text-base"
               >
                 Close
               </button>
@@ -186,7 +179,7 @@ export default function MemberProfiles({ trip, onStartChat }) {
                     setShowMemberModal(false);
                     onStartChat();
                   }}
-                  className="flex-1 bg-[#EC8E3D] hover:bg-[#EE9C8F] text-white py-2 rounded-xl transition-colors font-semibold"
+                  className="flex-1 bg-[#EC8E3D] hover:bg-[#EE9C8F] text-white py-2 rounded-xl transition-colors font-semibold text-sm sm:text-base"
                 >
                   Message
                 </button>
