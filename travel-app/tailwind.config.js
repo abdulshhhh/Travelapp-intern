@@ -9,7 +9,7 @@ export default {
       fontFamily: {
         headline: ['Poppins', 'sans-serif'],
         cinzel: ['Cinzel', 'serif'],
-        greatvibes: ['Great Vibes', 'cursive'],
+        southmind: ['South Mind', 'cursive'],
       },
       animation: {
         wiggle: 'wiggle 2s ease-in-out infinite',

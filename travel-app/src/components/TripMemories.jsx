@@ -1,8 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { FiX, FiChevronLeft, FiStar, FiUsers, FiMapPin, FiCalendar, FiDollarSign } from 'react-icons/fi';
 
 export default function TripMemories({ tripType, onClose }) {
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [showTripDetails, setShowTripDetails] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Handle window resize for responsive design
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Mock data for posted trips
   const postedTrips = [
@@ -177,91 +189,80 @@ export default function TripMemories({ tripType, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-60 flex items-center justify-center p-4">
-      <div className="bg-[#FCCB6E] rounded-2xl w-full max-w-6xl h-[85vh] border-2 border-[#5E5854] shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-60 flex items-center justify-center p-0 sm:p-4">
+      <div className="bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-none sm:rounded-2xl w-full h-full sm:h-[85vh] sm:max-w-6xl border-0 sm:border-2 border-[#5E5854] shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-[#6F93AD] p-6 border-b border-[#5E5854]">
+        <div className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] p-3 sm:p-6 border-b border-[#5E5854] flex-shrink-0">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {showTripDetails && (
                 <button
                   onClick={handleBackToList}
-                  className="text-[#204231] hover:text-[#EC8E3D] text-xl font-bold"
+                  className="text-white hover:text-[#f8a95d] text-base sm:text-xl font-bold transition-colors flex items-center"
                 >
-                  ← Back
+                  <FiChevronLeft className="mr-1" /> Back
                 </button>
               )}
-              <h2 className="text-2xl font-bold text-[#204231]">
-                {showTripDetails 
-                  ? selectedTrip?.title 
-                  : `${tripType === 'posted' ? 'Posted' : 'Joined'} Trips & Memories`
-                }
+              <h2 className="text-lg sm:text-2xl font-cinzel font-bold text-white truncate">
+                {tripType === 'photos' ? 'Photo Memories' : 
+                 tripType === 'videos' ? 'Video Memories' : 
+                 tripType === 'countries' ? 'Countries Visited' : 
+                 tripType === 'cities' ? 'Cities Explored' :
+                 tripType === 'posted' ? 'Trips You Organized' : 
+                 tripType === 'joined' ? 'Trips You Joined' : 'Travel Memories'}
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="text-[#204231] hover:text-[#EC8E3D] text-2xl font-bold"
+              className="text-white hover:text-[#f8a95d] transition-colors p-1"
+              aria-label="Close memories"
             >
-              ×
+              <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-6">
           {!showTripDetails ? (
             /* Trip List */
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
               {trips.map((trip) => (
                 <div
                   key={trip.id}
                   onClick={() => handleTripClick(trip)}
-                  className="bg-[#6F93AD] rounded-xl overflow-hidden border-2 border-[#5E5854] cursor-pointer hover:border-[#EC8E3D] transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                  className="bg-white rounded-xl overflow-hidden border border-[#d1c7b7] cursor-pointer hover:border-[#f8a95d] transition-all duration-300 hover:scale-[1.02] shadow-md hover:shadow-lg"
                 >
                   <div className="relative">
                     <img
                       src={trip.image}
                       alt={trip.title}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-32 sm:h-48 object-cover"
                     />
-                    <div className="absolute top-4 right-4">
-                      <span className="bg-[#EC8E3D] text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <div className="absolute top-2 right-2 sm:top-4 sm:right-4">
+                      <span className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
                         {trip.price}
                       </span>
                     </div>
-                    <div className="absolute bottom-4 left-4">
-                      <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4">
+                      <span className="bg-green-500 text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
                         ✓ {trip.status}
                       </span>
                     </div>
                   </div>
-                  
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-[#204231] mb-2">{trip.title}</h3>
-                    <p className="text-[#204231]/70 mb-2">{trip.destination}</p>
-                    <p className="text-[#204231]/70 mb-3">{trip.duration} • {trip.date}</p>
-                    
-                    {tripType === 'joined' && (
-                      <p className="text-[#204231]/80 text-sm mb-3">Organized by {trip.organizer}</p>
-                    )}
-                    
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="flex items-center space-x-4">
-                        <span className="text-[#204231] font-medium">
-                          {tripType === 'posted' ? trip.participants : ''} 
-                          {tripType === 'posted' ? ' participants' : ''}
-                        </span>
-                        <div className="flex items-center">
-                          <span className="text-[#EC8E3D]">★</span>
-                          <span className="text-[#204231] font-medium ml-1">{trip.rating}</span>
-                        </div>
+                  <div className="p-3 sm:p-4">
+                    <h3 className="text-base sm:text-lg font-bold text-[#2c5e4a] mb-1 sm:mb-2 truncate">{trip.title}</h3>
+                    <p className="text-[#5E5854] text-xs sm:text-sm mb-1 truncate">{trip.destination}</p>
+                    <p className="text-[#5E5854] text-xs sm:text-sm mb-2 truncate">{trip.date}</p>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <FiStar className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 mr-1" />
+                        <span className="text-[#2c5e4a] text-xs sm:text-sm font-medium">{trip.rating}</span>
                       </div>
-                    </div>
-                    
-                    <div className="bg-[#FCCB6E] p-3 rounded-lg border border-[#5E5854]">
-                      <p className="text-[#204231] text-sm font-medium">
-                        {trip.memories.length} memories • Click to view details
-                      </p>
+                      <div className="flex items-center">
+                        <FiUsers className="w-3 h-3 sm:w-4 sm:h-4 text-[#2c5e4a] mr-1" />
+                        <span className="text-[#5E5854] text-xs sm:text-sm">{trip.participants}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -269,106 +270,98 @@ export default function TripMemories({ tripType, onClose }) {
             </div>
           ) : (
             /* Trip Details */
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Trip Info */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-[#6F93AD] p-6 rounded-xl border border-[#5E5854]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div className="bg-white p-4 sm:p-6 rounded-xl border border-[#d1c7b7] shadow-md">
                   <img
                     src={selectedTrip.image}
                     alt={selectedTrip.title}
-                    className="w-full h-64 object-cover rounded-lg mb-4"
+                    className="w-full h-48 sm:h-64 object-cover rounded-lg mb-3 sm:mb-4"
                   />
-                  <h3 className="text-xl font-bold text-[#204231] mb-2">{selectedTrip.title}</h3>
-                  <div className="space-y-2 text-[#204231]">
-                    <p><strong>Destination:</strong> {selectedTrip.destination}</p>
-                    <p><strong>Duration:</strong> {selectedTrip.duration}</p>
-                    <p><strong>Date:</strong> {selectedTrip.date}</p>
-                    <p><strong>Price:</strong> {selectedTrip.price}</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-[#2c5e4a] mb-2">{selectedTrip.title}</h3>
+                  <div className="space-y-1 sm:space-y-2 text-[#5E5854] text-sm sm:text-base">
+                    <p className="flex items-center">
+                      <FiMapPin className="mr-2 text-[#2c5e4a] flex-shrink-0" />
+                      <span><strong className="text-[#2c5e4a]">Destination:</strong> {selectedTrip.destination}</span>
+                    </p>
+                    <p className="flex items-center">
+                      <FiCalendar className="mr-2 text-[#2c5e4a] flex-shrink-0" />
+                      <span><strong className="text-[#2c5e4a]">Date:</strong> {selectedTrip.date}</span>
+                    </p>
+                    <p className="flex items-center">
+                      <FiDollarSign className="mr-2 text-[#2c5e4a] flex-shrink-0" />
+                      <span><strong className="text-[#2c5e4a]">Price:</strong> {selectedTrip.price}</span>
+                    </p>
                     {selectedTrip.organizer && (
-                      <p><strong>Organizer:</strong> {selectedTrip.organizer}</p>
+                      <p className="flex items-center">
+                        <FiUsers className="mr-2 text-[#2c5e4a] flex-shrink-0" />
+                        <span><strong className="text-[#2c5e4a]">Organizer:</strong> {selectedTrip.organizer}</span>
+                      </p>
                     )}
-                    <div className="flex items-center space-x-2">
-                      <span className="text-[#EC8E3D]">★</span>
-                      <span className="font-medium">{selectedTrip.rating} rating</span>
+                    <div className="flex items-center mt-2">
+                      <FiStar className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 mr-1" />
+                      <span className="text-[#2c5e4a] font-medium">{selectedTrip.rating}</span>
                     </div>
                   </div>
                 </div>
-
-                {/* Trip Highlights */}
-                <div className="bg-[#EE9C8F] p-6 rounded-xl border border-[#5E5854]">
-                  <h4 className="text-xl font-bold text-[#204231] mb-4">Trip Highlights</h4>
-                  <ul className="space-y-2">
-                    {selectedTrip.highlights.map((highlight, index) => (
-                      <li key={index} className="flex items-center space-x-2 text-[#204231]">
-                        <span className="w-2 h-2 bg-[#EC8E3D] rounded-full"></span>
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="bg-white p-4 sm:p-6 rounded-xl border border-[#d1c7b7] shadow-md">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#2c5e4a] mb-3 sm:mb-4">Trip Details</h3>
+                  <div className="text-[#5E5854] text-sm sm:text-base">
+                    <p className="leading-relaxed">{selectedTrip.description || "Experience the journey of a lifetime with fellow travelers. This trip offers unique experiences, cultural immersion, and unforgettable memories."}</p>
+                    
+                    {/* Add trip highlights if available */}
+                    {selectedTrip.highlights && selectedTrip.highlights.length > 0 && (
+                      <div className="mt-3 sm:mt-4">
+                        <h4 className="text-base sm:text-lg font-semibold text-[#2c5e4a] mb-2">Trip Highlights</h4>
+                        <ul className="list-disc pl-5 space-y-1">
+                          {selectedTrip.highlights.map((highlight, index) => (
+                            <li key={index} className="text-[#5E5854]">{highlight}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Memories Gallery */}
-              <div className="bg-[#6F93AD] p-6 rounded-xl border border-[#5E5854]">
-                <h4 className="text-xl font-bold text-[#204231] mb-4">
+              <div className="bg-white p-4 sm:p-6 rounded-xl border border-[#d1c7b7] shadow-md">
+                <h4 className="text-lg sm:text-xl font-bold text-[#2c5e4a] mb-3 sm:mb-4">
                   Trip Memories ({selectedTrip.memories.length})
                 </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                   {selectedTrip.memories.map((memory) => (
                     <div
                       key={memory.id}
-                      className="bg-[#FCCB6E] rounded-lg overflow-hidden border border-[#5E5854] hover:scale-105 transition-transform duration-300"
+                      className="bg-[#f8f4e3] rounded-lg overflow-hidden border border-[#d1c7b7] hover:scale-[1.02] transition-transform duration-300 shadow-md"
                     >
                       <div className="relative">
                         <img
                           src={memory.url}
                           alt={memory.caption}
-                          className="w-full h-48 object-cover"
+                          className="w-full h-32 sm:h-48 object-cover"
                         />
                         {memory.type === 'video' && (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="bg-black/50 rounded-full p-3">
-                              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                            <div className="bg-black/50 rounded-full p-2 sm:p-3">
+                              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
                             </div>
                           </div>
                         )}
                       </div>
-                      <div className="p-4">
-                        <h5 className="font-bold text-[#204231] mb-1">{memory.caption}</h5>
-                        <p className="text-[#204231]/70 text-sm mb-1">📍 {memory.location}</p>
-                        <p className="text-[#204231]/60 text-xs">{memory.date}</p>
+                      <div className="p-3 sm:p-4">
+                        <p className="font-medium text-[#2c5e4a] text-sm sm:text-base mb-1 truncate">{memory.caption}</p>
+                        <div className="flex justify-between items-center text-[#5E5854] text-xs sm:text-sm">
+                          <span className="truncate max-w-[60%]">{memory.location}</span>
+                          <span>{memory.date}</span>
+                        </div>
                       </div>
                     </div>
                   ))}
-                </div>
-              </div>
-
-              {/* Memory Stats */}
-              <div className="bg-[#EE9C8F] p-6 rounded-xl border border-[#5E5854]">
-                <h4 className="text-xl font-bold text-[#204231] mb-4">Memory Statistics</h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                  <div>
-                    <p className="text-2xl font-bold text-[#EC8E3D]">
-                      {selectedTrip.memories.filter(m => m.type === 'photo').length}
-                    </p>
-                    <p className="text-[#204231]/70 text-sm">Photos</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#EC8E3D]">
-                      {selectedTrip.memories.filter(m => m.type === 'video').length}
-                    </p>
-                    <p className="text-[#204231]/70 text-sm">Videos</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#EC8E3D]">{selectedTrip.duration}</p>
-                    <p className="text-[#204231]/70 text-sm">Duration</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#EC8E3D]">{selectedTrip.rating}</p>
-                    <p className="text-[#204231]/70 text-sm">Rating</p>
-                  </div>
                 </div>
               </div>
             </div>

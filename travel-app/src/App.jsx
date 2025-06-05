@@ -133,7 +133,7 @@ const LandingPage = () => {
           NomadNova
         </h2>
         
-        <p className="text-2xl font-greatvibes text-gray-300 mt-2 max-w-xl">
+        <p className="text-2xl font-southmind text-gray-300 mt-2 max-w-xl">
           "Unleash the Nomad in You"
         </p>
 

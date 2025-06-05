@@ -438,25 +438,212 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 </div>
               </div>
 
-              {/* Memory Stats */}
+              {/* Memory Stats - Shuffling cards with popping animations */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">156</p>
-                  <p className="text-gray-500 text-sm">Photos</p>
+                <div 
+                  onClick={() => handleViewTripMemories('photos')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/paris.webp", "/assets/images/london.jpeg", "/assets/images/swissalps.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="Photo" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">156</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Photos</p>
+                  </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">42</p>
-                  <p className="text-gray-500 text-sm">Videos</p>
+                
+                <div 
+                  onClick={() => handleViewTripMemories('videos')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/Tokyo.jpeg", "/assets/images/icelandnorthernlights.jpeg", "/assets/images/santorinisunset.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="Video" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-8 h-8 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center play-icon">
+                            <div className="w-0 h-0 border-l-4 border-l-white border-t-3 border-t-transparent border-b-3 border-b-transparent ml-0.5"></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">42</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Videos</p>
+                  </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">23</p>
-                  <p className="text-gray-500 text-sm">Countries</p>
+                
+                <div 
+                  onClick={() => handleViewTripMemories('countries')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/paris.webp", "/assets/images/Tokyo.jpeg", "/assets/images/baliadventure.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="Country" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-white text-xs font-bold location-label">
+                          {i === 0 ? "France" : i === 1 ? "Japan" : "Indonesia"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">23</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Countries</p>
+                  </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">67</p>
-                  <p className="text-gray-500 text-sm">Cities</p>
+                
+                <div 
+                  onClick={() => handleViewTripMemories('cities')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/london.jpeg", "/assets/images/swissmount.jpeg", "/assets/images/santorinisunset.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="City" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-white text-xs font-bold location-label">
+                          {i === 0 ? "London" : i === 1 ? "Zurich" : "Santorini"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">67</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Cities</p>
+                  </div>
                 </div>
               </div>
+
+              {/* Add the CSS for animations */}
+              <style jsx>{`
+                /* Card shuffle and pop animations */
+                .memory-card {
+                  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                
+                .memory-card:hover {
+                  transform: translateY(-5px);
+                }
+                
+                .memory-card:hover .card-1 {
+                  animation: popAndShuffle1 0.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+                
+                .memory-card:hover .card-2 {
+                  animation: popAndShuffle2 0.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+                
+                .memory-card:hover .card-3 {
+                  animation: popAndShuffle3 0.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+                
+                .memory-card:hover .count-number {
+                  animation: popNumber 0.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                
+                .memory-card:hover .category-label {
+                  animation: popLabel 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                
+                .memory-card:hover .play-icon {
+                  animation: pulse 1.5s infinite;
+                }
+                
+                .memory-card:hover .location-label {
+                  animation: slideIn 0.4s forwards;
+                }
+                
+                @keyframes popAndShuffle1 {
+                  0% { transform: rotate(-5deg) translateY(5px); }
+                  30% { transform: rotate(-5deg) translateY(-10px) scale(1.05); }
+                  100% { transform: rotate(-15deg) translateX(-20px) translateY(5px); }
+                }
+                
+                @keyframes popAndShuffle2 {
+                  0% { transform: rotate(0deg) translateY(0px); }
+                  30% { transform: rotate(0deg) translateY(-15px) scale(1.05); }
+                  100% { transform: rotate(0deg) translateY(0px); }
+                }
+                
+                @keyframes popAndShuffle3 {
+                  0% { transform: rotate(5deg) translateY(-5px); }
+                  30% { transform: rotate(5deg) translateY(-20px) scale(1.05); }
+                  100% { transform: rotate(15deg) translateX(20px) translateY(5px); }
+                }
+                
+                @keyframes popNumber {
+                  0% { transform: scale(1); }
+                  50% { transform: scale(1.3); }
+                  100% { transform: scale(1.1); }
+                }
+                
+                @keyframes popLabel {
+                  0% { transform: scale(1); opacity: 0.8; }
+                  50% { transform: scale(1.2); opacity: 1; }
+                  100% { transform: scale(1); opacity: 1; }
+                }
+                
+                @keyframes pulse {
+                  0% { transform: scale(1); opacity: 0.7; }
+                  50% { transform: scale(1.2); opacity: 1; }
+                  100% { transform: scale(1); opacity: 0.7; }
+                }
+                
+                @keyframes slideIn {
+                  0% { transform: translateX(-100%); opacity: 0; }
+                  100% { transform: translateX(0); opacity: 1; }
+                }
+              `}</style>
             </div>
           )}
 
