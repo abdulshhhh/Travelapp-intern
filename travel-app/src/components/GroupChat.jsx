@@ -79,25 +79,25 @@ export default function GroupChat({ trip, currentUser, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
       <div
-        className="rounded-2xl w-full max-w-4xl h-[80vh] border border-gray-300 shadow-lg flex flex-col"
+        className="rounded-2xl w-full max-w-4xl h-[90vh] sm:h-[80vh] border border-gray-300 shadow-lg flex flex-col"
         style={{
           background: 'linear-gradient(135deg, #f7f5f2 0%, #e3d9b8 50%, #a49f94 100%)',
           color: '#4a453f' // soft mountain grey text
         }}
       >
         {/* Header */}
-        <div className="p-4 border-b border-yellow-300 rounded-t-2xl bg-transparent flex justify-between items-center">
-          <div className="flex items-center space-x-3">
+        <div className="p-3 sm:p-4 border-b border-yellow-300 rounded-t-2xl bg-transparent flex justify-between items-center">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <img
               src={trip.image}
               alt={trip.title}
-              className="w-10 h-10 rounded-full object-cover border-2 border-yellow-400"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-yellow-400"
             />
             <div>
-              <h3 className="text-lg font-semibold">{trip.title}</h3>
-              <p className="text-sm opacity-80">
+              <h3 className="text-base sm:text-lg font-semibold">{trip.title}</h3>
+              <p className="text-xs sm:text-sm opacity-80">
                 {trip.joinedMembers.length + 1} members • {trip.joinedMembers.slice(0, 3).length} online
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function GroupChat({ trip, currentUser, onClose }) {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-transparent rounded-b-none">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 bg-transparent rounded-b-none">
           {messages.map((message, index) => {
             const showDate =
               index === 0 || formatDate(messages[index - 1].timestamp) !== formatDate(message.timestamp);
@@ -124,8 +124,8 @@ export default function GroupChat({ trip, currentUser, onClose }) {
             return (
               <div key={message.id}>
                 {showDate && (
-                  <div className="text-center my-4">
-                    <span className="bg-yellow-200 text-yellow-900 px-3 py-1 rounded-full text-sm font-medium">
+                  <div className="text-center my-3 sm:my-4">
+                    <span className="bg-yellow-200 text-yellow-900 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                       {formatDate(message.timestamp)}
                     </span>
                   </div>
@@ -133,19 +133,19 @@ export default function GroupChat({ trip, currentUser, onClose }) {
 
                 <div className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
                   <div
-                    className={`flex items-end space-x-2 max-w-xs lg:max-w-md ${
-                      isCurrentUser ? 'flex-row-reverse space-x-reverse' : ''
+                    className={`flex items-end space-x-1 sm:space-x-2 max-w-[75%] sm:max-w-xs lg:max-w-md ${
+                      isCurrentUser ? 'flex-row-reverse space-x-reverse sm:space-x-reverse' : ''
                     }`}
                   >
                     {!isCurrentUser && (
                       <img
                         src={message.userAvatar}
                         alt={message.userName}
-                        className="w-8 h-8 rounded-full border-2 border-yellow-400 flex-shrink-0"
+                        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 border-yellow-400 flex-shrink-0"
                       />
                     )}
                     <div
-                      className={`rounded-2xl px-4 py-2 ${
+                      className={`rounded-2xl px-3 sm:px-4 py-2 ${
                         isCurrentUser
                           ? 'bg-yellow-300 bg-opacity-90 text-gray-800'
                           : 'bg-yellow-50 bg-opacity-90 text-gray-700'
@@ -154,7 +154,7 @@ export default function GroupChat({ trip, currentUser, onClose }) {
                       {!isCurrentUser && (
                         <p className="text-xs font-semibold mb-1 opacity-80">{message.userName}</p>
                       )}
-                      <p className="text-sm">{message.message}</p>
+                      <p className="text-xs sm:text-sm">{message.message}</p>
                       <p
                         className={`text-xs mt-1 ${
                           isCurrentUser ? 'text-gray-600' : 'text-gray-500'
@@ -174,18 +174,18 @@ export default function GroupChat({ trip, currentUser, onClose }) {
         {/* Message Input */}
         <form
           onSubmit={handleSendMessage}
-          className="p-4 border-t border-yellow-300 rounded-b-2xl flex bg-transparent"
+          className="p-3 sm:p-4 border-t border-yellow-300 rounded-b-2xl flex bg-transparent"
         >
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 px-4 py-2 rounded-full border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-yellow-50 text-gray-700 placeholder-yellow-700"
+            className="flex-1 px-3 sm:px-4 py-2 text-sm rounded-full border border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-yellow-50 text-gray-700 placeholder-yellow-700"
           />
           <button
             type="submit"
-            className="ml-2 px-5 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-full transition-colors"
+            className="ml-2 px-3 sm:px-5 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-full transition-colors text-sm sm:text-base"
           >
             Send
           </button>

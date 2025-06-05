@@ -314,6 +314,10 @@ export default function Dashboard({ onLogout }) {
     description: ''
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showMemberProfile, setShowMemberProfile] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [showMemberProfiles, setShowMemberProfiles] = useState(false);
+  const [selectedTripForMembers, setSelectedTripForMembers] = useState(null);
 
   // Current user data
   const currentUser = {
@@ -509,6 +513,52 @@ export default function Dashboard({ onLogout }) {
   const handlePhotoClick = (photo) => {
     setSelectedPhoto(photo);
     setShowPhotoModal(true);
+  };
+
+  const handleViewMemberProfile = (member) => {
+    // Format the member data with all required properties
+    const formattedMember = {
+      id: member.id,
+      name: member.name,
+      fullName: member.name,
+      avatar: member.avatar,
+      email: member.email || "traveler@example.com",
+      bio: member.bio || "Passionate traveler and adventure seeker.",
+      location: member.location || "Traveler",
+      phone: member.phone || "+1 (555) 123-4567",
+      role: member.role || "member",
+      verified: true,
+      // Add photos array which might be required by the Profile component
+      photos: [
+        member.avatar,
+        "/assets/images/baliadventure.jpeg",
+        "/assets/images/Tokyo.jpeg",
+        "/assets/images/swissmount.jpeg",
+        "/assets/images/icelandnorthernlights.jpeg",
+        "/assets/images/santorinisunset.jpeg"
+      ]
+    };
+    
+    // Close other modals
+    setShowTripDetails(false);
+    setShowMemberProfiles(false);
+    setShowPostTrip(false);
+    setMobileMenuOpen(false);
+    
+    // Open the profile modal
+    setSelectedMember(formattedMember);
+    setShowMemberProfile(true);
+  };
+
+  const handleViewAllMembers = (trip) => {
+    setSelectedTripForMembers(trip);
+    setShowMemberProfiles(true);
+  };
+
+  const handleStartChatWithMember = () => {
+    // Implement your chat functionality here
+    alert('Starting chat with member...');
+    setShowMemberProfiles(false);
   };
 
   return (
@@ -711,7 +761,11 @@ export default function Dashboard({ onLogout }) {
                   </div>
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                     <button
-                      onClick={() => handleViewTrip(trip)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleViewTrip(trip);
+                      }}
                       className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-4 py-2 rounded-full transition-colors font-cinzel flex items-center justify-center"
                     >
                       <FiEye className="mr-1" /> View
@@ -743,7 +797,7 @@ export default function Dashboard({ onLogout }) {
         {/* Enhanced Trip Details Modal */}
         {showTripDetails && selectedTrip && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
               {/* Modal Header with Close Button */}
               <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b border-[#d1c7b7]">
                 <h3 className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">{selectedTrip.title}</h3>
@@ -757,136 +811,187 @@ export default function Dashboard({ onLogout }) {
 
               {/* Modal Content */}
               <div className="p-4 sm:p-6">
-                {/* Trip Image */}
-                <div className="relative h-48 sm:h-64 md:h-80 rounded-xl overflow-hidden mb-6">
-                  <img
-                    src={selectedTrip.image}
-                    alt={selectedTrip.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                      {selectedTrip.price}
-                    </span>
+                {/* Trip Image and Basic Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="relative h-64 rounded-xl overflow-hidden">
+                    <img
+                      src={selectedTrip.image}
+                      alt={selectedTrip.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <span className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                        {selectedTrip.price}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7]">
+                    <h4 className="font-bold text-[#2c5e4a] mb-3">Trip Details</h4>
+                    <div className="space-y-2 text-[#5E5854]">
+                      <p className="flex items-center">
+                        <FiMapPin className="mr-2" /> <span className="font-medium">Destination:</span> {selectedTrip.destination}
+                      </p>
+                      <p className="flex items-center">
+                        <FiCalendar className="mr-2" /> <span className="font-medium">Duration:</span> {selectedTrip.duration}
+                      </p>
+                      <p className="flex items-center">
+                        <FiCalendar className="mr-2" /> <span className="font-medium">Dates:</span> {selectedTrip.date}
+                      </p>
+                      <p className="flex items-center">
+                        <FiUsers className="mr-2" /> <span className="font-medium">Available Spots:</span> {selectedTrip.spots}/{selectedTrip.maxSpots}
+                      </p>
+                      {selectedTrip.transport && (
+                        <p className="flex items-center">
+                          <FiNavigation className="mr-2" /> <span className="font-medium">Transport:</span> {selectedTrip.transport}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Trip Details */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* Left Column - Trip Info */}
-                  <div className="md:col-span-2 space-y-4 sm:space-y-6">
-                    <div>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {selectedTrip.tags.map((tag) => (
-                          <span key={tag} className="px-3 py-1 bg-[#2c5e4a] text-[#f8d56b] rounded-full text-xs sm:text-sm font-medium">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-                        <div className="bg-[#f8f4e3] p-3 rounded-lg flex flex-col items-center">
-                          <FiMapPin className="text-[#2c5e4a] mb-1" />
-                          <p className="text-[#2c5e4a] font-medium text-sm sm:text-base">{selectedTrip.destination}</p>
-                        </div>
-                        <div className="bg-[#f8f4e3] p-3 rounded-lg flex flex-col items-center">
-                          <FiCalendar className="text-[#2c5e4a] mb-1" />
-                          <p className="text-[#2c5e4a] font-medium text-sm sm:text-base">{selectedTrip.date}</p>
-                        </div>
-                        <div className="bg-[#f8f4e3] p-3 rounded-lg flex flex-col items-center">
-                          <FiClock className="text-[#2c5e4a] mb-1" />
-                          <p className="text-[#2c5e4a] font-medium text-sm sm:text-base">{selectedTrip.duration}</p>
-                        </div>
-                      </div>
-                      
-                      <h4 className="font-bold text-[#2c5e4a] mb-2">Trip Description</h4>
-                      <p className="text-[#5E5854] mb-6 text-sm sm:text-base">
-                        {selectedTrip.description || "Join us for an unforgettable adventure to explore the beautiful landscapes, rich culture, and amazing cuisine of this destination. This trip is perfect for travelers who love nature, photography, and authentic experiences."}
-                      </p>
-                      
-                      <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7] mb-6">
-                        <h4 className="font-bold text-[#2c5e4a] mb-3">Trip Organizer</h4>
-                        <div className="flex items-center">
-                          <img
-                            src={selectedTrip.organizerAvatar}
-                            alt={selectedTrip.organizer}
-                            className="w-12 h-12 rounded-full border-2 border-[#f8d56b] mr-4"
-                          />
-                          <div>
-                            <h5 className="font-bold text-[#2c5e4a]">{selectedTrip.organizer}</h5>
-                            <p className="text-[#5E5854] text-sm">Trip Organizer</p>
-                          </div>
-                        </div>
+                {/* Trip Description */}
+                <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7] mb-6">
+                  <h4 className="font-bold text-[#2c5e4a] mb-3">About This Trip</h4>
+                  <p className="text-[#5E5854]">{selectedTrip.description || "No description available."}</p>
+                </div>
+
+                {/* Trip Cost Breakdown */}
+                <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7] mb-6">
+                  <h4 className="font-bold text-[#2c5e4a] mb-3">Cost Breakdown</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center pb-2 border-b border-[#d1c7b7]">
+                      <span className="text-[#5E5854]">Base Price</span>
+                      <span className="font-medium text-[#2c5e4a]">{selectedTrip.price}</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-[#d1c7b7]">
+                      <span className="text-[#5E5854]">Accommodation</span>
+                      <span className="font-medium text-[#2c5e4a]">Included</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-[#d1c7b7]">
+                      <span className="text-[#5E5854]">Activities</span>
+                      <span className="font-medium text-[#2c5e4a]">Included</span>
+                    </div>
+                    <div className="flex justify-between items-center pt-2">
+                      <span className="font-bold text-[#2c5e4a]">Total Cost</span>
+                      <span className="font-bold text-[#f87c6d]">{selectedTrip.price}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Trip Statistics */}
+                <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7] mb-6">
+                  <h4 className="font-bold text-[#2c5e4a] mb-3">Trip Statistics</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div className="bg-white p-3 rounded-lg">
+                      <p className="text-2xl font-bold text-[#f87c6d]">{selectedTrip.maxSpots - selectedTrip.spots}</p>
+                      <p className="text-[#5E5854] text-sm">Travelers Joined</p>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg">
+                      <p className="text-2xl font-bold text-[#f87c6d]">{selectedTrip.duration.split(' ')[0]}</p>
+                      <p className="text-[#5E5854] text-sm">Days</p>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg">
+                      <p className="text-2xl font-bold text-[#f87c6d]">4.8</p>
+                      <p className="text-[#5E5854] text-sm">Rating</p>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg">
+                      <p className="text-2xl font-bold text-[#f87c6d]">{selectedTrip.tags?.length || 0}</p>
+                      <p className="text-[#5E5854] text-sm">Categories</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Trip Members */}
+                <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7] mb-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="font-bold text-[#2c5e4a]">Trip Members</h4>
+                    <button 
+                      onClick={() => handleViewAllMembers(selectedTrip)}
+                      className="text-[#f87c6d] hover:text-[#f8a95d] text-sm font-medium"
+                    >
+                      View All
+                    </button>
+                  </div>
+                  
+                  {/* Organizer */}
+                  <div className="mb-4">
+                    <p className="text-[#5E5854] mb-2 text-sm">Organizer:</p>
+                    <div className="flex items-center bg-white p-3 rounded-lg border border-[#d1c7b7]">
+                      <img
+                        src={selectedTrip.organizerAvatar}
+                        alt={selectedTrip.organizer}
+                        className="w-10 h-10 rounded-full object-cover mr-3 cursor-pointer"
+                        onClick={() => handleViewMemberProfile({
+                          id: selectedTrip.organizerId,
+                          name: selectedTrip.organizer,
+                          avatar: selectedTrip.organizerAvatar,
+                          role: 'organizer'
+                        })}
+                      />
+                      <div>
+                        <h5 className="font-medium text-[#2c5e4a]">{selectedTrip.organizer}</h5>
+                        <p className="text-xs text-[#5E5854]">Trip Organizer</p>
                       </div>
                     </div>
                   </div>
-
-                  {/* Right Column - Members & Chat */}
-                  <div className="space-y-4 sm:space-y-6">
-                    <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7]">
-                      <div className="flex justify-between items-center mb-4">
-                        <h4 className="font-bold text-[#2c5e4a] flex items-center">
-                          <FiUsers className="mr-2" />
-                          Trip Members ({selectedTrip.joinedMembers.length + 1}/{selectedTrip.maxSpots})
-                        </h4>
-                        {joinedTrips.includes(selectedTrip.id) && (
-                          <button
-                            onClick={handleStartGroupChat}
-                            className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center"
-                          >
-                            <FiMessageSquare className="mr-1" /> Chat
-                          </button>
-                        )}
-                      </div>
-
-                      <MemberProfiles
-                        trip={selectedTrip}
-                        onStartChat={handleStartGroupChat}
-                      />
-                    </div>
-
-                    {/* Trip Stats */}
-                    <div className="bg-[#f8d56b]/30 p-4 rounded-xl border border-[#d1c7b7]">
-                      <h4 className="font-bold text-[#2c5e4a] mb-3">Trip Statistics</h4>
-                      <div className="grid grid-cols-2 gap-4 text-center">
-                        <div className="bg-white p-3 rounded-lg border border-[#d1c7b7]">
-                          <p className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">{selectedTrip.joinedMembers.length + 1}</p>
-                          <p className="text-[#5E5854] text-xs sm:text-sm">Members Joined</p>
+                  
+                  {/* Members Preview (showing only a few) */}
+                  <div>
+                    <p className="text-[#5E5854] mb-2 text-sm">Members ({selectedTrip.joinedMembers?.length || 0}):</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {selectedTrip.joinedMembers?.slice(0, 4).map(member => (
+                        <div key={member.id} className="flex items-center bg-white p-3 rounded-lg border border-[#d1c7b7]">
+                          <img
+                            src={member.avatar}
+                            alt={member.name}
+                            className="w-10 h-10 rounded-full object-cover mr-3 cursor-pointer"
+                            onClick={() => handleViewMemberProfile(member)}
+                          />
+                          <div>
+                            <h5 className="font-medium text-[#2c5e4a]">{member.name}</h5>
+                            <p className="text-xs text-[#5E5854]">Joined {member.joinedDate}</p>
+                          </div>
                         </div>
-                        <div className="bg-white p-3 rounded-lg border border-[#d1c7b7]">
-                          <p className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">{selectedTrip.spots}</p>
-                          <p className="text-[#5E5854] text-xs sm:text-sm">Spots Available</p>
-                        </div>
-                      </div>
+                      ))}
                     </div>
+                    {selectedTrip.joinedMembers?.length > 4 && (
+                      <div className="mt-3 text-center">
+                        <button 
+                          onClick={() => handleViewAllMembers(selectedTrip)}
+                          className="text-[#f87c6d] hover:text-[#f8a95d] text-sm font-medium"
+                        >
+                          + {selectedTrip.joinedMembers.length - 4} more members
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                   <button
                     onClick={() => setShowTripDetails(false)}
                     className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white py-3 rounded-xl transition-colors font-cinzel"
                   >
                     Close
                   </button>
-                  <button
-                    onClick={() => handleJoinTrip(selectedTrip.id)}
-                    disabled={joinedTrips.includes(selectedTrip.id)}
-                    className={`flex-1 py-3 rounded-xl transition-colors font-cinzel ${
-                      joinedTrips.includes(selectedTrip.id)
-                        ? 'bg-[#a8c4b8] text-[#2c5e4a] cursor-not-allowed'
-                        : 'bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white'
-                    }`}
-                  >
-                    {joinedTrips.includes(selectedTrip.id) ? (
-                      <>
-                        <FiCheck className="inline mr-1" /> Already Joined
-                      </>
-                    ) : (
-                      'Join This Trip'
-                    )}
-                  </button>
+                  
+                  {joinedTrips.includes(selectedTrip.id) ? (
+                    <button
+                      onClick={() => handleStartGroupChat()}
+                      className="flex-1 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white py-3 rounded-xl transition-colors font-cinzel flex items-center justify-center"
+                    >
+                      <FiMessageSquare className="mr-2" /> Group Chat
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleJoinTrip(selectedTrip.id)}
+                      className="flex-1 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white py-3 rounded-xl transition-colors font-cinzel"
+                    >
+                      Join Trip
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -1194,6 +1299,67 @@ export default function Dashboard({ onLogout }) {
           </div>
         )}
       </div>
+
+      {/* Member Profile Modal */}
+      {showMemberProfile && selectedMember && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          {/* Add a fallback in case Profile fails to render */}
+          <div className="bg-white rounded-2xl p-8 max-w-4xl w-full border border-[#d1c7b7] shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-3xl font-bold text-[#2c5e4a]">Profile</h3>
+              <button
+                onClick={() => setShowMemberProfile(false)}
+                className="text-[#5E5854] hover:text-[#f87c6d] text-3xl font-bold"
+              >
+                <FiX />
+              </button>
+            </div>
+            
+            <div className="flex flex-col items-center">
+              <img
+                src={selectedMember.avatar}
+                alt={selectedMember.name}
+                className="w-32 h-32 rounded-full border-4 border-[#f8d56b] object-cover mb-4"
+              />
+              <h4 className="text-2xl font-bold text-[#2c5e4a]">{selectedMember.fullName || selectedMember.name}</h4>
+              <p className="text-[#5E5854]">{selectedMember.location}</p>
+            </div>
+            
+            <Profile
+              user={selectedMember}
+              onClose={() => setShowMemberProfile(false)}
+              onMessage={() => handleProfileMessage()}
+              onPhotoClick={handlePhotoClick}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Member Profiles Modal */}
+      {showMemberProfiles && selectedTripForMembers && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-60 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b border-[#d1c7b7]">
+              <h3 className="text-xl font-bold text-[#2c5e4a]">Trip Members</h3>
+              <button 
+                onClick={() => setShowMemberProfiles(false)}
+                className="text-[#5E5854] hover:text-[#2c5e4a] p-2 rounded-full"
+              >
+                <FiX className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-4">
+              <MemberProfiles 
+                trip={selectedTripForMembers} 
+                onStartChat={handleStartChatWithMember} 
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-[#2c5e4a] text-white py-12 mt-12">
