@@ -182,7 +182,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           {/* Stats Row */}
           <div className="grid grid-cols-2 sm:flex sm:justify-between mt-6 pt-4 border-t border-gray-200 gap-2 sm:gap-0">
             <div className="text-center">
-              <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.connections}</p>
+              <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800 bg-yellow-100 inline-block px-3 py-1 rounded-full">{profileData.connections}</p>
               <p className="text-gray-500 text-xs">Connections</p>
             </div>
             <div className="text-center">
