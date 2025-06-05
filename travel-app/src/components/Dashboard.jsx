@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NotificationSystem from './NotificationSystem';
 import GroupChat from './GroupChat';
 import MemberProfiles from './MemberProfiles';
-import { FiArrowLeft, FiArrowRight, FiCheck, FiX, FiMessageSquare, FiStar, FiEye, FiPlus, FiUser, FiCalendar, FiMapPin, FiDollarSign, FiUsers, FiTruck, FiEdit2, FiHeart, FiChevronLeft, FiChevronRight, FiMail } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiCheck, FiX, FiMessageSquare, FiStar, FiEye, FiPlus, FiUser, FiCalendar, FiMapPin, FiDollarSign, FiUsers, FiTruck, FiEdit2, FiHeart, FiChevronLeft, FiChevronRight, FiMail, FiMenu, FiBell, FiLogOut } from 'react-icons/fi';
 
 // Mock data for trips with enhanced structure
 const mockTrips = [
@@ -158,10 +158,10 @@ const testimonials = [
 ];
 
 const popularDestinations = [
-  { name: "Paris, France", visits: "2.3k", image: "/assets/images/paris.webp" },
-  { name: "New York, USA", visits: "1.8k", image: "/assets/images/newyork.jpeg" },
-  { name: "Dubai, UAE", visits: "1.5k", image: "/assets/images/dubai.jpeg" },
-  { name: "London, UK", visits: "1.2k", image: "/assets/images/london.jpeg" }
+  { id: 1, name: "Paris, France", country: "France", visits: "2.3k", image: "/assets/images/paris.webp" },
+  { id: 2, name: "New York, USA", country: "USA", visits: "1.8k", image: "/assets/images/newyork.jpeg" },
+  { id: 3, name: "Dubai, UAE", country: "UAE", visits: "1.5k", image: "/assets/images/dubai.jpeg" },
+  { id: 4, name: "London, UK", country: "UK", visits: "1.2k", image: "/assets/images/london.jpeg" }
 ];
 
 function Profile({ user, onClose, onMessage, onPhotoClick }) {
@@ -192,7 +192,7 @@ function Profile({ user, onClose, onMessage, onPhotoClick }) {
               <p className="text-[#5E5854]">{user.location}</p>
               <button
                 onClick={onMessage}
-                className="mt-4 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold flex items-center"
+                className="mt-4 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-cinzel flex items-center"
               >
                 <FiMail className="mr-2" /> Message
               </button>
@@ -313,6 +313,7 @@ export default function Dashboard({ onLogout }) {
     budget: '',
     description: ''
   });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Current user data
   const currentUser = {
@@ -489,7 +490,16 @@ export default function Dashboard({ onLogout }) {
   };
 
   const handleShowProfile = () => {
-    navigate('/profile');
+    // Check if we're using the navigate function from react-router
+    if (typeof navigate === 'function') {
+      navigate('/profile');
+    } else {
+      // If navigate is not available, we'll use an alternative approach
+      window.location.href = '/profile';
+    }
+    
+    // Close the mobile menu after navigation
+    setMobileMenuOpen(false);
   };
 
   const handleProfileMessage = () => {
@@ -508,14 +518,26 @@ export default function Dashboard({ onLogout }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-[#f8d56b]">NomadNova</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#f8d56b]">NomadNova</h1>
               <nav className="hidden md:flex space-x-6">
-                <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-medium">Trips</a>
-                <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-medium">Completed</a>
-                <a href="#destinations" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-medium">Destinations</a>
+                <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Trips</a>
+                <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Completed</a>
+                <a href="#destinations" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Destinations</a>
               </nav>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-white p-2"
+              >
+                {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+              </button>
+            </div>
+            
+            {/* Desktop navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <NotificationSystem
                 notifications={notifications}
                 showNotifications={showNotifications}
@@ -525,7 +547,7 @@ export default function Dashboard({ onLogout }) {
               />
               <button
                 onClick={handleShowProfile}
-                className="flex items-center space-x-2 bg-[#6F93AD] hover:bg-[#5E5854] text-white px-4 py-2 rounded-full transition-colors font-semibold shadow-lg"
+                className="flex items-center space-x-2 bg-[#6F93AD] hover:bg-[#5E5854] text-white px-4 py-2 rounded-full transition-colors font-cinzel flex items-center justify-center"
               >
                 <img
                   src={currentUser.avatar}
@@ -536,27 +558,76 @@ export default function Dashboard({ onLogout }) {
               </button>
               <button
                 onClick={() => setShowPostTrip(true)}
-                className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold shadow-lg flex items-center"
+                className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-cinzel shadow-lg flex items-center"
               >
                 <FiPlus className="mr-1" />
                 Post Trip
               </button>
               <button
                 onClick={onLogout}
-                className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+                className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-cinzel"
               >
                 Logout
               </button>
             </div>
           </div>
+          
+          {/* Mobile menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden bg-[#1a3a2a] py-4 px-2 rounded-b-lg">
+              <nav className="flex flex-col space-y-3">
+                <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4">Trips</a>
+                <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4">Completed</a>
+                <a href="#destinations" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4">Destinations</a>
+                <hr className="border-[#2c5e4a]" />
+                <button
+                  onClick={handleShowProfile}
+                  className="flex items-center space-x-2 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4 text-left"
+                >
+                  <img
+                    src={currentUser.avatar}
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full border border-white"
+                  />
+                  <span>Profile</span>
+                </button>
+                <button
+                  onClick={() => setShowPostTrip(true)}
+                  className="flex items-center space-x-2 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4 text-left"
+                >
+                  <FiPlus className="mr-1" />
+                  <span>Post Trip</span>
+                </button>
+                <button
+                  onClick={handleToggleNotifications}
+                  className="flex items-center space-x-2 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4 text-left"
+                >
+                  <FiBell className="mr-1" />
+                  <span>Notifications</span>
+                  {notifications.filter(n => !n.read).length > 0 && (
+                    <span className="bg-[#f87c6d] text-white text-xs rounded-full px-2 py-0.5 ml-1">
+                      {notifications.filter(n => !n.read).length}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="flex items-center space-x-2 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4 text-left"
+                >
+                  <FiLogOut className="mr-1" />
+                  <span>Logout</span>
+                </button>
+              </nav>
+            </div>
+          )}
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         {/* Welcome Section */}
-        <section className="text-center bg-gradient-to-r from-[#6F93AD] to-[#4a708a] rounded-2xl p-8 border border-[#5E5854] shadow-xl">
-          <h2 className="text-4xl font-bold mb-4 text-white">Welcome back, Traveler!</h2>
-          <p className="text-xl text-white/90 font-medium">Discover your next adventure with like-minded explorers</p>
+        <section className="text-center bg-gradient-to-r from-[#6F93AD] to-[#4a708a] rounded-2xl p-4 sm:p-8 border border-[#5E5854] shadow-xl">
+          <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 text-white">Welcome back, Traveler!</h2>
+          <p className="text-lg sm:text-xl text-white/90 font-greatvibes">Discover your next adventure with like-minded explorers</p>
         </section>
 
         {/* Available Trips Carousel */}
@@ -566,20 +637,20 @@ export default function Dashboard({ onLogout }) {
             <div className="flex space-x-2">
               <button
                 onClick={() => setCurrentTripIndex((prev) => (prev - 1 + mockTrips.length) % mockTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
+                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg font-cinzel"
               >
                 <FiChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setCurrentTripIndex((prev) => (prev + 1) % mockTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
+                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg font-cinzel"
               >
                 <FiChevronRight className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {availableTrips.map((trip, index) => (
               <div
                 key={trip.id}
@@ -591,17 +662,17 @@ export default function Dashboard({ onLogout }) {
                   <img
                     src={trip.image}
                     alt={trip.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-40 sm:h-48 object-cover"
                   />
                   <div className="absolute top-4 right-4">
-                    <span className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <span className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
                       {trip.price}
                     </span>
                   </div>
                 </div>
-                <div className="p-6 bg-gradient-to-b from-[#f8f4e3] to-[#f0d9b5]">
+                <div className="p-4 sm:p-6 bg-gradient-to-b from-[#f8f4e3] to-[#f0d9b5]">
                   <div className="flex justify-between items-start mb-3">
-                    <h4 className="text-xl font-bold text-[#2c5e4a]">{trip.title}</h4>
+                    <h4 className="text-lg sm:text-xl font-bold text-[#2c5e4a]">{trip.title}</h4>
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                       joinedTrips.includes(trip.id)
                         ? 'bg-[#f87c6d] text-white'
@@ -618,32 +689,37 @@ export default function Dashboard({ onLogout }) {
                   </p>
                   <p className="text-[#5E5854] text-sm mb-3">Organized by {trip.organizer}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {trip.tags.map((tag) => (
-                      <span key={tag} className="px-3 py-1 bg-[#2c5e4a] text-[#f8d56b] rounded-full text-sm font-medium">
+                    {trip.tags.slice(0, 3).map((tag) => (
+                      <span key={tag} className="bg-[#a8c4b8]/30 text-[#2c5e4a] px-2 py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
                         {tag}
                       </span>
                     ))}
+                    {trip.tags.length > 3 && (
+                      <span className="bg-[#a8c4b8]/30 text-[#2c5e4a] px-2 py-1 rounded-full text-xs">
+                        +{trip.tags.length - 3}
+                      </span>
+                    )}
                   </div>
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-[#2c5e4a] font-medium flex items-center">
-                      <FiUsers className="mr-1" /> {trip.spots} spots left
+                    <span className="text-[#2c5e4a] font-medium flex items-center text-sm">
+                      <FiUsers className="mr-1" /> {trip.spots} spots
                     </span>
                     <div className="flex items-center text-[#2c5e4a]">
                       <FiStar className="mr-1" />
                       <span className="text-sm">4.8</span>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                     <button
                       onClick={() => handleViewTrip(trip)}
-                      className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-4 py-2 rounded-full transition-colors font-semibold flex items-center justify-center"
+                      className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-4 py-2 rounded-full transition-colors font-cinzel flex items-center justify-center"
                     >
-                      <FiEye className="mr-1" /> View Details
+                      <FiEye className="mr-1" /> View
                     </button>
                     <button
                       onClick={() => handleJoinTrip(trip.id)}
                       disabled={joinedTrips.includes(trip.id)}
-                      className={`flex-1 px-4 py-2 rounded-full transition-colors font-semibold flex items-center justify-center ${
+                      className={`flex-1 px-4 py-2 rounded-full transition-colors font-cinzel flex items-center justify-center ${
                         joinedTrips.includes(trip.id)
                           ? 'bg-[#a8c4b8] text-[#2c5e4a] cursor-not-allowed'
                           : 'bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white'
@@ -666,176 +742,178 @@ export default function Dashboard({ onLogout }) {
 
         {/* Enhanced Trip Details Modal */}
         {showTripDetails && selectedTrip && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl p-8 max-w-5xl w-full border border-[#d1c7b7] shadow-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-3xl font-bold text-[#2c5e4a]">{selectedTrip.title}</h3>
-                <button
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+              {/* Modal Header with Close Button */}
+              <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b border-[#d1c7b7]">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">{selectedTrip.title}</h3>
+                <button 
                   onClick={() => setShowTripDetails(false)}
-                  className="text-[#5E5854] hover:text-[#f87c6d] text-3xl font-bold"
+                  className="text-[#5E5854] hover:text-[#2c5e4a] p-2 rounded-full"
                 >
-                  <FiX />
+                  <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Left Column - Trip Info */}
-                <div className="space-y-6">
-                  <div>
-                    <img
-                      src={selectedTrip.image}
-                      alt={selectedTrip.title}
-                      className="w-full h-64 object-cover rounded-xl border border-[#d1c7b7]"
-                    />
+              {/* Modal Content */}
+              <div className="p-4 sm:p-6">
+                {/* Trip Image */}
+                <div className="relative h-48 sm:h-64 md:h-80 rounded-xl overflow-hidden mb-6">
+                  <img
+                    src={selectedTrip.image}
+                    alt={selectedTrip.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-4 right-4">
+                    <span className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                      {selectedTrip.price}
+                    </span>
                   </div>
+                </div>
 
-                  <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7]">
-                    <h4 className="font-bold text-[#2c5e4a] mb-3 flex items-center">
-                      <FiMapPin className="mr-2" /> Trip Details
-                    </h4>
-                    <div className="space-y-2 text-[#5E5854]">
-                      <p className="flex items-center">
-                        <FiMapPin className="mr-2" /> <strong>Destination:</strong> {selectedTrip.destination}
+                {/* Trip Details */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Left Column - Trip Info */}
+                  <div className="md:col-span-2 space-y-4 sm:space-y-6">
+                    <div>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {selectedTrip.tags.map((tag) => (
+                          <span key={tag} className="px-3 py-1 bg-[#2c5e4a] text-[#f8d56b] rounded-full text-xs sm:text-sm font-medium">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                        <div className="bg-[#f8f4e3] p-3 rounded-lg flex flex-col items-center">
+                          <FiMapPin className="text-[#2c5e4a] mb-1" />
+                          <p className="text-[#2c5e4a] font-medium text-sm sm:text-base">{selectedTrip.destination}</p>
+                        </div>
+                        <div className="bg-[#f8f4e3] p-3 rounded-lg flex flex-col items-center">
+                          <FiCalendar className="text-[#2c5e4a] mb-1" />
+                          <p className="text-[#2c5e4a] font-medium text-sm sm:text-base">{selectedTrip.date}</p>
+                        </div>
+                        <div className="bg-[#f8f4e3] p-3 rounded-lg flex flex-col items-center">
+                          <FiClock className="text-[#2c5e4a] mb-1" />
+                          <p className="text-[#2c5e4a] font-medium text-sm sm:text-base">{selectedTrip.duration}</p>
+                        </div>
+                      </div>
+                      
+                      <h4 className="font-bold text-[#2c5e4a] mb-2">Trip Description</h4>
+                      <p className="text-[#5E5854] mb-6 text-sm sm:text-base">
+                        {selectedTrip.description || "Join us for an unforgettable adventure to explore the beautiful landscapes, rich culture, and amazing cuisine of this destination. This trip is perfect for travelers who love nature, photography, and authentic experiences."}
                       </p>
-                      <p className="flex items-center">
-                        <FiCalendar className="mr-2" /> <strong>Duration:</strong> {selectedTrip.duration}
-                      </p>
-                      <p className="flex items-center">
-                        <FiCalendar className="mr-2" /> <strong>Dates:</strong> {selectedTrip.date}
-                      </p>
-                      <p className="flex items-center">
-                        <FiDollarSign className="mr-2" /> <strong>Price:</strong> {selectedTrip.price}
-                      </p>
-                      <p className="flex items-center">
-                        <FiUser className="mr-2" /> <strong>Organizer:</strong> {selectedTrip.organizer}
-                      </p>
-                      <p className="flex items-center">
-                        <FiUsers className="mr-2" /> <strong>Available Spots:</strong> {selectedTrip.spots} of {selectedTrip.maxSpots}
-                      </p>
+                      
+                      <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7] mb-6">
+                        <h4 className="font-bold text-[#2c5e4a] mb-3">Trip Organizer</h4>
+                        <div className="flex items-center">
+                          <img
+                            src={selectedTrip.organizerAvatar}
+                            alt={selectedTrip.organizer}
+                            className="w-12 h-12 rounded-full border-2 border-[#f8d56b] mr-4"
+                          />
+                          <div>
+                            <h5 className="font-bold text-[#2c5e4a]">{selectedTrip.organizer}</h5>
+                            <p className="text-[#5E5854] text-sm">Trip Organizer</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="bg-[#f8d56b]/30 p-4 rounded-xl border border-[#d1c7b7]">
-                    <h4 className="font-bold text-[#2c5e4a] mb-3">What's Included</h4>
-                    <ul className="text-[#5E5854] space-y-2">
-                      <li className="flex items-center">
-                        <FiCheck className="text-[#2c5e4a] mr-2" /> Accommodation (shared rooms)
-                      </li>
-                      <li className="flex items-center">
-                        <FiCheck className="text-[#2c5e4a] mr-2" /> Local transportation
-                      </li>
-                      <li className="flex items-center">
-                        <FiCheck className="text-[#2c5e4a] mr-2" /> Guided tours
-                      </li>
-                      <li className="flex items-center">
-                        <FiCheck className="text-[#2c5e4a] mr-2" /> Some meals included
-                      </li>
-                      <li className="flex items-center">
-                        <FiCheck className="text-[#2c5e4a] mr-2" /> Travel insurance
-                      </li>
-                    </ul>
-                  </div>
-
-                  {selectedTrip.description && (
+                  {/* Right Column - Members & Chat */}
+                  <div className="space-y-4 sm:space-y-6">
                     <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7]">
-                      <h4 className="font-bold text-[#2c5e4a] mb-3">About This Trip</h4>
-                      <p className="text-[#5E5854]">{selectedTrip.description}</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Right Column - Members & Chat */}
-                <div className="space-y-6">
-                  <div className="bg-[#f8f4e3] p-4 rounded-xl border border-[#d1c7b7]">
-                    <div className="flex justify-between items-center mb-4">
-                      <h4 className="font-bold text-[#2c5e4a] flex items-center">
-                        <FiUsers className="mr-2" />
-                        Trip Members ({selectedTrip.joinedMembers.length + 1}/{selectedTrip.maxSpots})
-                      </h4>
-                      {joinedTrips.includes(selectedTrip.id) && (
-                        <button
-                          onClick={handleStartGroupChat}
-                          className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center"
-                        >
-                          <FiMessageSquare className="mr-1" /> Group Chat
-                        </button>
-                      )}
-                    </div>
-
-                    <MemberProfiles
-                      trip={selectedTrip}
-                      onStartChat={handleStartGroupChat}
-                    />
-                  </div>
-
-                  {/* Trip Stats */}
-                  <div className="bg-[#f8d56b]/30 p-4 rounded-xl border border-[#d1c7b7]">
-                    <h4 className="font-bold text-[#2c5e4a] mb-3">Trip Statistics</h4>
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div className="bg-white p-3 rounded-lg border border-[#d1c7b7]">
-                        <p className="text-2xl font-bold text-[#2c5e4a]">{selectedTrip.joinedMembers.length + 1}</p>
-                        <p className="text-[#5E5854] text-sm">Members Joined</p>
+                      <div className="flex justify-between items-center mb-4">
+                        <h4 className="font-bold text-[#2c5e4a] flex items-center">
+                          <FiUsers className="mr-2" />
+                          Trip Members ({selectedTrip.joinedMembers.length + 1}/{selectedTrip.maxSpots})
+                        </h4>
+                        {joinedTrips.includes(selectedTrip.id) && (
+                          <button
+                            onClick={handleStartGroupChat}
+                            className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold transition-colors flex items-center"
+                          >
+                            <FiMessageSquare className="mr-1" /> Chat
+                          </button>
+                        )}
                       </div>
-                      <div className="bg-white p-3 rounded-lg border border-[#d1c7b7]">
-                        <p className="text-2xl font-bold text-[#2c5e4a]">{selectedTrip.spots}</p>
-                        <p className="text-[#5E5854] text-sm">Spots Available</p>
+
+                      <MemberProfiles
+                        trip={selectedTrip}
+                        onStartChat={handleStartGroupChat}
+                      />
+                    </div>
+
+                    {/* Trip Stats */}
+                    <div className="bg-[#f8d56b]/30 p-4 rounded-xl border border-[#d1c7b7]">
+                      <h4 className="font-bold text-[#2c5e4a] mb-3">Trip Statistics</h4>
+                      <div className="grid grid-cols-2 gap-4 text-center">
+                        <div className="bg-white p-3 rounded-lg border border-[#d1c7b7]">
+                          <p className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">{selectedTrip.joinedMembers.length + 1}</p>
+                          <p className="text-[#5E5854] text-xs sm:text-sm">Members Joined</p>
+                        </div>
+                        <div className="bg-white p-3 rounded-lg border border-[#d1c7b7]">
+                          <p className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">{selectedTrip.spots}</p>
+                          <p className="text-[#5E5854] text-xs sm:text-sm">Spots Available</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Action Buttons */}
-              <div className="mt-8 flex space-x-4">
-                <button
-                  onClick={() => setShowTripDetails(false)}
-                  className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white py-3 rounded-xl transition-colors font-semibold"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={() => handleJoinTrip(selectedTrip.id)}
-                  disabled={joinedTrips.includes(selectedTrip.id)}
-                  className={`flex-1 py-3 rounded-xl transition-colors font-semibold ${
-                    joinedTrips.includes(selectedTrip.id)
-                      ? 'bg-[#a8c4b8] text-[#2c5e4a] cursor-not-allowed'
-                      : 'bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white'
-                  }`}
-                >
-                  {joinedTrips.includes(selectedTrip.id) ? (
-                    <>
-                      <FiCheck className="inline mr-1" /> Already Joined
-                    </>
-                  ) : (
-                    'Join This Trip'
-                  )}
-                </button>
+                {/* Action Buttons */}
+                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                  <button
+                    onClick={() => setShowTripDetails(false)}
+                    className="flex-1 bg-[#5E5854] hover:bg-[#2c5e4a] text-white py-3 rounded-xl transition-colors font-cinzel"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={() => handleJoinTrip(selectedTrip.id)}
+                    disabled={joinedTrips.includes(selectedTrip.id)}
+                    className={`flex-1 py-3 rounded-xl transition-colors font-cinzel ${
+                      joinedTrips.includes(selectedTrip.id)
+                        ? 'bg-[#a8c4b8] text-[#2c5e4a] cursor-not-allowed'
+                        : 'bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white'
+                    }`}
+                  >
+                    {joinedTrips.includes(selectedTrip.id) ? (
+                      <>
+                        <FiCheck className="inline mr-1" /> Already Joined
+                      </>
+                    ) : (
+                      'Join This Trip'
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
 
         {/* Completed Trips Section */}
-        <section id="completed" className="space-y-6">
+        <section id="completed" className="space-y-4 sm:space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-3xl font-bold text-[#2c5e4a]">Completed Trips</h3>
+            <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Completed Trips</h3>
             <div className="flex space-x-2">
               <button
                 onClick={() => setCurrentCompletedIndex((prev) => (prev - 1 + completedTrips.length) % completedTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
+                className="p-2 sm:p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
               >
-                <FiChevronLeft className="w-5 h-5" />
+                <FiChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <button
                 onClick={() => setCurrentCompletedIndex((prev) => (prev + 1) % completedTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
+                className="p-2 sm:p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
               >
-                <FiChevronRight className="w-5 h-5" />
+                <FiChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {completedTrips.map((trip, index) => (
               <div
                 key={trip.id}
@@ -848,14 +926,14 @@ export default function Dashboard({ onLogout }) {
                 }}
                 style={{ cursor: 'pointer' }}
               >
-                <div className="relative h-64">
+                <div className="relative h-48 sm:h-64">
                   <img
                     src={trip.image}
                     alt={trip.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-                    <h4 className="text-2xl font-bold text-white">{trip.title}</h4>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4 sm:p-6">
+                    <h4 className="text-xl sm:text-2xl font-bold text-white">{trip.title}</h4>
                     <p className="text-white/90">{trip.destination}</p>
                     <div className="flex justify-between items-center mt-3">
                       <span className="text-white flex items-center">
@@ -867,70 +945,60 @@ export default function Dashboard({ onLogout }) {
                     </div>
                   </div>
                 </div>
-                <div className="p-6 bg-gradient-to-b from-[#f8f4e3] to-[#f0d9b5]">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[#5E5854] flex items-center">
-                      <FiUsers className="mr-1" /> {trip.participants} travelers
-                    </span>
-                    <button className="text-[#2c5e4a] hover:text-[#f87c6d] font-semibold">
-                      View Photos
-                    </button>
-                  </div>
-                </div>
               </div>
             ))}
           </div>
         </section>
 
         {/* Testimonials Section */}
-        <section className="space-y-6">
-          <h3 className="text-3xl font-bold text-[#2c5e4a]">Traveler Testimonials</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="space-y-4 sm:space-y-6">
+          <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Traveler Testimonials</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {testimonials.map((testimonial) => (
-              <div key={testimonial.id} className="bg-white rounded-2xl p-6 border border-[#d1c7b7] shadow-lg">
+              <div key={testimonial.id} className="bg-white rounded-2xl p-4 sm:p-6 border border-[#d1c7b7] shadow-lg">
                 <div className="flex items-center mb-4">
                   <img
                     src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full border-2 border-[#f8d56b] mr-4"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[#f8d56b] mr-3 sm:mr-4"
                   />
                   <div>
                     <h4 className="font-bold text-[#2c5e4a]">{testimonial.name}</h4>
-                    <p className="text-[#5E5854] text-sm">{testimonial.trip}</p>
+                    <p className="text-[#5E5854] text-xs sm:text-sm">{testimonial.trip}</p>
                   </div>
                 </div>
                 <div className="flex mb-3">
                   {[...Array(5)].map((_, i) => (
                     <FiStar
                       key={i}
-                      className={`w-5 h-5 ${i < testimonial.rating ? 'text-[#f8d56b] fill-[#f8d56b]' : 'text-[#d1c7b7]'}`}
+                      className={`${i < testimonial.rating ? "text-[#f8d56b] fill-[#f8d56b]" : "text-gray-300"} w-4 h-4 sm:w-5 sm:h-5`}
                     />
                   ))}
                 </div>
-                <p className="text-[#5E5854] italic">"{testimonial.comment}"</p>
+                <p className="text-[#5E5854] text-sm sm:text-base">{testimonial.comment}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Popular Destinations Section */}
-        <section id="destinations" className="space-y-6">
-          <h3 className="text-3xl font-bold text-[#2c5e4a]">Popular Destinations</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {popularDestinations.map((destination, index) => (
-              <div
-                key={index}
-                className="relative rounded-xl overflow-hidden h-40 cursor-pointer group"
-                onClick={() => alert(`Viewing ${destination.name}`)}
+        <section id="destinations" className="space-y-4 sm:space-y-6">
+          <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Popular Destinations</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            {popularDestinations.map((destination) => (
+              <div 
+                key={destination.id} 
+                className="relative rounded-xl overflow-hidden h-40 sm:h-56 group cursor-pointer"
+                onClick={() => handleDestinationClick(destination)}
               >
-                <img
-                  src={destination.image}
-                  alt={destination.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                <img 
+                  src={destination.image} 
+                  alt={destination.name} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                  <h4 className="text-white font-bold">{destination.name}</h4>
-                  <p className="text-white/80 text-sm">{destination.visits} visits</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-3 sm:p-4">
+                  <h4 className="text-white font-bold text-sm sm:text-lg">{destination.name}</h4>
+                  <p className="text-white/80 text-xs sm:text-sm">{destination.country}</p>
                 </div>
               </div>
             ))}
@@ -939,20 +1007,22 @@ export default function Dashboard({ onLogout }) {
 
         {/* Post Trip Modal */}
         {showPostTrip && (
-  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div className="bg-white rounded-2xl p-8 max-w-2xl w-full border border-[#d1c7b7] shadow-2xl max-h-[90vh] overflow-y-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-3xl font-bold text-[#2c5e4a]">Post a New Trip</h3>
-        <button
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      {/* Modal Header with Close Button */}
+      <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b border-[#d1c7b7]">
+        <h3 className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">Post a New Trip</h3>
+        <button 
           onClick={() => setShowPostTrip(false)}
-          className="text-[#5E5854] hover:text-[#f87c6d] text-3xl font-bold"
+          className="text-[#5E5854] hover:text-[#2c5e4a] p-2 rounded-full"
         >
-          <FiX />
+          <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </div>
 
-      <form className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Form Content */}
+      <form className="p-4 sm:p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-[#5E5854] font-medium mb-2">Destination*</label>
             <input
@@ -961,7 +1031,7 @@ export default function Dashboard({ onLogout }) {
               value={newTrip.destination}
               onChange={handleInputChange}
               className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
-              placeholder="Where are you going?"
+              placeholder="e.g. Bali, Indonesia"
               required
             />
           </div>
@@ -973,10 +1043,13 @@ export default function Dashboard({ onLogout }) {
               value={newTrip.departure}
               onChange={handleInputChange}
               className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
-              placeholder="Starting point"
+              placeholder="e.g. San Francisco, CA"
               required
             />
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-[#5E5854] font-medium mb-2">From Date*</label>
             <input
@@ -999,30 +1072,38 @@ export default function Dashboard({ onLogout }) {
               required
             />
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Number of People Going*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Current Group Size*</label>
             <input
               type="number"
               name="numberOfPeople"
               value={newTrip.numberOfPeople}
               onChange={handleInputChange}
               className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              placeholder="e.g. 2"
               min="1"
               required
             />
           </div>
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Maximum People*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Maximum Group Size*</label>
             <input
               type="number"
               name="maxPeople"
               value={newTrip.maxPeople}
               onChange={handleInputChange}
               className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              placeholder="e.g. 6"
               min="1"
               required
             />
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-[#5E5854] font-medium mb-2">Transportation</label>
             <select
@@ -1031,12 +1112,13 @@ export default function Dashboard({ onLogout }) {
               onChange={handleInputChange}
               className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
             >
-              <option value="">Select option</option>
+              <option value="">Select transportation</option>
               <option value="Flight">Flight</option>
               <option value="Train">Train</option>
               <option value="Bus">Bus</option>
               <option value="Car">Car</option>
-              <option value="Mixed">Mixed</option>
+              <option value="Cruise">Cruise</option>
+              <option value="Multiple">Multiple</option>
             </select>
           </div>
           <div>
@@ -1064,18 +1146,18 @@ export default function Dashboard({ onLogout }) {
           ></textarea>
         </div>
 
-        <div className="flex justify-end space-x-4 pt-4">
+        <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
           <button
             type="button"
             onClick={() => setShowPostTrip(false)}
-            className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+            className="bg-[#5E5854] hover:bg-[#2c5e4a] text-white px-6 py-2 rounded-full transition-colors font-cinzel"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handlePostTrip}
-            className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-semibold"
+            className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-cinzel"
           >
             Post Trip
           </button>

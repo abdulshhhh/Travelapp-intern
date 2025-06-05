@@ -192,7 +192,7 @@ export default function Login({ onSignUpClick, onBackToLanding, onLoginSuccess }
             </div>
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-[#EC8E3D] to-[#FCCB6E] hover:from-[#FCCB6E] hover:to-[#EC8E3D] transition-all duration-500 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              className="w-full bg-gradient-to-r from-[#EC8E3D] to-[#FCCB6E] hover:from-[#FCCB6E] hover:to-[#EC8E3D] transition-all duration-500 text-white py-3 rounded-xl font-cinzel shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               Login
             </button>
