@@ -217,46 +217,48 @@ export default function GroupChat({ trip, currentUser, onClose }) {
           </button>
         </form>
       </div>
+
+      {/* App Download Prompt Modal */}
+      {showAppPrompt && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl border-2 border-yellow-400">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800">Download Our App</h3>
+              <button 
+                onClick={() => setShowAppPrompt(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <FiX className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="text-center mb-6">
+              <div className="bg-yellow-100 p-4 rounded-full inline-block mb-4">
+                {promptType === 'voice' ? (
+                  <FiPhone className="w-12 h-12 text-yellow-600" />
+                ) : (
+                  <FiVideo className="w-12 h-12 text-yellow-600" />
+                )}
+              </div>
+              <p className="text-gray-700 mb-2">
+                {promptType === 'voice' ? 'Voice' : 'Video'} calls are available exclusively on our mobile app.
+              </p>
+              <p className="text-gray-500 text-sm">
+                Download now to enjoy the full experience!
+              </p>
+            </div>
+            
+            <div className="flex space-x-4">
+              <button className="flex-1 bg-black text-white py-3 rounded-xl flex items-center justify-center">
+                <span className="mr-2">App Store</span>
+              </button>
+              <button className="flex-1 bg-green-600 text-white py-3 rounded-xl flex items-center justify-center">
+                <span className="mr-2">Google Play</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-  {showAppPrompt && (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl border-2 border-yellow-400">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-gray-800">Download Our App</h3>
-          <button 
-            onClick={() => setShowAppPrompt(false)}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <FiX className="w-6 h-6" />
-          </button>
-        </div>
-        
-        <div className="text-center mb-6">
-          <div className="bg-yellow-100 p-4 rounded-full inline-block mb-4">
-            {promptType === 'voice' ? (
-              <FiPhone className="w-12 h-12 text-yellow-600" />
-            ) : (
-              <FiVideo className="w-12 h-12 text-yellow-600" />
-            )}
-          </div>
-          <p className="text-gray-700 mb-2">
-            {promptType === 'voice' ? 'Voice' : 'Video'} calls are available exclusively on our mobile app.
-          </p>
-          <p className="text-gray-500 text-sm">
-            Download now to enjoy the full experience!
-          </p>
-        </div>
-        
-        <div className="flex space-x-4">
-          <button className="flex-1 bg-black text-white py-3 rounded-xl flex items-center justify-center">
-            <span className="mr-2">App Store</span>
-          </button>
-          <button className="flex-1 bg-green-600 text-white py-3 rounded-xl flex items-center justify-center">
-            <span className="mr-2">Google Play</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  )}
 }
