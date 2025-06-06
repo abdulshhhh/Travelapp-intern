@@ -389,9 +389,27 @@ export default function Dashboard({ onLogout }) {
   const handlePostTrip = (e) => {
     e.preventDefault();
     
-    // Basic validation
-    if (!newTrip.destination || !newTrip.fromDate || !newTrip.toDate || !newTrip.transport || !newTrip.budget || !newTrip.category || !newTrip.maxPeople) {
-      alert("Please fill in all required fields");
+    // Basic validation - log values to help debug
+    console.log("Form data:", newTrip);
+    
+    // Check each required field individually to identify the missing one
+    const requiredFields = {
+      destination: newTrip.destination,
+      departure: newTrip.departure,
+      fromDate: newTrip.fromDate,
+      toDate: newTrip.toDate,
+      transport: newTrip.transport,
+      budget: newTrip.budget,
+      maxPeople: newTrip.maxPeople,
+      category: newTrip.category
+    };
+    
+    const missingFields = Object.entries(requiredFields)
+      .filter(([_, value]) => !value)
+      .map(([field]) => field);
+    
+    if (missingFields.length > 0) {
+      alert(`Please fill in all required fields: ${missingFields.join(', ')}`);
       return;
     }
     
@@ -415,9 +433,9 @@ export default function Dashboard({ onLogout }) {
       spots: parseInt(newTrip.maxPeople, 10),
       maxSpots: parseInt(newTrip.maxPeople, 10),
       image: newTrip.coverImage || "/assets/images/default-trip.jpg",
-      organizer: currentUser.name,
-      organizerId: currentUser.id,
-      organizerAvatar: currentUser.avatar,
+      organizer: "Current User", // Replace with actual current user name
+      organizerId: "current_user_id", // Replace with actual current user ID
+      organizerAvatar: "/assets/images/sarachen.jpeg", // Replace with actual current user avatar
       joinedMembers: [],
       tags: [newTrip.category, "Adventure", "Travel"],
       rating: "4.8",
@@ -426,7 +444,12 @@ export default function Dashboard({ onLogout }) {
       memories: []
     };
     
-    // Close the modal first
+    console.log("Trip to add:", tripToAdd);
+    
+    // Update state with the new trip
+    setAvailableTrips(prevTrips => [tripToAdd, ...prevTrips]);
+    
+    // Close the modal
     setShowPostTrip(false);
     
     // Reset form
@@ -444,11 +467,7 @@ export default function Dashboard({ onLogout }) {
       coverImage: null
     });
     
-    // Update state with the new trip - do this after closing the modal
-    setAvailableTrips(prevTrips => [tripToAdd, ...prevTrips]);
-    
-    // Don't immediately show trip details - let the list render first
-    console.log("Trip posted:", tripToAdd);
+    console.log("Trip posted successfully");
   };
 
   // Handle functions
@@ -1162,7 +1181,7 @@ export default function Dashboard({ onLogout }) {
               name="destination"
               value={newTrip.destination}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
               placeholder="e.g. Bali, Indonesia"
               required
             />
@@ -1174,8 +1193,8 @@ export default function Dashboard({ onLogout }) {
               name="departure"
               value={newTrip.departure}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
-              placeholder="e.g. San Francisco, CA"
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
+              placeholder="e.g. New York, USA"
               required
             />
           </div>
@@ -1189,7 +1208,7 @@ export default function Dashboard({ onLogout }) {
               name="fromDate"
               value={newTrip.fromDate}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
               required
             />
           </div>
@@ -1200,7 +1219,7 @@ export default function Dashboard({ onLogout }) {
               name="toDate"
               value={newTrip.toDate}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
               required
             />
           </div>
@@ -1208,43 +1227,15 @@ export default function Dashboard({ onLogout }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Current Group Size*</label>
-            <input
-              type="number"
-              name="numberOfPeople"
-              value={newTrip.numberOfPeople}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
-              placeholder="e.g. 2"
-              min="1"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Maximum Group Size*</label>
-            <input
-              type="number"
-              name="maxPeople"
-              value={newTrip.maxPeople}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
-              placeholder="e.g. 6"
-              min="1"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Transportation</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Transport*</label>
             <select
               name="transport"
               value={newTrip.transport}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
+              required
             >
-              <option value="">Select transportation</option>
+              <option value="">Select transport</option>
               <option value="Flight">Flight</option>
               <option value="Train">Train</option>
               <option value="Bus">Bus</option>
@@ -1254,53 +1245,75 @@ export default function Dashboard({ onLogout }) {
             </select>
           </div>
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Trip Category*</label>
-            <select
-              name="category"
-              value={newTrip.category}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
-              required
-            >
-              <option value="">Select category</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Beach">Beach</option>
-              <option value="City">City</option>
-              <option value="Culture">Culture</option>
-              <option value="Food">Food</option>
-              <option value="Hiking">Hiking</option>
-              <option value="History">History</option>
-              <option value="Mountains">Mountains</option>
-              <option value="Nature">Nature</option>
-              <option value="Photography">Photography</option>
-              <option value="Wildlife">Wildlife</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Estimated Budget*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Budget (USD)*</label>
             <input
-              type="text"
+              type="number"
               name="budget"
               value={newTrip.budget}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
-              placeholder="e.g. $1,200"
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
+              placeholder="e.g. 1200"
               required
             />
           </div>
         </div>
 
-        <div>
-          <label className="block text-[#5E5854] font-medium mb-2">Trip Description</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Current Number of People*</label>
+            <input
+              type="number"
+              name="numberOfPeople"
+              value={newTrip.numberOfPeople === 0 ? '' : newTrip.numberOfPeople}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
+              placeholder="e.g. 2"
+              min="1"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Max People*</label>
+            <input
+              type="number"
+              name="maxPeople"
+              value={newTrip.maxPeople === 0 ? '' : newTrip.maxPeople}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
+              placeholder="e.g. 6"
+              min="1"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-[#5E5854] font-medium mb-2">Trip Category*</label>
+          <select
+            name="category"
+            value={newTrip.category}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854]"
+            required
+          >
+            <option value="">Select category</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Beach">Beach</option>
+            <option value="City">City</option>
+            <option value="Cultural">Cultural</option>
+            <option value="Mountain">Mountain</option>
+            <option value="Road Trip">Road Trip</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-[#5E5854] font-medium mb-2">Description</label>
           <textarea
             name="description"
             value={newTrip.description}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854] h-32"
-            placeholder="Tell potential travel buddies about your trip..."
+            className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-1 focus:ring-[#f8a95d] focus:border-[#f8a95d] focus:outline-none hover:border-[#f8a95d] text-[#5E5854] min-h-[100px]"
+            placeholder="Describe your trip..."
           ></textarea>
         </div>
 
