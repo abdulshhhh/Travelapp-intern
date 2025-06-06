@@ -48,3 +48,37 @@ body, html {
 .read-the-docs {
   color: #888;
 }
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-southmind {
+  font-family: 'South Mind', cursive;
+}
+
+/* Add this to your existing CSS */
+.perspective-500 {
+  perspective: 500px;
+}
+
+/* Add these keyframes for the shuffle animation */
+@keyframes shuffleLeft {
+  0% { transform: rotate(0deg) translateX(0) translateY(0); }
+  100% { transform: rotate(-15deg) translateX(-20px) translateY(5px); }
+}
+
+@keyframes shuffleCenter {
+  0% { transform: rotate(0deg) translateX(0) translateY(0); }
+  100% { transform: rotate(0deg) translateX(0) translateY(0); }
+}
+
+@keyframes shuffleRight {
+  0% { transform: rotate(0deg) translateX(0) translateY(0); }
+  100% { transform: rotate(15deg) translateX(20px) translateY(5px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
