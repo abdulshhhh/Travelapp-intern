@@ -5,8 +5,9 @@ import OTPVerification from './OTPVerification';
 import { 
   FiUser, FiMapPin, FiCalendar, FiStar, FiGlobe, FiEdit2, FiMessageSquare, 
   FiShare2, FiX, FiPlus, FiCheck, FiAward, FiCamera, FiHeart, FiFlag, 
-  FiClock, FiBookmark, FiUsers, FiNavigation, FiMail, FiPhone, FiVideo
+  FiClock, FiBookmark, FiUsers, FiNavigation, FiMail, FiPhone, FiVideo, FiMap
 } from 'react-icons/fi';
+import { FaPlaneDeparture } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 export default function Profile({ currentUser, onClose, onMessage }) {
@@ -114,7 +115,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: <FiUser className="w-5 h-5" /> },
-    { id: 'trips', label: 'Trips', icon: <FiBookmark className="w-5 h-5" /> },
+    { id: 'trips', label: 'Trips', icon: <FaPlaneDeparture className="w-5 h-5" /> },
     { id: 'memories', label: 'Memories', icon: <FiCamera className="w-5 h-5" /> },
     { id: 'reviews', label: 'Reviews', icon: <FiStar className="w-5 h-5" /> }
   ];

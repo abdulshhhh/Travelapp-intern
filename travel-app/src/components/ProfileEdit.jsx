@@ -125,10 +125,10 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
 
   return (
     <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-60 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-2xl w-full max-w-4xl h-[90vh] sm:h-[80vh] border border-gray-200 shadow-2xl flex flex-col md:flex-row overflow-hidden">
+      <div className="bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-2xl w-full max-w-4xl h-[90vh] sm:h-[80vh] border border-gray-200 shadow-2xl flex flex-col md:flex-row overflow-hidden">
         {/* Sidebar - Hidden on mobile, shown as tabs instead */}
-        <div className="hidden md:block md:w-64 bg-yellow-50 border-r border-gray-200 p-6">
-          <h3 className="text-xl font-bold text-yellow-900 mb-6">Edit Profile</h3>
+        <div className="hidden md:block md:w-64 bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] border-r border-gray-200 p-6">
+          <h3 className="text-xl font-bold text-white mb-6">Edit Profile</h3>
           <div className="space-y-2">
             {sections.map((section) => (
               <button
@@ -136,8 +136,8 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
                 onClick={() => setActiveSection(section.id)}
                 className={`w-full flex items-center space-x-3 p-3 rounded-lg font-semibold transition-colors ${
                   activeSection === section.id
-                    ? 'bg-yellow-100 text-yellow-700'
-                    : 'text-gray-600 hover:text-yellow-700 hover:bg-yellow-50'
+                    ? 'bg-[#f8d56b]/20 text-[#f8d56b]'
+                    : 'text-gray-300 hover:text-[#f8d56b] hover:bg-[#f8d56b]/10'
                 }`}
               >
                 {section.icon}
@@ -148,15 +148,15 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
         </div>
 
         {/* Mobile Tabs - Visible only on mobile */}
-        <div className="flex md:hidden bg-yellow-50 border-b border-gray-200 p-3 overflow-x-auto">
+        <div className="flex md:hidden bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] border-b border-gray-200 p-3 overflow-x-auto">
           {sections.map((section) => (
             <button
               key={section.id}
               onClick={() => setActiveSection(section.id)}
               className={`flex items-center space-x-2 p-2 rounded-lg font-semibold transition-colors whitespace-nowrap mr-2 ${
                 activeSection === section.id
-                  ? 'bg-yellow-100 text-yellow-700'
-                  : 'text-gray-600 hover:text-yellow-700 hover:bg-yellow-50'
+                  ? 'bg-[#f8d56b]/20 text-[#f8d56b]'
+                  : 'text-gray-300 hover:text-[#f8d56b] hover:bg-[#f8d56b]/10'
               }`}
             >
               {section.icon}
@@ -168,29 +168,15 @@ export default function ProfileEdit({ profileData, onClose, onOTPVerification })
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="p-3 sm:p-6 border-b border-gray-200 bg-white">
+          <div className="p-3 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg sm:text-2xl font-bold text-gray-800">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 {sections.find(s => s.id === activeSection)?.label}
               </h2>
-              <div className="flex items-center space-x-2 sm:space-x-4">
-                <button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white px-2 sm:px-4 py-2 rounded-lg font-semibold transition-colors text-xs sm:text-sm disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {isSaving ? (
-                    'Saving...'
-                  ) : (
-                    <>
-                      <FiSave className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
-                      Save
-                    </>
-                  )}
-                </button>
+              <div className="flex items-center">
                 <button
                   onClick={onClose}
-                  className="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl font-bold"
+                  className="text-gray-300 hover:text-white text-xl sm:text-2xl font-bold"
                 >
                   <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
