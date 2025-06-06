@@ -133,7 +133,7 @@ const LandingPage = () => {
           NomadNova
         </h2>
         
-        <p className="text-2xl font-greatvibes text-gray-300 mt-2 max-w-xl">
+        <p className="text-2xl font-southmind text-gray-300 mt-2 max-w-xl">
           "Unleash the Nomad in You"
         </p>
 
@@ -159,12 +159,12 @@ const LandingPage = () => {
   );
 };
 
-// Loading Fallback Component
-const LoadingFallback = () => (
-  <div className="min-h-screen bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] flex items-center justify-center">
-    <div className="text-white text-xl">Loading...</div>
-  </div>
-);
+// Loading Fallback Component - Remove this and use Loading component directly
+// const LoadingFallback = () => (
+//   <div className="min-h-screen bg-gradient-to-r from-[#EC8E3D] to-[#6F93AD] flex items-center justify-center">
+//     <div className="text-white text-xl">Loading...</div>
+//   </div>
+// );
 
 // Protected Route Component
 const ProtectedRoute = ({ children, isLoggedIn, redirectTo = "/login" }) => {
@@ -203,24 +203,25 @@ const App = () => {
   const handleAuthSuccess = useCallback(() => setIsLoggedIn(true), []);
   const handleLogout = useCallback(() => setIsLoggedIn(false), []);
 
+  // Initial app loading
   if (loading) {
-    return (
-      <Suspense fallback={<LoadingFallback />}>
-        <Loading onLoadingComplete={handleLoadingComplete} />
-      </Suspense>
-    );
+    return <Loading onLoadingComplete={handleLoadingComplete} />;
   }
 
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<Loading onLoadingComplete={() => {}} />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
             path="/login"
             element={
               <PublicRoute isLoggedIn={isLoggedIn}>
-                <Login onLoginSuccess={handleAuthSuccess} />
+                <Login 
+                  onLoginSuccess={handleAuthSuccess} 
+                  onSignUpClick={() => window.location.href = '/signup'}
+                  onBackToLanding={() => window.location.href = '/'}
+                />
               </PublicRoute>
             }
           />
@@ -228,7 +229,11 @@ const App = () => {
             path="/signup"
             element={
               <PublicRoute isLoggedIn={isLoggedIn}>
-                <SignUp onSignUpSuccess={handleAuthSuccess} />
+                <SignUp 
+                  onSignUpSuccess={handleAuthSuccess} 
+                  onLoginClick={() => window.location.href = '/login'}
+                  onBackToLanding={() => window.location.href = '/'}
+                />
               </PublicRoute>
             }
           />

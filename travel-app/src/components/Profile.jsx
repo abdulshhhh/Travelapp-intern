@@ -5,8 +5,10 @@ import OTPVerification from './OTPVerification';
 import { 
   FiUser, FiMapPin, FiCalendar, FiStar, FiGlobe, FiEdit2, FiMessageSquare, 
   FiShare2, FiX, FiPlus, FiCheck, FiAward, FiCamera, FiHeart, FiFlag, 
-  FiClock, FiBookmark, FiUsers, FiNavigation, FiMail, FiPhone, FiVideo
+  FiClock, FiBookmark, FiUsers, FiNavigation, FiMail, FiPhone, FiVideo, FiMap
 } from 'react-icons/fi';
+import { FaPlaneDeparture } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile({ currentUser, onClose, onMessage }) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -16,6 +18,21 @@ export default function Profile({ currentUser, onClose, onMessage }) {
   const [showOTPVerification, setShowOTPVerification] = useState(false);
   const [otpType, setOTPType] = useState('');
   const [isFollowing, setIsFollowing] = useState(false);
+  const navigate = useNavigate();
+
+  // Fix the close button functionality
+  const handleClose = () => {
+    if (typeof onClose === 'function') {
+      onClose();
+    } else {
+      // If onClose is not provided, navigate back
+      if (typeof navigate === 'function') {
+        navigate('/dashboard');
+      } else {
+        window.location.href = '/dashboard';
+      }
+    }
+  };
 
   // User profile data
   const profileData = {
@@ -98,53 +115,52 @@ export default function Profile({ currentUser, onClose, onMessage }) {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: <FiUser className="w-5 h-5" /> },
-    { id: 'trips', label: 'Trips', icon: <FiBookmark className="w-5 h-5" /> },
+    { id: 'trips', label: 'Trips', icon: <FaPlaneDeparture className="w-5 h-5" /> },
     { id: 'memories', label: 'Memories', icon: <FiCamera className="w-5 h-5" /> },
     { id: 'reviews', label: 'Reviews', icon: <FiStar className="w-5 h-5" /> }
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      {/* Main container with clean white background */}
-      <div className="bg-white rounded-xl w-full max-w-4xl h-[90vh] shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100] flex items-center justify-center p-2 sm:p-4">
+      {/* Main container with dashboard-matching background */}
+      <div className="bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-xl w-full max-w-4xl h-[90vh] shadow-2xl flex flex-col overflow-hidden">
         {/* Header with subtle gradient */}
-        <div className="bg-gradient-to-r from-yellow-50 to-purple-50 p-6 border-b border-gray-200">
+        <div className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] p-4 sm:p-6">
           <div className="flex justify-between items-start">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Profile Picture */}
               <div className="relative">
                 <img
                   src={profileData.avatar}
                   alt={profileData.fullName}
-                  className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-white shadow-md"
                 />
-                {profileData.verified && (
-                  <div className="absolute -bottom-2 -right-2 bg-yellow-500 rounded-full p-1.5">
-                    <FiCheck className="w-3 h-3 text-white" />
-                  </div>
+                {currentUser.id === profileData.id && (
+                  <button
+                    onClick={handleEditProfile}
+                    className="absolute top-0 right-0 bg-white hover:bg-gray-100 rounded-full p-1.5 shadow-md transition-colors"
+                    title="Edit Profile"
+                  >
+                    <FiEdit2 className="w-3 h-3 text-gray-700" />
+                  </button>
                 )}
               </div>
 
               {/* Profile Info */}
               <div>
                 <div className="flex items-center">
-                  <h2 className="text-2xl font-cinzel font-bold text-gray-800">{profileData.fullName}</h2>
-                  {profileData.verified && (
-                    <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-600 text-xs font-medium rounded-full flex items-center">
-                      Verified
-                    </span>
-                  )}
+                  <h2 className="text-xl sm:text-2xl font-cinzel font-bold text-white">{profileData.fullName}</h2>
                 </div>
-                <div className="flex items-center text-gray-600 text-sm mb-1">
+                <div className="flex items-center text-gray-200 text-xs sm:text-sm mb-1">
                   <FiMapPin className="mr-1" />
                   <span>{profileData.location}</span>
                 </div>
-                <div className="flex items-center space-x-3 text-sm text-gray-500">
+                <div className="flex items-center space-x-3 text-xs sm:text-sm text-gray-200">
                   <div className="flex items-center">
                     <FiStar className="mr-1 text-yellow-400 fill-yellow-400" />
                     <span>{profileData.rating} ({profileData.followers} reviews)</span>
                   </div>
-                  <div className="flex items-center">
+                  <div className="hidden sm:flex items-center">
                     <FiGlobe className="mr-1 text-yellow-400" />
                     <span>{profileData.totalCountries} countries</span>
                   </div>
@@ -153,53 +169,67 @@ export default function Profile({ currentUser, onClose, onMessage }) {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-start space-x-4">
               <button
-                onClick={onClose}
-                className="text-gray-500 hover:text-gray-700 text-2xl font-bold transition-colors p-1"
+                onClick={handleShare}
+                className="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-colors"
+                title="Share Profile"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                  <polyline points="16 6 12 2 8 6"></polyline>
+                  <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+                <span className="text-xs">Share</span>
+              </button>
+              <button
+                onClick={handleClose}
+                className="text-gray-300 hover:text-white transition-colors"
+                title="Close"
               >
                 <FiX className="w-6 h-6" />
               </button>
             </div>
           </div>
 
+          {/* Separator line */}
+          <div className="border-t border-gray-600 my-4 opacity-50"></div>
+
           {/* Stats Row */}
-          <div className="flex justify-between mt-6 pt-4 border-t border-gray-200">
+          <div className="grid grid-cols-2 sm:flex sm:justify-between mt-2 pt-2 gap-2 sm:gap-0">
             <div className="text-center">
-              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.connections}</p>
-              <p className="text-gray-500 text-xs">Connections</p>
+              <div className="bg-yellow-100 inline-block p-3 rounded-full">
+                <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.connections}</p>
+                <p className="text-gray-600 text-xs">Connections</p>
+              </div>
             </div>
             <div className="text-center">
-              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.tripsPosted}</p>
-              <p className="text-gray-500 text-xs">Trips Posted</p>
+              <p className="text-lg sm:text-xl font-cinzel font-bold text-white">{profileData.tripsPosted}</p>
+              <p className="text-gray-200 text-xs">Trips Posted</p>
             </div>
             <div className="text-center">
-              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.tripsJoined}</p>
-              <p className="text-gray-500 text-xs">Trips Joined</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-cinzel font-bold text-gray-800">{profileData.upcomingTrips}</p>
-              <p className="text-gray-500 text-xs">Upcoming</p>
+              <p className="text-lg sm:text-xl font-cinzel font-bold text-white">{profileData.tripsJoined}</p>
+              <p className="text-gray-200 text-xs">Trips Joined</p>
             </div>
           </div>
+          
+          {/* Separator line */}
+          <div className="border-t border-gray-600 mt-4 opacity-50"></div>
         </div>
 
         {/* Main action buttons */}
-        <div className="flex justify-between px-6 py-3 bg-white border-b border-gray-200">
-          <div className="flex space-x-2">
+        <div className="flex flex-wrap justify-between px-4 sm:px-6 py-3 bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
+          <div className="flex flex-wrap gap-2 mb-2 sm:mb-0">
             {currentUser.id === profileData.id ? (
-              <button
-                onClick={handleEditProfile}
-                className="bg-white hover:bg-gray-50 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors flex items-center border border-gray-300 shadow-sm"
-              >
-                <FiEdit2 className="mr-2" />
-                Edit Profile
-              </button>
+              <div className="flex items-center text-gray-200 text-sm">
+                <FiCalendar className="mr-1" />
+                <span>Joined {profileData.joinedDate}</span>
+              </div>
             ) : (
               <>
                 <button
                   onClick={handleFollow}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center shadow-sm ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center shadow-sm text-sm ${
                     isFollowing
                       ? 'bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300'
                       : 'bg-yellow-500 hover:bg-yellow-600 text-white'
@@ -219,7 +249,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 </button>
                 <button
                   onClick={onMessage}
-                  className="bg-white hover:bg-gray-50 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors flex items-center border border-gray-300 shadow-sm"
+                  className="bg-white hover:bg-gray-50 text-gray-800 px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center border border-gray-300 shadow-sm text-sm"
                 >
                   <FiMessageSquare className="mr-2" />
                   Message
@@ -227,26 +257,19 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               </>
             )}
           </div>
-          <button
-            onClick={handleShare}
-            className="bg-white hover:bg-gray-50 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors flex items-center border border-gray-300 shadow-sm"
-          >
-            <FiShare2 className="mr-2" />
-            Share
-          </button>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="border-b border-gray-200">
-          <div className="flex px-6">
+        <div className="overflow-x-auto bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
+          <div className="flex justify-between px-2 sm:px-6 min-w-max">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-3 px-4 font-medium text-sm transition-colors relative ${
+                className={`py-3 px-4 sm:px-6 font-medium text-xs sm:text-sm transition-colors relative ${
                   activeTab === tab.id
-                    ? 'text-yellow-500'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'text-[#f8d56b]'
+                    : 'text-gray-200 hover:text-[#f8d56b]'
                 }`}
               >
                 <div className="flex items-center">
@@ -254,7 +277,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                   <span className="ml-2">{tab.label}</span>
                 </div>
                 {activeTab === tab.id && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500 rounded-t-full"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f8d56b]"></div>
                 )}
               </button>
             ))}
@@ -262,23 +285,23 @@ export default function Profile({ currentUser, onClose, onMessage }) {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5]">
           {activeTab === 'overview' && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* About Section */}
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">About</h3>
-                <p className="text-gray-600 leading-relaxed">{profileData.bio}</p>
+              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2 sm:mb-3">About</h3>
+                <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{profileData.bio}</p>
               </div>
 
               {/* Travel Categories */}
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">Travel Interests</h3>
+              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2 sm:mb-3">Travel Interests</h3>
                 <div className="flex flex-wrap gap-2">
                   {profileData.travelCategories.map((category, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-sm font-medium"
+                      className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-xs sm:text-sm font-medium"
                     >
                       {category}
                     </span>
@@ -286,79 +309,84 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 </div>
               </div>
 
-              {/* Languages & Response Info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">Languages</h3>
-                  <div className="space-y-2">
-                    {profileData.languages.map((language, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                        <span className="text-gray-600">{language}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Pinned Memories */}
+              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                <div className="flex justify-between items-center mb-3 sm:mb-4">
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800">Pinned Memories</h3>
+                  <button 
+                    onClick={() => handleViewTripMemories('photos')}
+                    className="text-yellow-500 text-xs sm:text-sm font-medium"
+                  >
+                    View All
+                  </button>
                 </div>
-
-                <div className="bg-white p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-3">Response Info</h3>
-                  <div className="space-y-2 text-gray-600">
-                    <div className="flex items-center">
-                      <FiMail className="mr-2 text-yellow-500" />
-                      <span><strong className="font-cinzel">Response Rate:</strong> {profileData.responseRate}</span>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[
+                    { url: "/assets/images/paris.webp", location: "Paris, France", date: "Dec 2024" },
+                    { url: "/assets/images/london.jpeg", location: "London, UK", date: "Nov 2024" },
+                    { url: "/assets/images/swissalps.jpeg", location: "Swiss Alps", date: "Oct 2024" },
+                  ].map((memory, index) => (
+                    <div key={index} className="relative group cursor-pointer rounded-lg overflow-hidden">
+                      <img
+                        src={memory.url}
+                        alt={memory.location}
+                        className="w-full h-24 sm:h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <p className="text-white font-medium text-xs sm:text-sm">{memory.location}</p>
+                          <p className="text-white/80 text-xs">{memory.date}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center">
-                      <FiClock className="mr-2 text-yellow-500" />
-                      <span><strong className="font-cinzel">Response Time:</strong> {profileData.responseTime}</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
           )}
 
           {activeTab === 'trips' && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Trip Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div
                   onClick={() => handleViewTripMemories('posted')}
-                  className="bg-white p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
+                  className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
                 >
-                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Posted</h3>
-                  <p className="text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsPosted}</p>
-                  <p className="text-gray-500 text-sm">Click to view details and memories</p>
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Posted</h3>
+                  <p className="text-xl sm:text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsPosted}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Click to view details and memories</p>
                 </div>
 
                 <div
                   onClick={() => handleViewTripMemories('joined')}
-                  className="bg-white p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
+                  className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
                 >
-                  <h3 className="text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Joined</h3>
-                  <p className="text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsJoined}</p>
-                  <p className="text-gray-500 text-sm">Click to view details and memories</p>
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Joined</h3>
+                  <p className="text-xl sm:text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsJoined}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Click to view details and memories</p>
                 </div>
               </div>
 
               {/* Upcoming Trips */}
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-cinzel font-semibold text-gray-800">Upcoming Trips</h3>
-                  <button className="text-yellow-500 text-sm font-medium">View All</button>
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800">Upcoming Trips</h3>
+                  <button className="text-yellow-500 text-xs sm:text-sm font-medium">View All</button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {upcomingTrips.map((trip) => (
-                    <div key={trip.id} className="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow">
+                    <div key={trip.id} className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-md transition-shadow">
                       <img
                         src={trip.image}
                         alt={trip.title}
-                        className="w-full h-32 object-cover rounded-lg mb-3"
+                        className="w-full h-24 sm:h-32 object-cover rounded-lg mb-2 sm:mb-3"
                       />
-                      <h4 className="font-cinzel font-semibold text-gray-800 mb-1">{trip.title}</h4>
-                      <p className="text-gray-500 text-sm mb-2">{trip.destination}</p>
-                      <p className="text-gray-500 text-sm mb-2">{trip.date}</p>
+                      <h4 className="font-cinzel font-semibold text-gray-800 mb-1 text-sm sm:text-base">{trip.title}</h4>
+                      <p className="text-gray-500 text-xs sm:text-sm mb-1 sm:mb-2">{trip.destination}</p>
+                      <p className="text-gray-500 text-xs sm:text-sm mb-1 sm:mb-2">{trip.date}</p>
                       <div className="flex justify-between items-center">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                           trip.role === 'organizer'
                             ? 'bg-purple-100 text-purple-700'
                             : 'bg-yellow-100 text-yellow-700'
@@ -369,7 +397,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                             <span className="flex items-center"><FiUsers className="mr-1" /> Member</span>
                           )}
                         </span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                           trip.status === 'confirmed'
                             ? 'bg-green-100 text-green-700'
                             : trip.status === 'planning'
@@ -387,14 +415,14 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           )}
 
           {activeTab === 'memories' && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Recent Memories */}
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold text-gray-800">Recent Travel Memories</h3>
-                  <button className="text-yellow-500 text-sm font-medium">View All</button>
+              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                <div className="flex justify-between items-center mb-3 sm:mb-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">Recent Travel Memories</h3>
+                  <button className="text-yellow-500 text-xs sm:text-sm font-medium">View All</button>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
                   {[
                     { url: "/assets/images/paris.webp", location: "Paris, France", date: "Dec 2024" },
                     { url: "/assets/images/london.jpeg", location: "London, UK", date: "Nov 2024" },
@@ -409,7 +437,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                       <img
                         src={memory.url}
                         alt={memory.location}
-                        className="w-full h-32 object-cover rounded-lg border border-gray-200 group-hover:shadow-md transition-all"
+                        className="w-full h-24 sm:h-32 object-cover rounded-lg border border-gray-200 group-hover:shadow-md transition-all"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                         <div className="absolute bottom-2 left-2 right-2">
@@ -422,25 +450,212 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 </div>
               </div>
 
-              {/* Memory Stats */}
+              {/* Memory Stats - Shuffling cards with popping animations */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">156</p>
-                  <p className="text-gray-500 text-sm">Photos</p>
+                <div 
+                  onClick={() => handleViewTripMemories('photos')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/paris.webp", "/assets/images/london.jpeg", "/assets/images/swissalps.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="Photo" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">156</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Photos</p>
+                  </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">42</p>
-                  <p className="text-gray-500 text-sm">Videos</p>
+                
+                <div 
+                  onClick={() => handleViewTripMemories('videos')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/Tokyo.jpeg", "/assets/images/icelandnorthernlights.jpeg", "/assets/images/santorinisunset.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="Video" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-8 h-8 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center play-icon">
+                            <div className="w-0 h-0 border-l-4 border-l-white border-t-3 border-t-transparent border-b-3 border-b-transparent ml-0.5"></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">42</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Videos</p>
+                  </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">23</p>
-                  <p className="text-gray-500 text-sm">Countries</p>
+                
+                <div 
+                  onClick={() => handleViewTripMemories('countries')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/paris.webp", "/assets/images/Tokyo.jpeg", "/assets/images/baliadventure.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="Country" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-white text-xs font-bold location-label">
+                          {i === 0 ? "France" : i === 1 ? "Japan" : "Indonesia"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">23</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Countries</p>
+                  </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200 text-center">
-                  <p className="text-2xl font-bold text-yellow-500 mb-1">67</p>
-                  <p className="text-gray-500 text-sm">Cities</p>
+                
+                <div 
+                  onClick={() => handleViewTripMemories('cities')}
+                  className="relative h-32 rounded-lg overflow-hidden cursor-pointer perspective-500 memory-card"
+                >
+                  {/* Shuffling cards background */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {["/assets/images/london.jpeg", "/assets/images/swissmount.jpeg", "/assets/images/santorinisunset.jpeg"].map((img, i) => (
+                      <div 
+                        key={i} 
+                        className={`absolute w-full h-full rounded-lg border-2 border-white shadow-md overflow-hidden transform transition-all duration-500 card-${i+1}`}
+                        style={{ 
+                          transform: `rotate(${(i-1) * 5}deg) translateY(${i * 5}px)`,
+                          zIndex: 3-i,
+                          transformOrigin: 'center 120%',
+                        }}
+                      >
+                        <img src={img} alt="City" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-white text-xs font-bold location-label">
+                          {i === 0 ? "London" : i === 1 ? "Zurich" : "Santorini"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Overlay and content */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30 flex flex-col items-center justify-center z-30">
+                    <p className="text-4xl font-bold text-white mb-1 count-number">67</p>
+                    <p className="text-white text-sm bg-yellow-500/80 px-3 py-1 rounded-full category-label">Cities</p>
+                  </div>
                 </div>
               </div>
+
+              {/* Add the CSS for animations */}
+              <style jsx>{`
+                /* Card shuffle and pop animations */
+                .memory-card {
+                  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                
+                .memory-card:hover {
+                  transform: translateY(-5px);
+                }
+                
+                .memory-card:hover .card-1 {
+                  animation: popAndShuffle1 0.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+                
+                .memory-card:hover .card-2 {
+                  animation: popAndShuffle2 0.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+                
+                .memory-card:hover .card-3 {
+                  animation: popAndShuffle3 0.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+                
+                .memory-card:hover .count-number {
+                  animation: popNumber 0.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                
+                .memory-card:hover .category-label {
+                  animation: popLabel 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                
+                .memory-card:hover .play-icon {
+                  animation: pulse 1.5s infinite;
+                }
+                
+                .memory-card:hover .location-label {
+                  animation: slideIn 0.4s forwards;
+                }
+                
+                @keyframes popAndShuffle1 {
+                  0% { transform: rotate(-5deg) translateY(5px); }
+                  30% { transform: rotate(-5deg) translateY(-10px) scale(1.05); }
+                  100% { transform: rotate(-15deg) translateX(-20px) translateY(5px); }
+                }
+                
+                @keyframes popAndShuffle2 {
+                  0% { transform: rotate(0deg) translateY(0px); }
+                  30% { transform: rotate(0deg) translateY(-15px) scale(1.05); }
+                  100% { transform: rotate(0deg) translateY(0px); }
+                }
+                
+                @keyframes popAndShuffle3 {
+                  0% { transform: rotate(5deg) translateY(-5px); }
+                  30% { transform: rotate(5deg) translateY(-20px) scale(1.05); }
+                  100% { transform: rotate(15deg) translateX(20px) translateY(5px); }
+                }
+                
+                @keyframes popNumber {
+                  0% { transform: scale(1); }
+                  50% { transform: scale(1.3); }
+                  100% { transform: scale(1.1); }
+                }
+                
+                @keyframes popLabel {
+                  0% { transform: scale(1); opacity: 0.8; }
+                  50% { transform: scale(1.2); opacity: 1; }
+                  100% { transform: scale(1); opacity: 1; }
+                }
+                
+                @keyframes pulse {
+                  0% { transform: scale(1); opacity: 0.7; }
+                  50% { transform: scale(1.2); opacity: 1; }
+                  100% { transform: scale(1); opacity: 0.7; }
+                }
+                
+                @keyframes slideIn {
+                  0% { transform: translateX(-100%); opacity: 0; }
+                  100% { transform: translateX(0); opacity: 1; }
+                }
+              `}</style>
             </div>
           )}
 

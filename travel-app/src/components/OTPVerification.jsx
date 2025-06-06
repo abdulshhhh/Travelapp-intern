@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { FiLock, FiRefreshCw, FiX, FiMail, FiAlertTriangle } from 'react-icons/fi';
 
 export default function OTPVerification({ type, onClose, onVerified }) {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -120,51 +121,46 @@ export default function OTPVerification({ type, onClose, onVerified }) {
   const getDescription = () => {
     switch (type) {
       case 'password':
-        return 'We\'ve sent a verification code to your registered email address to confirm the password change.';
+        return 'We\'ve sent a verification code to your email.';
       case 'phone':
-        return 'We\'ve sent a verification code to your new phone number to confirm the change.';
+        return 'We\'ve sent a verification code to your phone.';
       default:
-        return 'Please enter the verification code sent to your device.';
+        return 'Please enter the verification code.';
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-70 flex items-center justify-center p-4">
-      <div className="bg-[#FCCB6E] rounded-2xl w-full max-w-md border-2 border-[#5E5854] shadow-2xl">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-70 flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-2xl w-full max-w-sm border-2 border-[#5E5854] shadow-2xl">
         {/* Header */}
-        <div className="bg-[#6F93AD] p-6 rounded-t-2xl border-b border-[#5E5854]">
+        <div className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] p-3 rounded-t-2xl border-b border-[#5E5854]">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold text-[#204231]">{getTitle()}</h2>
+            <h2 className="text-lg font-bold text-white">{getTitle()}</h2>
             <button
               onClick={onClose}
-              className="text-[#204231] hover:text-[#EC8E3D] text-2xl font-bold"
+              className="text-white hover:text-[#EC8E3D] transition-colors"
+              aria-label="Close verification"
             >
-              ×
+              <FiX className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 space-y-4">
           {/* Icon */}
           <div className="text-center">
-            <div className="w-16 h-16 bg-[#EC8E3D] rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
+            <div className="w-12 h-12 bg-[#EC8E3D] rounded-full flex items-center justify-center mx-auto mb-2">
+              <FiMail className="w-6 h-6 text-white" />
             </div>
-            <p className="text-[#204231] text-center leading-relaxed">
+            <p className="text-sm text-[#204231] text-center">
               {getDescription()}
             </p>
           </div>
 
           {/* OTP Input */}
-          <div className="space-y-4">
-            <label className="block text-[#204231] font-semibold text-center">
-              Enter 6-digit verification code
-            </label>
-            <div className="flex justify-center space-x-3">
+          <div className="space-y-3">
+            <div className="flex justify-center space-x-2">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -175,7 +171,7 @@ export default function OTPVerification({ type, onClose, onVerified }) {
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
-                  className="w-12 h-12 text-center text-xl font-bold bg-[#6F93AD] border-2 border-[#5E5854] rounded-lg text-[#204231] focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:border-[#EC8E3D] transition-colors"
+                  className="w-9 h-10 text-center text-lg font-bold bg-[#6F93AD] border-2 border-[#5E5854] rounded-lg text-[#204231] focus:outline-none focus:ring-2 focus:ring-[#EC8E3D] focus:border-[#EC8E3D] transition-colors"
                 />
               ))}
             </div>
@@ -184,59 +180,40 @@ export default function OTPVerification({ type, onClose, onVerified }) {
           {/* Timer */}
           <div className="text-center">
             {timeLeft > 0 ? (
-              <p className="text-[#204231]/70">
+              <p className="text-xs text-[#204231]/70">
                 Code expires in <span className="font-bold text-[#EC8E3D]">{formatTime(timeLeft)}</span>
               </p>
             ) : (
-              <p className="text-red-600 font-semibold">Code has expired</p>
+              <p className="text-xs text-red-600 font-semibold">Code has expired</p>
             )}
           </div>
-
-          {/* Attempts Warning */}
-          {attempts > 0 && (
-            <div className="bg-orange-100 border border-orange-300 rounded-lg p-3">
-              <p className="text-orange-800 text-sm text-center">
-                ⚠️ {attempts}/3 attempts used. {3 - attempts} attempts remaining.
-              </p>
-            </div>
-          )}
 
           {/* Action Buttons */}
           <div className="space-y-3">
             <button
               onClick={handleVerify}
               disabled={otp.join('').length !== 6 || timeLeft === 0}
-              className="w-full bg-[#EC8E3D] hover:bg-[#EE9C8F] disabled:bg-[#5E5854] disabled:cursor-not-allowed text-white py-3 rounded-xl font-cinzel transition-colors"
+              className="w-full bg-[#EC8E3D] hover:bg-[#EE9C8F] disabled:bg-[#5E5854] disabled:cursor-not-allowed text-white py-2 rounded-xl font-cinzel transition-colors flex items-center justify-center"
             >
-              🔐 Verify Code
+              <FiLock className="w-4 h-4 mr-2" />
+              <span className="text-sm">Verify Code</span>
             </button>
 
             <div className="text-center">
-              <p className="text-[#204231]/70 text-sm mb-2">Didn't receive the code?</p>
               <button
                 onClick={handleResendOTP}
                 disabled={isResending || timeLeft > 240} // Can resend after 1 minute
-                className="text-[#EC8E3D] hover:text-[#EE9C8F] font-cinzel disabled:text-[#5E5854] disabled:cursor-not-allowed transition-colors"
+                className="text-[#EC8E3D] hover:text-[#EE9C8F] font-cinzel disabled:text-[#5E5854] disabled:cursor-not-allowed transition-colors flex items-center justify-center mx-auto"
               >
-                {isResending ? '📤 Sending...' : '🔄 Resend OTP'}
+                <FiRefreshCw className={`w-3 h-3 mr-1 ${isResending ? 'animate-spin' : ''}`} />
+                <span className="text-xs">{isResending ? 'Sending...' : 'Resend OTP'}</span>
               </button>
-              {timeLeft > 240 && (
-                <p className="text-[#204231]/60 text-xs mt-1">
-                  Available in {formatTime(timeLeft - 240)}
-                </p>
-              )}
             </div>
           </div>
 
-          {/* Help Text */}
-          <div className="bg-[#EE9C8F] p-4 rounded-lg border border-[#5E5854]">
-            <h4 className="font-bold text-[#204231] mb-2">💡 Tips:</h4>
-            <ul className="text-[#204231] text-sm space-y-1">
-              <li>• Check your spam/junk folder if you don't see the code</li>
-              <li>• Make sure you have good network connectivity</li>
-              <li>• The code is valid for 5 minutes only</li>
-              <li>• For testing, use code: <span className="font-bold">123456</span></li>
-            </ul>
+          {/* Testing tip */}
+          <div className="text-xs text-center text-[#204231]">
+            For testing, use code: <span className="font-bold">123456</span>
           </div>
         </div>
       </div>

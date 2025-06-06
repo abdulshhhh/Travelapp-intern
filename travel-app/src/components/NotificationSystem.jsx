@@ -28,11 +28,11 @@ export default function NotificationSystem({
         className="relative p-2 rounded-full bg-[#6F93AD] hover:bg-[#5E5854] transition-colors text-white"
         aria-label="Notifications"
       >
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
           <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
         </svg>
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-[#EC8E3D] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+          <span className="absolute -top-1 -right-1 bg-[#EC8E3D] text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-bold">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -40,60 +40,71 @@ export default function NotificationSystem({
 
       {/* Notification Dropdown */}
       {showNotifications && (
-        <div className="absolute right-0 top-12 w-80 bg-[#FCCB6E] rounded-xl border-2 border-[#5E5854] shadow-2xl z-50 max-h-96 overflow-hidden">
+        <div className="absolute right-0 top-12 w-full sm:w-80 bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-xl border-2 border-[#5E5854] shadow-2xl z-50 max-h-[80vh] sm:max-h-96 overflow-hidden">
           {/* Header */}
-          <div className="p-4 border-b border-[#5E5854] bg-[#6F93AD]">
+          <div className="p-3 sm:p-4 border-b border-[#5E5854] bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-[#204231]">Notifications</h3>
-              {notifications.length > 0 && (
+              <h3 className="text-base sm:text-lg font-bold text-white">Notifications</h3>
+              <div className="flex items-center space-x-2">
+                {notifications.length > 0 && (
+                  <button
+                    onClick={onClearAll}
+                    className="text-xs sm:text-sm text-white hover:text-[#EC8E3D] font-medium transition-colors"
+                  >
+                    Clear All
+                  </button>
+                )}
                 <button
-                  onClick={onClearAll}
-                  className="text-sm text-[#204231] hover:text-[#EC8E3D] font-medium transition-colors"
+                  onClick={onToggleNotifications}
+                  className="text-white hover:text-[#EC8E3D] transition-colors"
+                  aria-label="Close notifications"
                 >
-                  Clear All
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
                 </button>
-              )}
+              </div>
             </div>
             {unreadCount > 0 && (
-              <p className="text-sm text-[#204231]/70 mt-1">
+              <p className="text-xs sm:text-sm text-white/70 mt-1">
                 {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}
               </p>
             )}
           </div>
 
           {/* Notifications List */}
-          <div className="max-h-80 overflow-y-auto">
+          <div className="max-h-[60vh] sm:max-h-80 overflow-y-auto">
             {notifications.length === 0 ? (
-              <div className="p-6 text-center">
+              <div className="p-4 sm:p-6 text-center">
                 <div className="text-[#204231]/50 mb-2">
-                  <svg className="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-8 h-8 sm:w-12 sm:h-12 mx-auto" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                   </svg>
                 </div>
-                <p className="text-[#204231]/70 font-medium">No notifications yet</p>
-                <p className="text-[#204231]/50 text-sm mt-1">You'll see trip updates here</p>
+                <p className="text-sm sm:text-base text-[#204231]/70 font-medium">No notifications yet</p>
+                <p className="text-xs sm:text-sm text-[#204231]/50 mt-1">You'll see trip updates here</p>
               </div>
             ) : (
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 border-b border-[#5E5854]/30 hover:bg-[#EE9C8F]/20 transition-colors cursor-pointer ${
+                  className={`p-3 sm:p-4 border-b border-[#5E5854]/30 hover:bg-[#EE9C8F]/20 transition-colors cursor-pointer ${
                     !notification.read ? 'bg-[#EE9C8F]/10' : ''
                   }`}
                   onClick={() => onMarkAsRead(notification.id)}
                 >
-                  <div className="flex items-start space-x-3">
+                  <div className="flex items-start space-x-2 sm:space-x-3">
                     {/* User Avatar */}
                     <img
                       src={notification.userAvatar}
                       alt={notification.userName}
-                      className="w-10 h-10 rounded-full border-2 border-[#EC8E3D] flex-shrink-0"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-[#EC8E3D] flex-shrink-0"
                     />
                     
                     {/* Notification Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-semibold text-[#204231] truncate">
+                        <p className="text-xs sm:text-sm font-semibold text-[#204231] truncate">
                           {notification.userName}
                         </p>
                         {!notification.read && (
@@ -101,7 +112,7 @@ export default function NotificationSystem({
                         )}
                       </div>
                       
-                      <p className="text-sm text-[#204231] mt-1">
+                      <p className="text-xs sm:text-sm text-[#204231] mt-1">
                         {notification.type === 'join_request' && (
                           <>joined your trip <span className="font-semibold">"{notification.tripTitle}"</span></>
                         )}
@@ -115,11 +126,11 @@ export default function NotificationSystem({
                   
                   {/* Action Buttons for Join Requests */}
                   {notification.type === 'join_request' && !notification.read && (
-                    <div className="mt-3 flex space-x-2">
-                      <button className="flex-1 bg-[#EC8E3D] hover:bg-[#EE9C8F] text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+                    <div className="mt-2 sm:mt-3 flex space-x-2">
+                      <button className="flex-1 bg-[#EC8E3D] hover:bg-[#EE9C8F] text-white px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm font-medium transition-colors">
                         View Trip
                       </button>
-                      <button className="flex-1 bg-[#6F93AD] hover:bg-[#5E5854] text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+                      <button className="flex-1 bg-[#6F93AD] hover:bg-[#5E5854] text-white px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm font-medium transition-colors">
                         Send Message
                       </button>
                     </div>
