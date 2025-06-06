@@ -135,11 +135,6 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                   alt={profileData.fullName}
                   className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-white shadow-md"
                 />
-                {profileData.verified && (
-                  <div className="absolute -bottom-2 -right-2 bg-yellow-500 rounded-full p-1.5">
-                    <FiCheck className="w-3 h-3 text-white" />
-                  </div>
-                )}
                 {currentUser.id === profileData.id && (
                   <button
                     onClick={handleEditProfile}
@@ -155,11 +150,6 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               <div>
                 <div className="flex items-center">
                   <h2 className="text-xl sm:text-2xl font-cinzel font-bold text-white">{profileData.fullName}</h2>
-                  {profileData.verified && (
-                    <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-600 text-xs font-medium rounded-full flex items-center">
-                      Verified
-                    </span>
-                  )}
                 </div>
                 <div className="flex items-center text-gray-200 text-xs sm:text-sm mb-1">
                   <FiMapPin className="mr-1" />
@@ -202,8 +192,11 @@ export default function Profile({ currentUser, onClose, onMessage }) {
             </div>
           </div>
 
+          {/* Separator line */}
+          <div className="border-t border-gray-600 my-4 opacity-50"></div>
+
           {/* Stats Row */}
-          <div className="grid grid-cols-2 sm:flex sm:justify-between mt-6 pt-4 gap-2 sm:gap-0">
+          <div className="grid grid-cols-2 sm:flex sm:justify-between mt-2 pt-2 gap-2 sm:gap-0">
             <div className="text-center">
               <div className="bg-yellow-100 inline-block p-3 rounded-full">
                 <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.connections}</p>
@@ -219,6 +212,9 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               <p className="text-gray-200 text-xs">Trips Joined</p>
             </div>
           </div>
+          
+          {/* Separator line */}
+          <div className="border-t border-gray-600 mt-4 opacity-50"></div>
         </div>
 
         {/* Main action buttons */}

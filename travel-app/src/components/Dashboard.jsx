@@ -441,7 +441,11 @@ export default function Dashboard({ onLogout }) {
       rating: "4.8",
       status: "planning",
       itinerary: [],
-      memories: []
+      memories: [],
+      // Add these properties to ensure compatibility with trip details modal
+      joinedDate: new Date().toISOString().split('T')[0],
+      reviews: [],
+      location: newTrip.destination
     };
     
     console.log("Trip to add:", tripToAdd);
@@ -515,7 +519,8 @@ export default function Dashboard({ onLogout }) {
   };
 
   const handleViewTrip = (trip) => {
-    setSelectedTrip(trip);
+    console.log("Viewing trip:", trip); // Add this to debug
+    setSelectedTrip({...trip}); // Create a new object to ensure all properties are copied
     setShowTripDetails(true);
   };
 
@@ -980,18 +985,18 @@ export default function Dashboard({ onLogout }) {
                       <p className="text-[#5E5854] mb-2 text-sm">Organizer:</p>
                       <div className="flex items-center bg-[#f8f4e3] p-3 rounded-lg border border-[#d1c7b7]">
                         <img
-                          src={selectedTrip.organizerAvatar}
-                          alt={selectedTrip.organizer}
+                          src={selectedTrip.organizerAvatar || "/assets/images/default-avatar.jpg"}
+                          alt={selectedTrip.organizer || "Trip Organizer"}
                           className="w-10 h-10 rounded-full object-cover mr-3 cursor-pointer"
                           onClick={() => handleViewMemberProfile({
-                            id: selectedTrip.organizerId,
-                            name: selectedTrip.organizer,
-                            avatar: selectedTrip.organizerAvatar,
+                            id: selectedTrip.organizerId || "organizer_id",
+                            name: selectedTrip.organizer || "Trip Organizer",
+                            avatar: selectedTrip.organizerAvatar || "/assets/images/default-avatar.jpg",
                             role: 'organizer'
                           })}
                         />
                         <div>
-                          <h5 className="font-medium text-[#2c5e4a]">{selectedTrip.organizer}</h5>
+                          <h5 className="font-medium text-[#2c5e4a]">{selectedTrip.organizer || "Trip Organizer"}</h5>
                           <p className="text-xs text-[#5E5854]">Trip Organizer</p>
                         </div>
                       </div>
@@ -1064,6 +1069,12 @@ export default function Dashboard({ onLogout }) {
         <section id="completed" className="space-y-4 sm:space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Completed Trips</h3>
+            <button 
+              onClick={() => navigate('/memories')} 
+              className="text-[#f87c6d] hover:text-[#f8a95d] text-sm font-medium flex items-center"
+            >
+              View All <FiArrowRight className="ml-1" />
+            </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -1083,21 +1094,59 @@ export default function Dashboard({ onLogout }) {
                     alt={trip.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4 sm:p-6">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-4 sm:p-6">
+                    <div className="flex items-center mb-2">
+                      <span className="bg-[#f8d56b] text-[#2c5e4a] px-2 py-1 rounded-full text-xs font-bold">
+                        Completed
+                      </span>
+                    </div>
                     <h4 className="text-xl sm:text-2xl font-bold text-white">{trip.title}</h4>
                     <p className="text-white/90">{trip.destination}</p>
                     <div className="flex justify-between items-center mt-3">
                       <span className="text-white flex items-center">
                         <FiCalendar className="mr-1" /> {trip.date}
                       </span>
-                      <span className="flex items-center text-white">
-                        <FiStar className="text-[#f8d56b] mr-1" /> {trip.rating}
+                      <div className="flex items-center">
+                        <span className="flex items-center text-white bg-black/30 px-2 py-1 rounded-full">
+                          <FiStar className="text-[#f8d56b] mr-1" /> {trip.rating}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center mt-3">
+                      <span className="text-white flex items-center text-sm">
+                        <FiUsers className="mr-1" /> {trip.participants} travelers
                       </span>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Handle view memories
+                          navigate(`/memories/${trip.id}`);
+                        }}
+                        className="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full text-sm flex items-center backdrop-blur-sm transition-colors"
+                      >
+                        <FiCamera className="mr-1" /> Memories
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
+            
+            {completedTrips.length === 0 && (
+              <div className="col-span-1 sm:col-span-2 bg-white p-6 rounded-xl border border-[#d1c7b7] text-center">
+                <div className="flex flex-col items-center justify-center py-8">
+                  <FiMapPin className="w-12 h-12 text-[#a8c4b8] mb-4" />
+                  <h4 className="text-xl font-bold text-[#2c5e4a] mb-2">No Completed Trips Yet</h4>
+                  <p className="text-[#5E5854] mb-4">Your completed trips will appear here.</p>
+                  <button 
+                    onClick={() => navigate('/trips')}
+                    className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-4 py-2 rounded-full transition-colors font-cinzel"
+                  >
+                    Explore Trips
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
