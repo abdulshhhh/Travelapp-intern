@@ -1056,35 +1056,31 @@ export default function Dashboard({ onLogout }) {
         </section>
 
         {/* Testimonials Section */}
-        <section className="space-y-4 sm:space-y-6">
-          <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Traveler Testimonials</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {testimonials.map((testimonial) => (
-              <div key={testimonial.id} className="bg-white rounded-2xl p-4 sm:p-6 border border-[#d1c7b7] shadow-lg">
-                <div className="flex items-center mb-4">
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[#f8d56b] mr-3 sm:mr-4"
-                  />
-                  <div>
-                    <h4 className="font-bold text-[#2c5e4a]">{testimonial.name}</h4>
-                    <p className="text-[#5E5854] text-xs sm:text-sm">{testimonial.trip}</p>
-                  </div>
-                </div>
-                <div className="flex mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <FiStar
-                      key={i}
-                      className={`${i < testimonial.rating ? "text-[#f8d56b] fill-[#f8d56b]" : "text-gray-300"} w-4 h-4 sm:w-5 sm:h-5`}
-                    />
-                  ))}
-                </div>
-                <p className="text-[#5E5854] text-sm sm:text-base">{testimonial.comment}</p>
-              </div>
-            ))}
+        /* Testimonials Section */
+<section className="space-y-4 sm:space-y-6">
+  <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Traveler Testimonials</h3>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+    {testimonials.map((testimonial) => (
+      <div key={testimonial.id} className="bg-white rounded-2xl p-4 sm:p-6 border border-[#d1c7b7] shadow-lg">
+        <div className="flex items-center mb-4">
+          <img
+            src={testimonial.avatar}
+            alt={testimonial.name}
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[#f8d56b] mr-3 sm:mr-4"
+          />
+          <div>
+            <h4 className="font-bold text-[#2c5e4a]">{testimonial.name}</h4>
+            <p className="text-[#5E5854] text-xs sm:text-sm">{testimonial.trip}</p>
           </div>
-        </section>
+        </div>
+
+        {/* Removed star ratings here */}
+
+        <p className="text-[#5E5854] text-sm sm:text-base">{testimonial.comment}</p>
+      </div>
+    ))}
+  </div>
+</section>
 
         {/* Popular Destinations Section */}
         <section id="destinations" className="space-y-4 sm:space-y-6">
