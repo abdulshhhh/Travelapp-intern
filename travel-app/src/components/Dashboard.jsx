@@ -734,7 +734,7 @@ export default function Dashboard({ onLogout }) {
         {/* Welcome Section */}
         <section className="text-center bg-gradient-to-r from-[#6F93AD] to-[#4a708a] rounded-2xl p-4 sm:p-8 border border-[#5E5854] shadow-xl">
           <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 text-white">Welcome back, Traveler!</h2>
-          <p className="text-lg sm:text-xl text-white/90 font-greatvibes">Discover your next adventure with like-minded explorers</p>
+          <p className="font-southmind text-lg sm:text-xl text-white/90">Discover your next adventure with like-minded explorers</p>
         </section>
 
         {/* Available Trips Carousel */}
