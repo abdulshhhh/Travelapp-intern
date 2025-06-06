@@ -205,7 +205,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           {/* Stats Row */}
           <div className="grid grid-cols-2 sm:flex sm:justify-between mt-6 pt-4 gap-2 sm:gap-0">
             <div className="text-center">
-              <div className="bg-yellow-100 inline-block px-3 py-1 rounded-full">
+              <div className="bg-yellow-100 inline-block p-3 rounded-full">
                 <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.connections}</p>
                 <p className="text-gray-600 text-xs">Connections</p>
               </div>
@@ -217,10 +217,6 @@ export default function Profile({ currentUser, onClose, onMessage }) {
             <div className="text-center">
               <p className="text-lg sm:text-xl font-cinzel font-bold text-white">{profileData.tripsJoined}</p>
               <p className="text-gray-200 text-xs">Trips Joined</p>
-            </div>
-            <div className="text-center">
-              <p className="text-lg sm:text-xl font-cinzel font-bold text-white">{profileData.upcomingTrips}</p>
-              <p className="text-gray-200 text-xs">Upcoming</p>
             </div>
           </div>
         </div>
