@@ -36,18 +36,6 @@ export default function GroupChat({ trip, currentUser, onClose }) {
   const messagesEndRef = useRef(null);
   const [showAppPrompt, setShowAppPrompt] = useState(false);
   const [promptType, setPromptType] = useState('');
- 
-   useEffect(() => {
-    if (showAppPrompt) {
-      const timer = setTimeout(() => {
-        setShowAppPrompt(false);
-      }, 10000); // 10 seconds timeout to close popup
-
-      return () => clearTimeout(timer);
-    }
-  }, [showAppPrompt]);
-
-
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -243,7 +231,6 @@ export default function GroupChat({ trip, currentUser, onClose }) {
                 <FiX className="w-6 h-6" />
               </button>
             </div>
-          
             
             <div className="text-center mb-6">
               <div className="bg-yellow-100 p-4 rounded-full inline-block mb-4">
@@ -253,12 +240,16 @@ export default function GroupChat({ trip, currentUser, onClose }) {
                   <FiVideo className="w-12 h-12 text-yellow-600" />
                 )}
               </div>
-             <p className="text-gray-700 mb-2">
-  {promptType === 'voice' ? 'Voice' : 'Video'} call is available only in the app.
-</p>
-<p className="text-red-600 font-semibold">
-  Use the app for better experience!
-</p>
+              <p className="text-gray-700 mb-2">
+                {promptType === 'voice' ? 'Voice' : 'Video'} calls are available exclusively on our mobile app.
+              </p>
+           <div className="mt-2 mb-1">
+  <p className="text-lg font-semibold text-yellow-700 bg-yellow-100 px-4 py-2 rounded-full shadow-sm inline-block animate-pulse">
+    🚀 Use the app for the best experience!
+  </p>
+</div>
+
+
               <p className="text-gray-500 text-sm">
                 Download now to enjoy the full experience!
               </p>
