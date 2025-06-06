@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NotificationSystem from './NotificationSystem';
 import GroupChat from './GroupChat';
 import MemberProfiles from './MemberProfiles';
-import { FiArrowLeft, FiArrowRight, FiCheck, FiX, FiMessageSquare, FiStar, FiEye, FiPlus, FiUser, FiCalendar, FiMapPin, FiDollarSign, FiUsers, FiTruck, FiEdit2, FiHeart, FiChevronLeft, FiChevronRight, FiMail, FiMenu, FiBell, FiLogOut } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiCheck, FiX, FiMessageSquare, FiStar, FiEye, FiPlus, FiUser, FiCalendar, FiMapPin, FiDollarSign, FiUsers, FiTruck, FiEdit2, FiHeart, FiChevronLeft, FiChevronRight, FiMail, FiMenu, FiBell, FiLogOut, FiCamera } from 'react-icons/fi';
 
 // Mock data for trips with enhanced structure
 const mockTrips = [
@@ -311,13 +311,29 @@ export default function Dashboard({ onLogout }) {
     toDate: '',
     transport: '',
     budget: '',
-    description: ''
+    description: '',
+    category: '',
+    coverImage: null
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showMemberProfile, setShowMemberProfile] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [showMemberProfiles, setShowMemberProfiles] = useState(false);
   const [selectedTripForMembers, setSelectedTripForMembers] = useState(null);
+
+  // Add a function to handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // In a real app, you would upload this to a server
+      // For now, we'll just store the file and create a preview URL
+      const imageUrl = URL.createObjectURL(file);
+      setNewTrip(prev => ({
+        ...prev,
+        coverImage: imageUrl
+      }));
+    }
+  };
 
   // Current user data
   const currentUser = {
@@ -341,23 +357,16 @@ export default function Dashboard({ onLogout }) {
 
   // Fix scrolling issues by removing auto-rotate on scroll
   useEffect(() => {
-    let interval;
-    
+    // Remove auto-rotation completely
     const handleScroll = () => {
-      // Clear interval when user scrolls
-      clearInterval(interval);
+      // No action needed, just keeping the handler for future use
     };
 
-    // Only auto-rotate when not scrolling
-    interval = setInterval(() => {
-      setCurrentTripIndex((prev) => (prev + 1) % mockTrips.length);
-      setCurrentCompletedIndex((prev) => (prev + 1) % completedTrips.length);
-    }, 5000);
-
+    // No interval needed as we're removing auto-rotation
+    
     window.addEventListener('scroll', handleScroll);
     
     return () => {
-      clearInterval(interval);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -379,7 +388,7 @@ export default function Dashboard({ onLogout }) {
 
   const handlePostTrip = () => {
     if (!newTrip.destination || !newTrip.departure || !newTrip.fromDate ||
-        !newTrip.toDate || !newTrip.budget || !newTrip.maxPeople) {
+        !newTrip.toDate || !newTrip.budget || !newTrip.maxPeople || !newTrip.category) {
       alert('Please fill in all required fields');
       return;
     }
@@ -395,14 +404,14 @@ export default function Dashboard({ onLogout }) {
       departure: newTrip.departure,
       duration: `${durationDays} days`,
       price: newTrip.budget,
-      image: "/assets/images/default.jpeg",
+      image: newTrip.coverImage || "/assets/images/default.jpeg",
       spots: newTrip.maxPeople - newTrip.numberOfPeople,
       maxSpots: newTrip.maxPeople,
       date: `${formatDate(fromDate)} - ${formatDate(toDate)}`,
       organizer: currentUser.name,
       organizerId: currentUser.id,
       organizerAvatar: currentUser.avatar,
-      tags: ["Adventure", "Travel"],
+      tags: [newTrip.category, "Travel"],
       transport: newTrip.transport,
       description: newTrip.description,
       joinedMembers: []
@@ -419,7 +428,9 @@ export default function Dashboard({ onLogout }) {
       toDate: '',
       transport: '',
       budget: '',
-      description: ''
+      description: '',
+      category: '',
+      coverImage: null
     });
 
     alert('Trip posted successfully!');
@@ -568,7 +579,14 @@ export default function Dashboard({ onLogout }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#f8d56b]">NomadNova</h1>
+              <div className="flex items-center">
+                <img 
+                  src="/assets/images/NomadNovalogo.jpg" 
+                  alt="NomadNova Logo" 
+                  className="w-8 h-8 rounded-full mr-2"
+                />
+                <h1 className="text-xl sm:text-2xl font-bold text-[#f8d56b]">NomadNova</h1>
+              </div>
               <nav className="hidden md:flex space-x-6">
                 <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Trips</a>
                 <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Completed</a>
@@ -684,29 +702,13 @@ export default function Dashboard({ onLogout }) {
         <section id="trips" className="space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-3xl font-bold text-[#2c5e4a]">Available Trips</h3>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => setCurrentTripIndex((prev) => (prev - 1 + mockTrips.length) % mockTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg font-cinzel"
-              >
-                <FiChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setCurrentTripIndex((prev) => (prev + 1) % mockTrips.length)}
-                className="p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg font-cinzel"
-              >
-                <FiChevronRight className="w-5 h-5" />
-              </button>
-            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {availableTrips.map((trip, index) => (
               <div
                 key={trip.id}
-                className={`bg-white rounded-2xl overflow-hidden border border-[#d1c7b7] shadow-lg transition-all duration-300 transform ${
-                  index === currentTripIndex ? 'scale-105 z-10 ring-2 ring-[#f8a95d]' : 'scale-100 opacity-90 hover:scale-102'
-                }`}
+                className="bg-white rounded-2xl overflow-hidden border border-[#d1c7b7] shadow-lg transition-all duration-300 transform hover:scale-105 hover:z-10 hover:ring-2 hover:ring-[#f8a95d]"
               >
                 <div className="relative">
                   <img
@@ -716,7 +718,7 @@ export default function Dashboard({ onLogout }) {
                   />
                   <div className="absolute top-4 right-4">
                     <span className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
-                      {trip.price}
+                      approx {trip.price}
                     </span>
                   </div>
                 </div>
@@ -736,6 +738,9 @@ export default function Dashboard({ onLogout }) {
                   </p>
                   <p className="text-[#5E5854] mb-3 flex items-center">
                     <FiCalendar className="mr-1" /> {trip.duration} • {trip.date}
+                  </p>
+                  <p className="text-[#5E5854] text-sm mb-3">
+                    <span className="font-medium">Category:</span> {trip.tags[0]}
                   </p>
                   <p className="text-[#5E5854] text-sm mb-3">Organized by {trip.organizer}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -841,6 +846,9 @@ export default function Dashboard({ onLogout }) {
                       <p className="flex items-center">
                         <FiUsers className="mr-2" /> <span className="font-medium">Available Spots:</span> {selectedTrip.spots}/{selectedTrip.maxSpots}
                       </p>
+                      <p className="flex items-center">
+                        <FiStar className="mr-2" /> <span className="font-medium">Category:</span> {selectedTrip.tags && selectedTrip.tags.length > 0 ? selectedTrip.tags[0] : 'Adventure'}
+                      </p>
                       {selectedTrip.transport && (
                         <p className="flex items-center">
                           <FiNavigation className="mr-2" /> <span className="font-medium">Transport:</span> {selectedTrip.transport}
@@ -874,7 +882,7 @@ export default function Dashboard({ onLogout }) {
                     </div>
                     <div className="flex justify-between items-center pt-2">
                       <span className="font-bold text-[#2c5e4a]">Total Cost</span>
-                      <span className="font-bold text-[#f87c6d]">{selectedTrip.price}</span>
+                      <span className="font-bold text-[#f87c6d]">approx {selectedTrip.price}</span>
                     </div>
                   </div>
                 </div>
@@ -1002,29 +1010,13 @@ export default function Dashboard({ onLogout }) {
         <section id="completed" className="space-y-4 sm:space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Completed Trips</h3>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => setCurrentCompletedIndex((prev) => (prev - 1 + completedTrips.length) % completedTrips.length)}
-                className="p-2 sm:p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
-              >
-                <FiChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-              <button
-                onClick={() => setCurrentCompletedIndex((prev) => (prev + 1) % completedTrips.length)}
-                className="p-2 sm:p-3 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] rounded-full text-white transition-colors shadow-lg"
-              >
-                <FiChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {completedTrips.map((trip, index) => (
               <div
                 key={trip.id}
-                className={`bg-white rounded-2xl overflow-hidden border border-[#d1c7b7] shadow-lg transition-all duration-300 transform ${
-                  index === currentCompletedIndex ? 'scale-105 z-10 ring-2 ring-[#f8a95d]' : 'scale-100 opacity-90 hover:scale-102'
-                }`}
+                className="bg-white rounded-2xl overflow-hidden border border-[#d1c7b7] shadow-lg transition-all duration-300 transform hover:scale-105 hover:z-10 hover:ring-2 hover:ring-[#f8a95d]"
                 onClick={() => {
                   setSelectedTrip(trip);
                   setShowTripDetails(true);
@@ -1113,13 +1105,13 @@ export default function Dashboard({ onLogout }) {
         {/* Post Trip Modal */}
         {showPostTrip && (
   <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-    <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
       {/* Modal Header with Close Button */}
-      <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b border-[#d1c7b7]">
-        <h3 className="text-xl sm:text-2xl font-bold text-[#2c5e4a]">Post a New Trip</h3>
+      <div className="sticky top-0 bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] z-10 flex justify-between items-center p-4 border-b border-[#5E5854]">
+        <h3 className="text-xl sm:text-2xl font-bold text-white">Post a New Trip</h3>
         <button 
           onClick={() => setShowPostTrip(false)}
-          className="text-[#5E5854] hover:text-[#2c5e4a] p-2 rounded-full"
+          className="text-white hover:text-[#f8d56b] p-2 rounded-full"
         >
           <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -1227,6 +1219,32 @@ export default function Dashboard({ onLogout }) {
             </select>
           </div>
           <div>
+            <label className="block text-[#5E5854] font-medium mb-2">Trip Category*</label>
+            <select
+              name="category"
+              value={newTrip.category}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854]"
+              required
+            >
+              <option value="">Select category</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Beach">Beach</option>
+              <option value="City">City</option>
+              <option value="Culture">Culture</option>
+              <option value="Food">Food</option>
+              <option value="Hiking">Hiking</option>
+              <option value="History">History</option>
+              <option value="Mountains">Mountains</option>
+              <option value="Nature">Nature</option>
+              <option value="Photography">Photography</option>
+              <option value="Wildlife">Wildlife</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
             <label className="block text-[#5E5854] font-medium mb-2">Estimated Budget*</label>
             <input
               type="text"
@@ -1249,6 +1267,45 @@ export default function Dashboard({ onLogout }) {
             className="w-full px-4 py-2 border border-[#d1c7b7] rounded-lg focus:ring-2 focus:ring-[#f8a95d] focus:border-transparent text-[#5E5854] h-32"
             placeholder="Tell potential travel buddies about your trip..."
           ></textarea>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-[#5E5854] font-medium mb-2">Trip Cover Image</label>
+          <div className="flex items-center space-x-4">
+            <div className="flex-1">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                id="trip-cover-image"
+              />
+              <label
+                htmlFor="trip-cover-image"
+                className="flex items-center justify-center w-full px-4 py-2 border border-[#d1c7b7] rounded-lg bg-white hover:bg-[#f8f4e3] text-[#5E5854] cursor-pointer transition-colors"
+              >
+                <FiCamera className="mr-2" />
+                {newTrip.coverImage ? 'Change Image' : 'Upload Image'}
+              </label>
+            </div>
+            {newTrip.coverImage && (
+              <div className="w-24 h-24 relative">
+                <img
+                  src={newTrip.coverImage}
+                  alt="Trip cover preview"
+                  className="w-full h-full object-cover rounded-lg border border-[#d1c7b7]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setNewTrip(prev => ({ ...prev, coverImage: null }))}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                >
+                  <FiX className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-[#5E5854] mt-1">Recommended: landscape orientation, at least 800x600px</p>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
