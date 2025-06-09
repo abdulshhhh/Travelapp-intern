@@ -1184,7 +1184,7 @@ function Dashboard({ onLogout }) {
 
         {/* Testimonials Section */}
         <section className="space-y-4 sm:space-y-6">
-          <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">chronicles of nomads</h3>
+          <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Chronicles of Nomads</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {testimonials.map((testimonial) => (
               <div key={testimonial.id} className="bg-white rounded-2xl p-4 sm:p-6 border border-[#d1c7b7] shadow-lg">
