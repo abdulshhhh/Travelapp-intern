@@ -204,12 +204,16 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               </div>
             </div>
             <div className="text-center">
-              <p className="text-lg sm:text-xl font-cinzel font-bold text-white">{profileData.tripsPosted}</p>
-              <p className="text-gray-200 text-xs">Trips Posted</p>
+              <div className="bg-yellow-100 inline-block p-3 rounded-full">
+                <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.tripsPosted}</p>
+                <p className="text-gray-600 text-xs">Trips Posted</p>
+              </div>
             </div>
             <div className="text-center">
-              <p className="text-lg sm:text-xl font-cinzel font-bold text-white">{profileData.tripsJoined}</p>
-              <p className="text-gray-200 text-xs">Trips Joined</p>
+              <div className="bg-yellow-100 inline-block p-3 rounded-full">
+                <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.tripsJoined}</p>
+                <p className="text-gray-600 text-xs">Trips Joined</p>
+              </div>
             </div>
           </div>
           

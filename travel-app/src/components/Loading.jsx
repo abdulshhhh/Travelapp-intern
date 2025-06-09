@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-function Loading({ onLoadingComplete }) {
+export default function Loading({ onLoadingComplete }) {
   const [progress, setProgress] = useState(0);
   const [loadingPhase, setLoadingPhase] = useState(0);
   const canvasRef = useRef(null);
@@ -269,5 +269,3 @@ function Loading({ onLoadingComplete }) {
     </div>
   );
 }
-
-export default Loading;

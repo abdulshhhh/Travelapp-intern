@@ -18,7 +18,7 @@ const slides = [
   },
 ];
 
-export default function SignUp({ onLoginClick, onBackToLanding, onSignUpSuccess }) {
+export default function SignUp({ onSignUpSuccess, onLoginClick, onBackToLanding }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -74,7 +74,7 @@ export default function SignUp({ onLoginClick, onBackToLanding, onSignUpSuccess 
                 {slide.title}
               </h2>
               <p className="text-base sm:text-lg md:text-xl max-w-sm drop-shadow-md transform translate-y-4 opacity-0 transition-all duration-1000 delay-300 ease-out"
-                 style={{ transform: index === currentSlide ? 'translateY(0)' : 'translateY(4rem)', opacity: index === currentSlide ? 1 : 0 }}>
+                 style={{ transform: index === currentSlide ? 'trabbbbbbbbnslateY(0)' : 'translateY(4rem)', opacity: index === currentSlide ? 1 : 0 }}>
                 {slide.subtitle}
               </p>
             </div>
