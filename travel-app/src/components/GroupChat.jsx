@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { FiPhone, FiVideo, FiX } from 'react-icons/fi';
+import { FiPhone, FiVideo, FiX, FiMapPin, FiShare2 } from 'react-icons/fi';
 
 export default function GroupChat({ trip, currentUser, onClose }) {
   const [messages, setMessages] = useState([
@@ -36,6 +36,8 @@ export default function GroupChat({ trip, currentUser, onClose }) {
   const messagesEndRef = useRef(null);
   const [showAppPrompt, setShowAppPrompt] = useState(false);
   const [promptType, setPromptType] = useState('');
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [locationData, setLocationData] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -84,6 +86,79 @@ export default function GroupChat({ trip, currentUser, onClose }) {
   const showMobileAppPrompt = (type) => {
     setPromptType(type);
     setShowAppPrompt(true);
+  };
+
+  const handleShareLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setShowLocationModal(true);
+          // Store coordinates for sharing
+          setLocationData({
+            latitude,
+            longitude,
+            timestamp: new Date().toISOString()
+          });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          alert("Unable to access your location. Please check your browser permissions.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  };
+
+  const shareLocationViaApp = (app) => {
+    const { latitude, longitude } = locationData;
+    let shareUrl = '';
+    
+    switch(app) {
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=My%20current%20location:%20https://maps.google.com/?q=${latitude},${longitude}`;
+        break;
+      case 'telegram':
+        shareUrl = `https://t.me/share/url?url=https://maps.google.com/?q=${latitude},${longitude}&text=My%20current%20location`;
+        break;
+      case 'messenger':
+        shareUrl = `https://www.facebook.com/dialog/send?link=https://maps.google.com/?q=${latitude},${longitude}&app_id=YOUR_APP_ID`;
+        break;
+      case 'chat':
+        // Share directly in the chat
+        const locationMessage = {
+          id: Date.now(),
+          userId: currentUser.id,
+          userName: currentUser.name,
+          userAvatar: currentUser.avatar,
+          message: `📍 Shared my location: https://maps.google.com/?q=${latitude},${longitude}`,
+          timestamp: new Date().toISOString(),
+          type: 'location'
+        };
+        setMessages([...messages, locationMessage]);
+        setShowLocationModal(false);
+        return;
+      default:
+        // Default to native share if available
+        if (navigator.share) {
+          navigator.share({
+            title: 'My Current Location',
+            text: 'Check out my current location!',
+            url: `https://maps.google.com/?q=${latitude},${longitude}`
+          });
+          setShowLocationModal(false);
+          return;
+        }
+        // Fallback to copying to clipboard
+        navigator.clipboard.writeText(`https://maps.google.com/?q=${latitude},${longitude}`);
+        alert('Location link copied to clipboard!');
+        setShowLocationModal(false);
+        return;
+    }
+    
+    window.open(shareUrl, '_blank');
+    setShowLocationModal(false);
   };
 
   return (
@@ -180,7 +255,23 @@ export default function GroupChat({ trip, currentUser, onClose }) {
                       {!isCurrentUser && (
                         <p className="text-xs font-semibold mb-1 opacity-80">{message.userName}</p>
                       )}
-                      <p className="text-xs sm:text-sm">{message.message}</p>
+                      {message.type === 'location' ? (
+                        <div>
+                          <p className="text-xs sm:text-sm flex items-center">
+                            <FiMapPin className="mr-1" /> 
+                            <a 
+                              href={message.message.split(': ')[1]} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="underline"
+                            >
+                              View shared location
+                            </a>
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-xs sm:text-sm">{message.message}</p>
+                      )}
                       <p
                         className={`text-xs mt-1 ${
                           isCurrentUser ? 'text-white/70' : 'text-[#2c5e4a]/70'
@@ -202,6 +293,15 @@ export default function GroupChat({ trip, currentUser, onClose }) {
           onSubmit={handleSendMessage}
           className="p-3 sm:p-4 border-t border-[#d1c7b7] rounded-b-2xl flex bg-transparent"
         >
+          <button
+            type="button"
+            onClick={handleShareLocation}
+            className="p-2 mr-2 bg-[#f8d56b] rounded-full text-[#2c5e4a] hover:bg-[#f8a95d] hover:text-white transition-colors"
+            title="Share Location"
+            aria-label="Share Location"
+          >
+            <FiMapPin className="w-5 h-5" />
+          </button>
           <input
             type="text"
             value={newMessage}
@@ -260,6 +360,68 @@ export default function GroupChat({ trip, currentUser, onClose }) {
                 <button className="flex-1 bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white py-3 rounded-xl flex items-center justify-center">
                   <span className="mr-2">Google Play</span>
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Location Sharing Modal */}
+      {showLocationModal && locationData && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-xl overflow-hidden w-full max-w-md shadow-xl border border-[#d1c7b7]">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] p-4 border-b border-[#d1c7b7]">
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-bold text-white">Share Your Location</h3>
+                <button 
+                  onClick={() => setShowLocationModal(false)}
+                  className="text-white/80 hover:text-white"
+                >
+                  <FiX className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="p-6">
+              <div className="text-center mb-6">
+                <div className="bg-[#f8d56b]/30 p-4 rounded-full inline-block mb-4">
+                  <FiMapPin className="w-12 h-12 text-[#f8a95d]" />
+                </div>
+                <p className="text-[#2c5e4a] mb-2">
+                  Share your current location with the group
+                </p>
+                <p className="text-[#5E5854] text-sm mb-4">
+                  Choose how you want to share:
+                </p>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <button 
+                    onClick={() => shareLocationViaApp('whatsapp')}
+                    className="bg-[#25D366] text-white py-3 rounded-xl flex items-center justify-center"
+                  >
+                    <span>WhatsApp</span>
+                  </button>
+                  <button 
+                    onClick={() => shareLocationViaApp('telegram')}
+                    className="bg-[#0088cc] text-white py-3 rounded-xl flex items-center justify-center"
+                  >
+                    <span>Telegram</span>
+                  </button>
+                  <button 
+                    onClick={() => shareLocationViaApp('messenger')}
+                    className="bg-[#0084ff] text-white py-3 rounded-xl flex items-center justify-center"
+                  >
+                    <span>Messenger</span>
+                  </button>
+                  <button 
+                    onClick={() => shareLocationViaApp('chat')}
+                    className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] text-white py-3 rounded-xl flex items-center justify-center"
+                  >
+                    <span>Share in Chat</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -1255,7 +1255,7 @@ function Dashboard({ onLogout }) {
       <form className="p-4 sm:p-6" onSubmit={handlePostTrip}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Destination*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Destination<span className="text-red-500">*</span></label>
             <input
               type="text"
               name="destination"
@@ -1267,7 +1267,7 @@ function Dashboard({ onLogout }) {
             />
           </div>
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Departure From*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Departure From<span className="text-red-500">*</span></label>
             <input
               type="text"
               name="departure"
@@ -1282,7 +1282,7 @@ function Dashboard({ onLogout }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">From Date*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">From<span className="text-red-500">*</span></label>
             <input
               type="date"
               name="fromDate"
@@ -1293,7 +1293,7 @@ function Dashboard({ onLogout }) {
             />
           </div>
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">To Date*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">To<span className="text-red-500">*</span></label>
             <input
               type="date"
               name="toDate"
@@ -1307,7 +1307,7 @@ function Dashboard({ onLogout }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Transport*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Transport<span className="text-red-500">*</span></label>
             <select
               name="transport"
               value={newTrip.transport}
@@ -1325,7 +1325,7 @@ function Dashboard({ onLogout }) {
             </select>
           </div>
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Budget*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Budget<span className="text-red-500">*</span></label>
             <div className="flex space-x-2">
               <select
                 name="currency"
@@ -1360,7 +1360,7 @@ function Dashboard({ onLogout }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Current Number of People*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Current Number of People<span className="text-red-500">*</span></label>
             <input
               type="number"
               name="numberOfPeople"
@@ -1373,7 +1373,7 @@ function Dashboard({ onLogout }) {
             />
           </div>
           <div>
-            <label className="block text-[#5E5854] font-medium mb-2">Max People*</label>
+            <label className="block text-[#5E5854] font-medium mb-2">Max People<span className="text-red-500">*</span></label>
             <input
               type="number"
               name="maxPeople"
@@ -1388,7 +1388,7 @@ function Dashboard({ onLogout }) {
         </div>
 
         <div className="mb-4">
-          <label className="block text-[#5E5854] font-medium mb-2">Trip Category*</label>
+          <label className="block text-[#5E5854] font-medium mb-2">Trip Category<span className="text-red-500">*</span></label>
           <select
             name="category"
             value={newTrip.category}
