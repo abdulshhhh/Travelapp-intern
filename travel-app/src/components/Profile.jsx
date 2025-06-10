@@ -197,25 +197,25 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               )}
             </div>
             
-            {/* Stats in Instagram-like layout */}
+            {/* Stats in Instagram-like layout - using opacity for lighter appearance */}
             <div className="flex-1 grid grid-cols-3 gap-1 text-center">
               <div className="flex flex-col items-center">
-                <span className="bg-yellow-500/30 rounded-full w-8 h-8 flex items-center justify-center mb-1 shadow-sm shadow-yellow-500/20">
-                  <span className="text-yellow-100 font-bold text-sm">{profileData.tripsPosted}</span>
+                <span className="bg-gradient-to-br from-yellow-300/90 to-yellow-500/80 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-travelers">
+                  <span className="text-white font-bold text-sm">{profileData.connections}</span>
+                  <span className="text-white text-[10px] font-medium">Travelers</span>
                 </span>
-                <span className="text-yellow-200 text-xs font-medium">Trips</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="bg-yellow-500/30 rounded-full w-8 h-8 flex items-center justify-center mb-1 shadow-sm shadow-yellow-500/20">
-                  <span className="text-yellow-100 font-bold text-sm">{profileData.totalCountries}</span>
+                <span className="bg-gradient-to-br from-yellow-300/90 to-yellow-500/80 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-countries">
+                  <span className="text-white font-bold text-sm">{profileData.totalCountries}</span>
+                  <span className="text-white text-[10px] font-medium">Countries</span>
                 </span>
-                <span className="text-yellow-200 text-xs font-medium">Countries</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="bg-yellow-500/30 rounded-full w-8 h-8 flex items-center justify-center mb-1 shadow-sm shadow-yellow-500/20">
-                  <span className="text-yellow-100 font-bold text-sm">{profileData.connections}</span>
+                <span className="bg-gradient-to-br from-yellow-300/90 to-yellow-500/80 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-trips">
+                  <span className="text-white font-bold text-sm">{profileData.tripsPosted}</span>
+                  <span className="text-white text-[10px] font-medium">Trips</span>
                 </span>
-                <span className="text-yellow-200 text-xs font-medium">Travelers</span>
               </div>
             </div>
           </div>
@@ -228,15 +228,15 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               <span>{profileData.location}</span>
             </div>
             
-            {/* Travel stats - more visible */}
-            <div className="flex space-x-3 mt-2">
-              <div className="bg-yellow-500/20 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center">
-                <FiStar className="mr-1 w-3 h-3 text-yellow-400 fill-yellow-400" />
-                <span className="text-white text-xs font-medium">{profileData.followers} reviews</span>
+            {/* Travel stats - with opacity adjustments */}
+            <div className="flex space-x-3 mt-0.5 mb-1">
+              <div className="bg-gradient-to-r from-yellow-300/30 to-yellow-500/20 backdrop-blur-sm px-2 py-0.5 rounded-lg flex items-center border border-yellow-300/20">
+                <FiUsers className="mr-1 w-3 h-3 text-yellow-300" />
+                <span className="text-white text-xs font-semibold">{profileData.connections} travelers</span>
               </div>
-              <div className="bg-blue-500/20 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center">
-                <FiGlobe className="mr-1 w-3 h-3 text-blue-300" />
-                <span className="text-white text-xs font-medium">{profileData.totalCountries} countries</span>
+              <div className="bg-gradient-to-r from-yellow-300/30 to-yellow-500/20 backdrop-blur-sm px-2 py-0.5 rounded-lg flex items-center border border-yellow-300/20">
+                <FiGlobe className="mr-1 w-3 h-3 text-yellow-300" />
+                <span className="text-white text-xs font-semibold">{profileData.totalCountries} countries</span>
               </div>
             </div>
           </div>
