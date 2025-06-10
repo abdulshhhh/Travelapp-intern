@@ -643,10 +643,23 @@ function Dashboard({ onLogout }) {
                 />
                 <h1 className="text-xl sm:text-2xl font-bold text-[#f8d56b]">NomadNova</h1>
               </div>
-              <div className="absolute left-[calc(100%+1rem)] whitespace-nowrap flex items-center h-full">
-                <a href="#trips" className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1">Trips</a>
-                <a href="#destinations" className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1">Destinations</a>
-                <a href="#completed" className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1">Completed</a>
+              {/* Make desktop links disappear on mobile */}
+              <div className="hidden md:absolute md:left-[calc(100%+1rem)] md:whitespace-nowrap md:flex md:items-center md:h-full">
+                <a 
+                  href="#trips" 
+                  className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >Trips</a>
+                <a 
+                  href="#destinations" 
+                  className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >Destinations</a>
+                <a 
+                  href="#completed" 
+                  className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >Completed</a>
               </div>
             </div>
             
@@ -680,7 +693,10 @@ function Dashboard({ onLogout }) {
                 />
               </button>
               <button
-                onClick={() => setShowPostTrip(true)}
+                onClick={() => {
+                  setShowPostTrip(true);
+                  setMobileMenuOpen(false);
+                }}
                 className="bg-gradient-to-r from-[#f8a95d] to-[#f87c6d] hover:from-[#f87c6d] hover:to-[#f8a95d] text-white px-6 py-2 rounded-full transition-colors font-cinzel shadow-lg flex items-center"
               >
                 <FiPlus className="mr-1" />
@@ -699,9 +715,21 @@ function Dashboard({ onLogout }) {
           {mobileMenuOpen && (
             <div className="md:hidden bg-[#1a3a2a] py-4 px-2 rounded-b-lg">
               <nav className="flex flex-col space-y-3">
-                <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4">Trips</a>
-                <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4">Completed</a>
-                <a href="#destinations" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4">Destinations</a>
+                <a 
+                  href="#trips" 
+                  className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4"
+                  onClick={() => setMobileMenuOpen(false)}
+                >Trips</a>
+                <a 
+                  href="#completed" 
+                  className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4"
+                  onClick={() => setMobileMenuOpen(false)}
+                >Completed</a>
+                <a 
+                  href="#destinations" 
+                  className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4"
+                  onClick={() => setMobileMenuOpen(false)}
+                >Destinations</a>
                 <hr className="border-[#2c5e4a]" />
                 <button
                   onClick={handleShowProfile}
@@ -715,7 +743,10 @@ function Dashboard({ onLogout }) {
                   <span>Profile</span>
                 </button>
                 <button
-                  onClick={() => setShowPostTrip(true)}
+                  onClick={() => {
+                    setShowPostTrip(true);
+                    setMobileMenuOpen(false);
+                  }}
                   className="flex items-center space-x-2 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4 text-left"
                 >
                   <FiPlus className="mr-1" />
