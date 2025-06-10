@@ -746,7 +746,7 @@ function Dashboard({ onLogout }) {
         </section>
 
         {/* Available Trips Carousel */}
-        <section id="trips" className="space-y-6">
+        <section id="trips" className="space-y-6 scroll-mt-24">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <h3 className="text-3xl font-bold text-[#2c5e4a]">Available Trips</h3>
             
@@ -1097,9 +1097,9 @@ function Dashboard({ onLogout }) {
         )}
 
         {/* Completed Trips Section */}
-        <section id="completed" className="space-y-4 sm:space-y-6">
+        <section id="completed" className="space-y-4 sm:space-y-6 scroll-mt-24">
           <div className="flex justify-between items-center">
-            <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">The road so far</h3>
+            <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">The road so far</h3>
             <button 
               onClick={() => navigate('/memories')} 
               className="text-[#f87c6d] hover:text-[#f8a95d] text-sm font-medium flex items-center"
@@ -1213,7 +1213,7 @@ function Dashboard({ onLogout }) {
         </section>
 
         {/* Popular Destinations Section */}
-        <section id="destinations" className="space-y-4 sm:space-y-6">
+        <section id="destinations" className="space-y-4 sm:space-y-6 scroll-mt-24">
           <h3 className="text-xl sm:text-3xl font-bold text-[#2c5e4a]">Popular Destinations</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             {popularDestinations.map((destination) => (
