@@ -626,20 +626,20 @@ function Dashboard({ onLogout }) {
       <header className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] shadow-lg sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center">
+            <div className="flex items-center relative">
               <div className="flex items-center">
                 <img 
                   src="/assets/images/NomadNovalogo.jpg" 
                   alt="NomadNova Logo" 
-                  className="w-8 h-8 rounded-full mr-2"
+                  className="w-12 h-12 rounded-full mr-3"
                 />
                 <h1 className="text-xl sm:text-2xl font-bold text-[#f8d56b]">NomadNova</h1>
               </div>
-              <nav className="hidden md:flex ml-8 space-x-8">
-                <a href="#trips" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Trips</a>
-                <a href="#completed" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Completed</a>
-                <a href="#destinations" className="text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel">Destinations</a>
-              </nav>
+              <div className="absolute left-[calc(100%+1rem)] whitespace-nowrap flex items-center h-full">
+                <a href="#trips" className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1">Trips</a>
+                <a href="#destinations" className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1">Destinations</a>
+                <a href="#completed" className="px-4 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel text-base translate-y-1">Completed</a>
+              </div>
             </div>
             
             {/* Mobile menu button */}
@@ -663,14 +663,13 @@ function Dashboard({ onLogout }) {
               />
               <button
                 onClick={handleShowProfile}
-                className="flex items-center space-x-2 bg-[#6F93AD] hover:bg-[#5E5854] text-white px-4 py-2 rounded-full transition-colors font-cinzel flex items-center justify-center"
+                className="flex items-center space-x-2 text-white transition-colors font-cinzel"
               >
                 <img
                   src={currentUser.avatar}
                   alt="Profile"
-                  className="w-6 h-6 rounded-full border border-white"
+                  className="w-10 h-10 rounded-full border-2 border-[#f8d56b] object-cover"
                 />
-              
               </button>
               <button
                 onClick={() => setShowPostTrip(true)}
@@ -703,7 +702,7 @@ function Dashboard({ onLogout }) {
                   <img
                     src={currentUser.avatar}
                     alt="Profile"
-                    className="w-6 h-6 rounded-full border border-white"
+                    className="w-10 h-10 rounded-full border-2 border-[#f8d56b] object-cover"
                   />
                   <span>Profile</span>
                 </button>
