@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProfileEdit from './ProfileEdit';
 import TripMemories from './TripMemories';
 import OTPVerification from './OTPVerification';
 import { 
   FiUser, FiMapPin, FiCalendar, FiStar, FiGlobe, FiEdit2, FiMessageSquare, 
-  FiShare2, FiX, FiPlus, FiCheck, FiAward, FiCamera, FiHeart, FiFlag, 
+  FiShare, FiX, FiPlus, FiCheck, FiAward, FiCamera, FiHeart, FiFlag, 
   FiClock, FiBookmark, FiUsers, FiNavigation, FiMail, FiPhone, FiVideo, FiMap
 } from 'react-icons/fi';
 import { FaPlaneDeparture } from 'react-icons/fa';
@@ -37,25 +37,46 @@ export default function Profile({ currentUser, onClose, onMessage }) {
   // User profile data
   const profileData = {
     ...currentUser,
-    fullName: "Alex Rivera",
-    bio: "Passionate traveler and adventure seeker. Love exploring new cultures, meeting amazing people, and creating unforgettable memories around the world!",
-    location: "San Francisco, CA",
-    joinedDate: "January 2023",
-    phone: "+1 (555) 123-4567",
-    connections: 247,
-    followers: 189,
-    following: 156,
-    tripsPosted: 8,
-    tripsJoined: 15,
-    upcomingTrips: 3,
-    totalCountries: 23,
-    totalCities: 67,
-    travelCategories: ["Adventure", "Culture", "Food", "Photography", "Nature"],
-    languages: ["English", "Spanish", "French"],
-    verified: true,
-    responseRate: "95%",
-    responseTime: "Within 2 hours"
+    fullName: currentUser?.fullName || "Alex Rivera",
+    bio: currentUser?.bio || "Passionate traveler and adventure seeker. Love exploring new cultures, meeting amazing people, and creating unforgettable memories around the world!",
+    location: currentUser?.location || "San Francisco, CA",
+    joinedDate: currentUser?.joinedDate || "January 2023",
+    phone: currentUser?.phone || "+1 (555) 123-4567",
+    connections: currentUser?.connections || 247,
+    followers: currentUser?.followers || 189,
+    following: currentUser?.following || 156,
+    tripsPosted: currentUser?.tripsPosted || 8,
+    tripsJoined: currentUser?.tripsJoined || 15,
+    upcomingTrips: currentUser?.upcomingTrips || 3,
+    totalCountries: currentUser?.totalCountries || 23,
+    totalCities: currentUser?.totalCities || 67,
+    travelCategories: currentUser?.travelCategories || ["Adventure", "Culture", "Food", "Photography", "Nature"],
+    languages: currentUser?.languages || ["English", "Spanish", "French"],
+    verified: currentUser?.verified !== undefined ? currentUser.verified : true,
+    responseRate: currentUser?.responseRate || "95%",
+    responseTime: currentUser?.responseTime || "Within 2 hours",
+    avatar: currentUser?.avatar || "/assets/images/Alexrivera.jpeg",
+    rating: currentUser?.rating || 4.8
   };
+
+  // Ensure we have a valid avatar URL
+  useEffect(() => {
+    // Check if profileData exists and has an avatar property
+    if (profileData && !profileData.avatar) {
+      // If currentUser has an avatar, use that
+      if (currentUser && currentUser.avatar) {
+        profileData.avatar = currentUser.avatar;
+      } else {
+        // Otherwise use a default avatar
+        profileData.avatar = "/assets/images/Alexrivera.jpeg";
+      }
+    }
+  }, [profileData, currentUser]);
+
+  // Debug the avatar URL
+  useEffect(() => {
+    console.log("Avatar URL:", profileData?.avatar);
+  }, [profileData]);
 
   const upcomingTrips = [
     {
@@ -124,112 +145,147 @@ export default function Profile({ currentUser, onClose, onMessage }) {
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100] flex items-center justify-center p-2 sm:p-4">
       {/* Main container with dashboard-matching background */}
       <div className="bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-xl w-full max-w-4xl h-[90vh] shadow-2xl flex flex-col overflow-hidden">
-        {/* Header with subtle gradient */}
-        <div className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] p-4 sm:p-6">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* Profile Picture */}
-              <div className="relative">
-                <img
-                  src={profileData.avatar}
-                  alt={profileData.fullName}
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-white shadow-md"
-                />
-                {currentUser.id === profileData.id && (
-                  <button
-                    onClick={handleEditProfile}
-                    className="absolute top-0 right-0 bg-white hover:bg-gray-100 rounded-full p-1.5 shadow-md transition-colors"
-                    title="Edit Profile"
-                  >
-                    <FiEdit2 className="w-3 h-3 text-gray-700" />
-                  </button>
-                )}
-              </div>
-
-              {/* Profile Info */}
-              <div>
-                <div className="flex items-center">
-                  <h2 className="text-xl sm:text-2xl font-cinzel font-bold text-white">{profileData.fullName}</h2>
-                </div>
-                <div className="flex items-center text-gray-200 text-xs sm:text-sm mb-1">
-                  <FiMapPin className="mr-1" />
-                  <span>{profileData.location}</span>
-                </div>
-                <div className="flex items-center space-x-3 text-xs sm:text-sm text-gray-200">
-                  <div className="flex items-center">
-                    <FiStar className="mr-1 text-yellow-400 fill-yellow-400" />
-                    <span>{profileData.rating} ({profileData.followers} reviews)</span>
-                  </div>
-                  <div className="hidden sm:flex items-center">
-                    <FiGlobe className="mr-1 text-yellow-400" />
-                    <span>{profileData.totalCountries} countries</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-start space-x-4">
+        {/* Header with Instagram-like layout */}
+        <div className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] p-2">
+          <div className="flex justify-between items-center">
+            {/* Title instead of close button on left */}
+            <h3 className="text-white font-semibold text-sm">Profile</h3>
+            
+            <div className="flex items-center gap-3">
+              {/* Share button */}
               <button
                 onClick={handleShare}
-                className="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-colors"
+                className="text-gray-300 hover:text-white transition-colors flex flex-col items-center"
                 title="Share Profile"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                  <polyline points="16 6 12 2 8 6"></polyline>
-                  <line x1="12" y1="2" x2="12" y2="15"></line>
-                </svg>
+                <FiShare className="w-4 h-4 mb-0.5" />
                 <span className="text-xs">Share</span>
               </button>
+              
+              {/* Close button */}
               <button
                 onClick={handleClose}
-                className="text-gray-300 hover:text-white transition-colors"
+                className="text-white bg-yellow-500/40 hover:bg-yellow-500/60 transition-colors -mt-2 p-1 rounded-full"
                 title="Close"
               >
-                <FiX className="w-6 h-6" />
+                <FiX className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
-
-          {/* Separator line */}
-          <div className="border-t border-gray-600 my-4 opacity-50"></div>
-
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 sm:flex sm:justify-between mt-2 pt-2 gap-2 sm:gap-0">
-            <div className="text-center">
-              <div className="bg-yellow-100 inline-block p-3 rounded-full">
-                <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.connections}</p>
-                <p className="text-gray-600 text-xs">Connections</p>
-              </div>
+          
+          {/* Profile info in Instagram-like layout */}
+          <div className="flex items-center mt-2">
+            {/* Profile Picture */}
+            <div className="relative mr-4">
+              <img
+                src={profileData?.avatar || "/assets/images/Alexrivera.jpeg"}
+                alt={profileData?.fullName || "User"}
+                className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/assets/images/Alexrivera.jpeg";
+                }}
+              />
+              {currentUser?.id === profileData?.id && (
+                <button
+                  onClick={handleEditProfile}
+                  className="absolute -bottom-1 -right-1 bg-white hover:bg-gray-100 rounded-full p-1 shadow-md transition-colors"
+                  title="Edit Profile"
+                >
+                  <FiEdit2 className="w-3 h-3 text-gray-700" />
+                </button>
+              )}
             </div>
-            <div className="text-center">
-              <div className="bg-yellow-100 inline-block p-3 rounded-full">
-                <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.tripsPosted}</p>
-                <p className="text-gray-600 text-xs">Trips Posted</p>
+            
+            {/* Stats in Instagram-like layout */}
+            <div className="flex-1 grid grid-cols-3 gap-1 text-center">
+              <div className="flex flex-col items-center">
+                <span className="bg-yellow-500/30 rounded-full w-8 h-8 flex items-center justify-center mb-1 shadow-sm shadow-yellow-500/20">
+                  <span className="text-yellow-100 font-bold text-sm">{profileData.tripsPosted}</span>
+                </span>
+                <span className="text-yellow-200 text-xs font-medium">Trips</span>
               </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-yellow-100 inline-block p-3 rounded-full">
-                <p className="text-lg sm:text-xl font-cinzel font-bold text-gray-800">{profileData.tripsJoined}</p>
-                <p className="text-gray-600 text-xs">Trips Joined</p>
+              <div className="flex flex-col items-center">
+                <span className="bg-yellow-500/30 rounded-full w-8 h-8 flex items-center justify-center mb-1 shadow-sm shadow-yellow-500/20">
+                  <span className="text-yellow-100 font-bold text-sm">{profileData.totalCountries}</span>
+                </span>
+                <span className="text-yellow-200 text-xs font-medium">Countries</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="bg-yellow-500/30 rounded-full w-8 h-8 flex items-center justify-center mb-1 shadow-sm shadow-yellow-500/20">
+                  <span className="text-yellow-100 font-bold text-sm">{profileData.connections}</span>
+                </span>
+                <span className="text-yellow-200 text-xs font-medium">Travelers</span>
               </div>
             </div>
           </div>
           
-          {/* Separator line */}
-          <div className="border-t border-gray-600 mt-4 opacity-50"></div>
+          {/* Name and bio */}
+          <div className="mt-2">
+            <h2 className="text-base font-cinzel font-bold text-white mb-1">{profileData.fullName}</h2>
+            <div className="flex items-center text-gray-200 text-xs mb-2">
+              <FiMapPin className="mr-1 w-3 h-3" />
+              <span>{profileData.location}</span>
+            </div>
+            
+            {/* Travel stats - more visible */}
+            <div className="flex space-x-3 mt-2">
+              <div className="bg-yellow-500/20 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center">
+                <FiStar className="mr-1 w-3 h-3 text-yellow-400 fill-yellow-400" />
+                <span className="text-white text-xs font-medium">{profileData.followers} reviews</span>
+              </div>
+              <div className="bg-blue-500/20 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center">
+                <FiGlobe className="mr-1 w-3 h-3 text-blue-300" />
+                <span className="text-white text-xs font-medium">{profileData.totalCountries} countries</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Follow/Message buttons - more compact */}
+          <div className="flex mt-3 space-x-2">
+            {currentUser.id === profileData.id ? (
+              <div className="text-gray-200 text-xs flex items-center">
+                <FiCalendar className="mr-1 w-3 h-3" />
+                <span>Member since {profileData.joinedDate}</span>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={handleFollow}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors flex items-center shadow-sm text-sm ${
+                    isFollowing
+                      ? 'bg-gray-100 text-gray-800 border border-gray-300'
+                      : 'bg-yellow-500 text-white'
+                  }`}
+                >
+                  {isFollowing ? (
+                    <>
+                      <FiCheck className="mr-1 w-3 h-3" />
+                      Following
+                    </>
+                  ) : (
+                    <>
+                      <FiPlus className="mr-1 w-3 h-3" />
+                      Follow
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={onMessage}
+                  className="bg-gray-100 text-gray-800 px-3 py-1 rounded-lg text-xs font-medium flex items-center"
+                >
+                  <FiMessageSquare className="mr-1 w-3 h-3" />
+                  Message
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Main action buttons */}
-        <div className="flex flex-wrap justify-between px-4 sm:px-6 py-3 bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
+        <div className="flex flex-wrap justify-between px-3 sm:px-4 py-2 bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
           <div className="flex flex-wrap gap-2 mb-2 sm:mb-0">
-            {currentUser.id === profileData.id ? (
-              <div className="flex items-center text-gray-200 text-sm">
-                <FiCalendar className="mr-1" />
-                <span>Joined {profileData.joinedDate}</span>
-              </div>
-            ) : (
+            {currentUser.id !== profileData.id && (
               <>
                 <button
                   onClick={handleFollow}
@@ -263,22 +319,22 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="overflow-x-auto bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
-          <div className="flex justify-between px-2 sm:px-6 min-w-max">
+        {/* Navigation Tabs - Instagram style */}
+        <div className="bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a] border-t border-gray-700/30">
+          <div className="flex justify-around">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-3 px-4 sm:px-6 font-medium text-xs sm:text-sm transition-colors relative ${
+                className={`py-2 px-3 font-medium text-xs transition-colors relative flex-1 ${
                   activeTab === tab.id
                     ? 'text-[#f8d56b]'
                     : 'text-gray-200 hover:text-[#f8d56b]'
                 }`}
               >
-                <div className="flex items-center">
+                <div className="flex flex-col items-center">
                   {tab.icon}
-                  <span className="ml-2">{tab.label}</span>
+                  <span className="mt-1">{tab.label}</span>
                 </div>
                 {activeTab === tab.id && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f8d56b]"></div>
@@ -298,52 +354,55 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{profileData.bio}</p>
               </div>
 
-              {/* Travel Categories */}
-              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
-                <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2 sm:mb-3">Travel Interests</h3>
-                <div className="flex flex-wrap gap-2">
-                  {profileData.travelCategories.map((category, index) => (
-                    <span
-                      key={index}
-                      className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-xs sm:text-sm font-medium"
-                    >
-                      {category}
-                    </span>
-                  ))}
+              {/* About Section with Travel Interests and Pinned Memories side by side */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                {/* Travel Categories */}
+                <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2 sm:mb-3">Travel Interests</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {profileData.travelCategories.map((category, index) => (
+                      <span
+                        key={index}
+                        className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-xs sm:text-sm font-medium"
+                      >
+                        {category}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Pinned Memories */}
-              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
-                <div className="flex justify-between items-center mb-3 sm:mb-4">
-                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800">Pinned Memories</h3>
-                  <button 
-                    onClick={() => handleViewTripMemories('photos')}
-                    className="text-yellow-500 text-xs sm:text-sm font-medium"
-                  >
-                    View All
-                  </button>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {[
-                    { url: "/assets/images/paris.webp", location: "Paris, France", date: "Dec 2024" },
-                    { url: "/assets/images/london.jpeg", location: "London, UK", date: "Nov 2024" },
-                    { url: "/assets/images/swissalps.jpeg", location: "Swiss Alps", date: "Oct 2024" },
-                  ].map((memory, index) => (
-                    <div key={index} className="relative group cursor-pointer rounded-lg overflow-hidden">
-                      <img
-                        src={memory.url}
-                        alt={memory.location}
-                        className="w-full h-24 sm:h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
-                        <div className="absolute bottom-2 left-2 right-2">
-                          <p className="text-white font-medium text-xs sm:text-sm">{memory.location}</p>
-                          <p className="text-white/80 text-xs">{memory.date}</p>
+                {/* Pinned Memories */}
+                <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                  <div className="flex justify-between items-center mb-3 sm:mb-4">
+                    <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800">Pinned Memories</h3>
+                    <button 
+                      onClick={() => handleViewTripMemories('photos')}
+                      className="text-yellow-500 text-xs sm:text-sm font-medium"
+                    >
+                      View All
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {[
+                      { url: "/assets/images/paris.webp", location: "Paris, France", date: "Dec 2024" },
+                      { url: "/assets/images/london.jpeg", location: "London, UK", date: "Nov 2024" },
+                      { url: "/assets/images/swissalps.jpeg", location: "Swiss Alps", date: "Oct 2024" },
+                    ].map((memory, index) => (
+                      <div key={index} className="relative group cursor-pointer rounded-lg overflow-hidden">
+                        <img
+                          src={memory.url}
+                          alt={memory.location}
+                          className="w-full h-24 sm:h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                          <div className="absolute bottom-2 left-2 right-2">
+                            <p className="text-white font-medium text-xs sm:text-sm">{memory.location}</p>
+                            <p className="text-white/80 text-xs">{memory.date}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

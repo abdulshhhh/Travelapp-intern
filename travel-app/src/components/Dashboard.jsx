@@ -310,10 +310,12 @@ function Dashboard({ onLogout }) {
     toDate: '',
     transport: '',
     budget: '',
-    currency: 'USD', // Add default currency
+    currency: 'USD',
     description: '',
     category: '',
-    coverImage: null
+    coverImage: null,
+    genderPreference: 'anyone'
+    // Removed priorities array
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showMemberProfile, setShowMemberProfile] = useState(false);
@@ -335,6 +337,8 @@ function Dashboard({ onLogout }) {
       }));
     }
   };
+
+  // Removed handlePriorityChange function
 
   // Current user data
   const currentUser = {
@@ -441,6 +445,8 @@ function Dashboard({ onLogout }) {
       tags: [newTrip.category, "Adventure", "Travel"],
       rating: "4.8",
       status: "planning",
+      genderPreference: newTrip.genderPreference,
+      // Removed priorities
       itinerary: [],
       memories: [],
       // Add these properties to ensure compatibility with trip details modal
@@ -470,7 +476,9 @@ function Dashboard({ onLogout }) {
       currency: 'USD', // Reset to default currency
       description: '',
       category: '',
-      coverImage: null
+      coverImage: null,
+      genderPreference: 'anyone', // Reset to default gender preference
+      priorities: [] // Reset priorities
     });
     
     console.log("Trip posted successfully");
@@ -926,6 +934,24 @@ function Dashboard({ onLogout }) {
                             <FiNavigation className="mr-2" /> <span className="font-medium">Transport:</span> {selectedTrip.transport}
                           </p>
                         )}
+                        {/* Gender Preference */}
+                        <p className="flex items-center">
+                          <FiUsers className="mr-2" /> <span className="font-medium">Gender Preference:</span> 
+                          <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                            selectedTrip.genderPreference === "womenOnly" 
+                              ? 'bg-pink-100 text-pink-700' 
+                              : selectedTrip.genderPreference === "menOnly"
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-green-100 text-green-700'
+                          }`}>
+                            {selectedTrip.genderPreference === "womenOnly" 
+                              ? 'Women Only' 
+                              : selectedTrip.genderPreference === "menOnly"
+                              ? 'Men Only'
+                              : 'Anyone Welcome'}
+                          </span>
+                        </p>
+                        {/* Removed Trip Priority section */}
                       </div>
                     </div>
                   </div>
@@ -1388,6 +1414,63 @@ function Dashboard({ onLogout }) {
         </div>
 
         <div className="mb-4">
+          <label className="block text-[#5E5854] font-medium mb-2">Gender Preference</label>
+          <div className="flex flex-wrap gap-3">
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="genderPreference"
+                value="anyone"
+                checked={newTrip.genderPreference === "anyone"}
+                onChange={handleInputChange}
+                className="sr-only"
+              />
+              <span className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                newTrip.genderPreference === "anyone" 
+                  ? 'bg-[#2c5e4a] text-white' 
+                  : 'bg-[#f8f4e3] text-[#5E5854] hover:bg-[#f0d9b5]'
+              }`}>
+                Anyone
+              </span>
+            </label>
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="genderPreference"
+                value="menOnly"
+                checked={newTrip.genderPreference === "menOnly"}
+                onChange={handleInputChange}
+                className="sr-only"
+              />
+              <span className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                newTrip.genderPreference === "menOnly" 
+                  ? 'bg-[#2c5e4a] text-white' 
+                  : 'bg-[#f8f4e3] text-[#5E5854] hover:bg-[#f0d9b5]'
+              }`}>
+                Men Only
+              </span>
+            </label>
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="genderPreference"
+                value="womenOnly"
+                checked={newTrip.genderPreference === "womenOnly"}
+                onChange={handleInputChange}
+                className="sr-only"
+              />
+              <span className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                newTrip.genderPreference === "womenOnly" 
+                  ? 'bg-[#2c5e4a] text-white' 
+                  : 'bg-[#f8f4e3] text-[#5E5854] hover:bg-[#f0d9b5]'
+              }`}>
+                Women Only
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div className="mb-4">
           <label className="block text-[#5E5854] font-medium mb-2">Trip Category<span className="text-red-500">*</span></label>
           <select
             name="category"
@@ -1577,7 +1660,7 @@ function Dashboard({ onLogout }) {
               <h5 className="font-bold mb-4">Explore</h5>
               <ul className="space-y-2 text-[#a8c4b8]">
                 <li><a href="#trips" className="hover:text-[#f8d56b] transition-colors">Available Trips</a></li>
-                <li><a href="#completed" className="hover:text-[#f8d56b] transition-colors">Completed Trips</a></li>
+                <li><a href="#completed" className="hover:text-[#f8d56b] transition-colors">The road so far</a></li>
                 <li><a href="#destinations" className="hover:text-[#f8d56b] transition-colors">Popular Destinations</a></li>
               </ul>
             </div>
