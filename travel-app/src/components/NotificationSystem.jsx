@@ -21,26 +21,26 @@ export default function NotificationSystem({
   };
 
   return (
-    <div className="relative">
-      {/* Notification Bell */}
+    <div className="relative w-full md:w-auto">
+      {/* Notification Bell - more compact for mobile */}
       <button
         onClick={onToggleNotifications}
-        className="relative p-2 rounded-full bg-[#6F93AD] hover:bg-[#5E5854] transition-colors text-white"
+        className="relative p-2 rounded-full bg-[#6F93AD] hover:bg-[#5E5854] transition-colors text-white flex items-center justify-center"
         aria-label="Notifications"
       >
-        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
           <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
         </svg>
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-[#EC8E3D] text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-bold">
+          <span className="absolute -top-1 -right-1 bg-[#EC8E3D] text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
       </button>
 
-      {/* Notification Dropdown */}
+      {/* Notification Dropdown - adjust position for mobile */}
       {showNotifications && (
-        <div className="absolute right-0 top-12 w-full sm:w-80 bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-xl border-2 border-[#5E5854] shadow-2xl z-50 max-h-[80vh] sm:max-h-96 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 bg-gradient-to-br from-[#f8f4e3] to-[#f0d9b5] rounded-xl border-2 border-[#5E5854] shadow-2xl z-50 max-h-[80vh] sm:max-h-96 overflow-hidden">
           {/* Header */}
           <div className="p-3 sm:p-4 border-b border-[#5E5854] bg-gradient-to-r from-[#2c5e4a] to-[#1a3a2a]">
             <div className="flex justify-between items-center">

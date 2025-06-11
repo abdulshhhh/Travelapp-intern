@@ -663,8 +663,15 @@ function Dashboard({ onLogout }) {
               </div>
             </div>
             
-            {/* Mobile menu button */}
-            <div className="md:hidden">
+            {/* Mobile menu button and notification system */}
+            <div className="md:hidden flex items-center space-x-2">
+              <NotificationSystem
+                notifications={notifications}
+                showNotifications={showNotifications}
+                onToggleNotifications={handleToggleNotifications}
+                onMarkAsRead={handleMarkNotificationAsRead}
+                onClearAll={handleClearAllNotifications}
+              />
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-white p-2"
@@ -751,18 +758,6 @@ function Dashboard({ onLogout }) {
                 >
                   <FiPlus className="mr-1" />
                   <span>Post Trip</span>
-                </button>
-                <button
-                  onClick={handleToggleNotifications}
-                  className="flex items-center space-x-2 text-[#a8c4b8] hover:text-[#f8d56b] transition-colors font-cinzel py-2 px-4 text-left"
-                >
-                  <FiBell className="mr-1" />
-                  <span>Notifications</span>
-                  {notifications.filter(n => !n.read).length > 0 && (
-                    <span className="bg-[#f87c6d] text-white text-xs rounded-full px-2 py-0.5 ml-1">
-                      {notifications.filter(n => !n.read).length}
-                    </span>
-                  )}
                 </button>
                 <button
                   onClick={onLogout}
