@@ -165,7 +165,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               {/* Close button */}
               <button
                 onClick={handleClose}
-                className="text-white bg-yellow-500/40 hover:bg-yellow-500/60 transition-colors -mt-2 p-1 rounded-full"
+                className="text-white bg-yellow-500/30 hover:bg-yellow-500/60 transition-colors -mt-2 p-1 rounded-full"
                 title="Close"
               >
                 <FiX className="w-3.5 h-3.5" />
@@ -200,19 +200,19 @@ export default function Profile({ currentUser, onClose, onMessage }) {
             {/* Stats in Instagram-like layout - using opacity for lighter appearance */}
             <div className="flex-1 grid grid-cols-3 gap-1 text-center">
               <div className="flex flex-col items-center">
-                <span className="bg-gradient-to-br from-yellow-300/90 to-yellow-500/80 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-travelers">
+                <span className="bg-yellow-500/60 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-travelers">
                   <span className="text-white font-bold text-sm">{profileData.connections}</span>
                   <span className="text-white text-[10px] font-medium">Travelers</span>
                 </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="bg-gradient-to-br from-yellow-300/90 to-yellow-500/80 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-countries">
+                <span className="bg-yellow-500/60 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-countries">
                   <span className="text-white font-bold text-sm">{profileData.totalCountries}</span>
                   <span className="text-white text-[10px] font-medium">Countries</span>
                 </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="bg-gradient-to-br from-yellow-300/90 to-yellow-500/80 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-trips">
+                <span className="bg-yellow-500/60 rounded-full w-14 h-14 flex flex-col items-center justify-center mb-0.5 shadow-md stat-circle stat-circle-trips">
                   <span className="text-white font-bold text-sm">{profileData.tripsPosted}</span>
                   <span className="text-white text-[10px] font-medium">Trips</span>
                 </span>
@@ -349,21 +349,21 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           {activeTab === 'overview' && (
             <div className="space-y-4 sm:space-y-6">
               {/* About Section */}
-              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
-                <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2 sm:mb-3">About</h3>
-                <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{profileData.bio}</p>
+              <div className="bg-yellow-50 p-4 sm:p-6 rounded-lg border border-[#204231]">
+                <h3 className="text-base sm:text-lg font-cinzel font-semibold text-[#204231] mb-2 sm:mb-3">About</h3>
+                <p className="text-green-900 leading-relaxed text-sm sm:text-base">{profileData.bio}</p>
               </div>
 
               {/* About Section with Travel Interests and Pinned Memories side by side */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Travel Categories */}
-                <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2 sm:mb-3">Travel Interests</h3>
+                <div className="bg-yellow-50 p-4 sm:p-6 rounded-lg border border-[#204231]">
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-[#204231] mb-2 sm:mb-3">Travel Interests</h3>
                   <div className="flex flex-wrap gap-2">
                     {profileData.travelCategories.map((category, index) => (
                       <span
                         key={index}
-                        className="px-2 sm:px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-xs sm:text-sm font-medium"
+                        className="px-2 sm:px-3 py-1 bg-yellow-100 text-[#204231] rounded-full text-xs sm:text-sm font-medium border border-[#204231]"
                       >
                         {category}
                       </span>
@@ -372,12 +372,12 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                 </div>
 
                 {/* Pinned Memories */}
-                <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                <div className="bg-yellow-50 p-4 sm:p-6 rounded-lg border border-[#204231]">
                   <div className="flex justify-between items-center mb-3 sm:mb-4">
-                    <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800">Pinned Memories</h3>
+                    <h3 className="text-base sm:text-lg font-cinzel font-semibold text-[#204231]">Pinned Memories</h3>
                     <button 
                       onClick={() => handleViewTripMemories('photos')}
-                      className="text-yellow-500 text-xs sm:text-sm font-medium"
+                      className="text-[#204231] text-xs sm:text-sm font-medium"
                     >
                       View All
                     </button>
@@ -414,32 +414,32 @@ export default function Profile({ currentUser, onClose, onMessage }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div
                   onClick={() => handleViewTripMemories('posted')}
-                  className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
+                  className="bg-yellow-50 p-4 sm:p-6 rounded-lg border border-[#204231] cursor-pointer hover:border-[#204231] transition-colors"
                 >
-                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Posted</h3>
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-[#204231] mb-2">Trips Posted</h3>
                   <p className="text-xl sm:text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsPosted}</p>
-                  <p className="text-gray-500 text-xs sm:text-sm">Click to view details and memories</p>
+                  <p className="text-[#204231] text-xs sm:text-sm">Click to view details and memories</p>
                 </div>
 
                 <div
                   onClick={() => handleViewTripMemories('joined')}
-                  className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 cursor-pointer hover:border-yellow-300 transition-colors"
+                  className="bg-yellow-50 p-4 sm:p-6 rounded-lg border border-[#204231] cursor-pointer hover:border-[#204231] transition-colors"
                 >
-                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800 mb-2">Trips Joined</h3>
+                  <h3 className="text-base sm:text-lg font-cinzel font-semibold text-[#204231] mb-2">Trips Joined</h3>
                   <p className="text-xl sm:text-2xl font-cinzel font-bold text-yellow-500 mb-2">{profileData.tripsJoined}</p>
                   <p className="text-gray-500 text-xs sm:text-sm">Click to view details and memories</p>
                 </div>
               </div>
 
               {/* Upcoming Trips */}
-              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+              <div className="bg-yellow-50 p-4 sm:p-6 rounded-lg border border-[#204231]">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-base sm:text-lg font-cinzel font-semibold text-gray-800">Upcoming Trips</h3>
                   <button className="text-yellow-500 text-xs sm:text-sm font-medium">View All</button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {upcomingTrips.map((trip) => (
-                    <div key={trip.id} className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-md transition-shadow">
+                    <div key={trip.id} className="bg-yellow-100 rounded-lg p-3 sm:p-4 border border-[#204231] hover:shadow-md transition-shadow">
                       <img
                         src={trip.image}
                         alt={trip.title}
@@ -480,9 +480,9 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           {activeTab === 'memories' && (
             <div className="space-y-4 sm:space-y-6">
               {/* Recent Memories */}
-              <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+              <div className="bg-yellow-50 p-4 sm:p-6 rounded-lg border border-[#204231]">
                 <div className="flex justify-between items-center mb-3 sm:mb-4">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">Recent Travel Memories</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-[#204231]">Recent Travel Memories</h3>
                   <button className="text-yellow-500 text-xs sm:text-sm font-medium">View All</button>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
@@ -500,7 +500,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                       <img
                         src={memory.url}
                         alt={memory.location}
-                        className="w-full h-24 sm:h-32 object-cover rounded-lg border border-gray-200 group-hover:shadow-md transition-all"
+                        className="w-full h-24 sm:h-32 object-cover rounded-lg border border-[#204231] group-hover:shadow-md transition-all"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                         <div className="absolute bottom-2 left-2 right-2">
@@ -725,10 +725,10 @@ export default function Profile({ currentUser, onClose, onMessage }) {
           {activeTab === 'reviews' && (
             <div className="space-y-6">
               {/* Reviews Received */}
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <div className="bg-yellow-50 p-6 rounded-lg border border-[#204231]">
                 <div className="flex justify-between items-center mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800">Reviews Received</h3>
+                    <h3 className="text-lg font-semibold text-[#204231]">Reviews Received</h3>
                     <div className="flex items-center mt-1">
                       <FiStar className="text-yellow-400 fill-yellow-400 mr-1" />
                       <span className="text-gray-600 font-medium">4.8</span>
@@ -767,7 +767,7 @@ export default function Profile({ currentUser, onClose, onMessage }) {
                       date: "October 2024"
                     }
                   ].map((review) => (
-                    <div key={review.id} className="bg-gray-50 p-4 rounded-lg">
+                    <div key={review.id} className="bg-[#f8f4e3] p-4 rounded-lg border border-[#d1c7b7]">
                       <div className="flex items-start space-x-3">
                         <img
                           src={review.avatar}
