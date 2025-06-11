@@ -4,7 +4,7 @@ import './App.css';
 
 // Lazy loaded components
 const Landing = lazy(() => import('./components/Landing'));
-const Login = lazy(() => import('./components/Login'));
+const Login = lazy(() => import('./components/login'));
 const SignUp = lazy(() => import('./components/SignUp'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Profile = lazy(() => import('./components/Profile'));
