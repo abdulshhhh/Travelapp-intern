@@ -38,6 +38,7 @@ export default function GroupChat({ trip, currentUser, onClose }) {
   const [promptType, setPromptType] = useState('');
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [locationData, setLocationData] = useState(null);
+  const [locationWatchId, setLocationWatchId] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -90,6 +91,12 @@ export default function GroupChat({ trip, currentUser, onClose }) {
 
   const handleShareLocation = () => {
     if (navigator.geolocation) {
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 10000,        // 10 seconds
+        maximumAge: 0          // Don't use cached position
+      };
+      
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -98,13 +105,15 @@ export default function GroupChat({ trip, currentUser, onClose }) {
           setLocationData({
             latitude,
             longitude,
+            accuracy: position.coords.accuracy, // Store accuracy info
             timestamp: new Date().toISOString()
           });
         },
         (error) => {
           console.error("Error getting location:", error);
           alert("Unable to access your location. Please check your browser permissions.");
-        }
+        },
+        options
       );
     } else {
       alert("Geolocation is not supported by your browser.");
@@ -160,6 +169,50 @@ export default function GroupChat({ trip, currentUser, onClose }) {
     window.open(shareUrl, '_blank');
     setShowLocationModal(false);
   };
+
+  // Function to start watching location
+  const startWatchingLocation = () => {
+    if (navigator.geolocation) {
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      };
+      
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocationData({
+            latitude,
+            longitude,
+            accuracy: position.coords.accuracy,
+            timestamp: new Date().toISOString()
+          });
+        },
+        (error) => {
+          console.error("Error watching location:", error);
+        },
+        options
+      );
+      
+      setLocationWatchId(watchId);
+    }
+  };
+
+  // Function to stop watching location
+  const stopWatchingLocation = () => {
+    if (locationWatchId !== null) {
+      navigator.geolocation.clearWatch(locationWatchId);
+      setLocationWatchId(null);
+    }
+  };
+
+  // Clean up on component unmount
+  useEffect(() => {
+    return () => {
+      stopWatchingLocation();
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
