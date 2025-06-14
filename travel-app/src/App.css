@@ -77,3 +77,147 @@ body, html {
   0% { transform: rotate(0deg) translateX(0) translateY(0); }
   100% { transform: rotate(15deg) translateX(20px) translateY(5px); }
 }
+
+.loading-container {
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(to bottom, #1a202c, #0f172a, #000000);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.loading-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(transparent, black);
+  opacity: 0.7;
+  z-index: 10;
+}
+
+.loading-content {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.logo-container {
+  margin-bottom: 3rem;
+  position: relative;
+  perspective: 600px;
+}
+
+.logo-pulse {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 9999px;
+  background-image: linear-gradient(to right, rgba(255, 157, 108, 0.2), rgba(255, 191, 105, 0.2), rgba(255, 107, 149, 0.2));
+  filter: blur(1.5rem);
+  animation: pulse 5s ease-in-out infinite;
+}
+
+.logo-wrapper {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+  animation: float 6s ease-in-out infinite;
+}
+
+.logo-wrapper:hover {
+  transform: rotateY(12deg);
+}
+
+.logo-image {
+  height: 8rem;
+  width: auto;
+  border-radius: 9999px;
+  box-shadow: 0 25px 50px -12px rgba(252, 203, 110, 0.2);
+  ring: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+  opacity: 0.7;
+}
+
+.logo-ring {
+  position: absolute;
+  inset: -0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  opacity: 0.5;
+}
+
+.loading-title {
+  font-size: 3.75rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(to right, #FF9D6C, #FFBF69, #FF6B95);
+  margin-bottom: 3rem;
+  background-size: 200% 100%;
+  animation: gradient-x 4s ease infinite;
+}
+
+.progress-bar {
+  width: 20rem;
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.progress-segment {
+  height: 0.375rem;
+  flex: 1;
+  border-radius: 9999px;
+  transition: all 0.3s;
+  background-color: #374151;
+}
+
+.progress-segment.filled {
+  background-image: linear-gradient(to right, #FF9D6C, #FF6B95);
+}
+
+.loading-phrase {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  letter-spacing: 0.05em;
+  max-width: 32rem;
+  height: 3rem;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes gradient-x {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

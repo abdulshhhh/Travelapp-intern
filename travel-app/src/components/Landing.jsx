@@ -15,20 +15,26 @@ const useBackgroundSlider = (backgrounds, interval) => {
   const [bg2, setBg2] = useState(1);
 
   useEffect(() => {
+    // Preload images
+    backgrounds.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
     const timer = setInterval(() => {
       setActiveLayer(prev => {
         const isActive = !prev;
         if (isActive) {
-          setBg2(prev => (prev + 1) % backgrounds.length);
+          setBg2(prev => (prev + 2) % backgrounds.length);
         } else {
-          setBg1(prev => (prev + 1) % backgrounds.length);
+          setBg1(prev => (prev + 2) % backgrounds.length);
         }
         return isActive;
       });
     }, interval);
 
     return () => clearInterval(timer);
-  }, [backgrounds.length, interval]);
+  }, [backgrounds, interval]);
 
   return { activeLayer, bg1, bg2 };
 };
@@ -64,7 +70,7 @@ export default function Landing() {
       />
       
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen text-center px-4 bg-black/45 backdrop-blur-[1px]">
-        <h1 className="text-4xl font-extrabold text-white-400 mb-2 mt-6">
+        <h1 className="text-4xl font-extrabold text-white mb-2 mt-6">
           Your Journey should be as exciting as your <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-green-500">
             Destination

@@ -3,23 +3,21 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import './App.css';
 
 // Lazy loaded components
+import Loading from './components/Loading';
 const Landing = lazy(() => import('./components/Landing'));
 const Login = lazy(() => import('./components/Login'));
 const SignUp = lazy(() => import('./components/SignUp'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Profile = lazy(() => import('./components/Profile'));
-const Loading = lazy(() => import('./components/Loading'));
 
 // Constants
-const LOADING_DURATION = 5500;
 const STORAGE_KEYS = {
   DARK_MODE: 'darkMode',
   AUTH_TOKEN: 'authToken'
 };
 
-const CURRENT_USER = {
-  // ...existing code...
-};
+console.log('App component initializing...'); // Debug log
+
 
 // Custom hooks
 const useLocalStorage = (key, defaultValue) => {
@@ -89,8 +87,7 @@ const SignUpWrapper = ({ isLoggedIn, handleAuthSuccess }) => {
 
 // Main App Component
 const App = () => {
-  const hasTransitioned = useRef(false);
-  const [loading, setLoading] = useState(true);
+  console.log('App component rendering...'); // Debug log
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useLocalStorage(STORAGE_KEYS.DARK_MODE, true);
 
@@ -98,38 +95,14 @@ const App = () => {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  const handleLoadingComplete = useCallback(() => {
-    if (!hasTransitioned.current) {
-      hasTransitioned.current = true;
-      setLoading(false);
-    }
-  }, []);
 
-  useEffect(() => {
-    if (!loading) return;
-    const timer = setTimeout(handleLoadingComplete, LOADING_DURATION);
-    return () => clearTimeout(timer);
-  }, [loading, handleLoadingComplete]);
+  const handleAuthSuccess = () => setIsLoggedIn(true);
+  const handleLogout = () => setIsLoggedIn(false);
 
-  const handleAuthSuccess = useCallback(() => setIsLoggedIn(true), []);
-  const handleLogout = useCallback(() => setIsLoggedIn(false), []);
-
-  useEffect(() => {
-    // Shorter loading duration for testing
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <Loading onLoadingComplete={() => setLoading(false)} />;
-  }
 
   return (
     <BrowserRouter>
-      <Suspense fallback={<Loading onLoadingComplete={() => {}} />}>
+      <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route
@@ -146,7 +119,6 @@ const App = () => {
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Dashboard 
                   onLogout={handleLogout} 
-                  currentUser={CURRENT_USER}
                   darkMode={darkMode}
                   setDarkMode={setDarkMode}
                 />
@@ -158,7 +130,6 @@ const App = () => {
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Profile 
-                  currentUser={CURRENT_USER}
                   darkMode={darkMode}
                 />
               </ProtectedRoute>
